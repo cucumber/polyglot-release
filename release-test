@@ -4,4 +4,4 @@ cd test-fixture
 ../release 1.0.0 --no-git-commit
 
 git diff --unified=0
-git reset --hard HEAD
+#git reset --hard HEAD

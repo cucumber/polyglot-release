@@ -22,13 +22,15 @@ function release_java() {
   fi
 }
 function post_release_java() {
-  pushd java
-  NEW_VERSION_TEMPLATE="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
-  mvn --quiet \
-    build-helper:parse-version \
-    versions:set -DnewVersion="$NEW_VERSION_TEMPLATE" \
-    versions:set-scm-tag -DnewTag="HEAD"
-  popd
+  if [[ -d java ]]; then
+    pushd java
+    NEW_VERSION_TEMPLATE="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
+    mvn --quiet \
+      build-helper:parse-version \
+      versions:set -DnewVersion="$NEW_VERSION_TEMPLATE" \
+      versions:set-scm-tag -DnewTag="HEAD"
+    popd
+  fi
 }
 
 function release_ruby() {
