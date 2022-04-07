@@ -8,7 +8,7 @@ Automates Cucumber Release process as documented in [RELEASING.md](https://githu
 To install in a project run:
 
 ```shell
-curl --silent -o release https://raw.githubusercontent.com/cucumber/polyglot-release/main/bootstraper
+curl --silent -o release https://raw.githubusercontent.com/cucumber/polyglot-release/main/bootstrapper
 chmod 744 release
 ./release --help
 ```
