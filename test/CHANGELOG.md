@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [0.0.0] - 2019-08-23
+## [0.0.1] - 2022-04-07
 
-[Unreleased]: https://github.com/cucumber/html-formatter/compare/v0.0.0...main
+## 0.0.0 - 2019-08-23
+
+[Unreleased]: https://github.com/cucumber/html-formatter/compare/v0.0.1...main
+[0.0.1]: https://github.com/cucumber/html-formatter/compare/v0.0.0...main
