@@ -182,7 +182,7 @@ release_ruby
 changelog release "$NEW_VERSION" --tag-format "v%s" -o CHANGELOG.md
 
 if [[ -z $NO_GIT_COMMIT ]]; then
-  git commit -am "Prepare release v$NEW_VERSION"
+  git commit --quiet --all --message="Prepare release v$NEW_VERSION"
   git tag "v$NEW_TAG"
 fi
 
@@ -198,13 +198,13 @@ post_release_java
 post_release_ruby
 
 if [[ -z $NO_GIT_COMMIT ]]; then
-  git commit -am "Prepare for the next development iteration"
+  git commit --quiet --all --message="Prepare for the next development iteration"
 fi
 
 ###
 # push to github
 ##
 if [[ -z $NO_GIT_PUSH ]]; then
-  git push origin
-  git push origin "$(git rev-list --max-count=1 "v$NEW_VERSION"):refs/heads/release/v$NEW_VERSION"
+  git push --quiet origin
+  git push --quiet origin "$(git rev-list --max-count=1 "v$NEW_VERSION"):refs/heads/release/v$NEW_VERSION"
 fi
