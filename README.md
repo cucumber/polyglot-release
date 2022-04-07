@@ -1,3 +1,5 @@
+[![Tests](https://github.com/cucumber/polyglot-release/actions/workflows/main.yml/badge.svg)](https://github.com/cucumber/polyglot-release/actions/workflows/main.yml)
+
 # polyglot-release
 Make polyglot releases with a single command
 
