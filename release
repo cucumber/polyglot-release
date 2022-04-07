@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+# quiet output from pushd / popd
+pushd () { 
+  command pushd "$@" > /dev/null
+}
+popd () { 
+  command popd "$@" > /dev/null
+}
+
 function release_javascript() {
   if [[ -d javascript ]]; then
     pushd javascript
@@ -80,7 +88,7 @@ function validate_environment() {
 # Integrity check (are all the tools installed?)
 # Present the user with the current version?
 # Show unreleased
-# Reduce the output from git and pushd/popo
+# Reduce the output from git
 
 # Version4:
 # Bootstrap from single git repo.
