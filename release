@@ -69,6 +69,23 @@ function validate_args() {
 }
 
 function validate_environment() {
+
+   required_tools=("git" "changelog")
+   [[ -d javascript ]] && required_tools+=("npm")
+   [[ -d java ]] && required_tools+=("mvn")
+   for tool in ${required_tools[@]}
+   do
+     if ! which -s $tool; then
+       echo "$tool is not installed!"
+       missing_tool="true"
+     fi
+   done
+   if [ "$missing_tool" ]; then
+     echo
+     echo "Please install the missing required tool(s)."
+     exit 1
+   fi
+
   if [[ (-z $NO_GIT_TAG_CHECK) && (-z "$(git tag --list "v$(changelog latest)")") ]]; then
     echo "No git tag found for v$(changelog latest) (found in CHANGELOG.md)!"
     echo
