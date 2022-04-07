@@ -1,0 +1,40 @@
+diff --git a/test-fixture/CHANGELOG.md b/test-fixture/CHANGELOG.md
+--- a/test-fixture/CHANGELOG.md
++++ b/test-fixture/CHANGELOG.md
+@@ -9,0 +10,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
++## [1.0.0] - 2022-04-07
++
+@@ -12 +14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
+-## [0.0.0] - 2019-08-23
++## 0.0.0 - 2019-08-23
+@@ -14 +16,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
+-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
++[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
++[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
+diff --git a/test-fixture/java/pom.xml b/test-fixture/java/pom.xml
+--- a/test-fixture/java/pom.xml
++++ b/test-fixture/java/pom.xml
+@@ -8 +8 @@
+-    <version>0.0.1-SNAPSHOT</version>
++    <version>1.0.1-SNAPSHOT</version>
+diff --git a/test-fixture/javascript/package-lock.json b/test-fixture/javascript/package-lock.json
+--- a/test-fixture/javascript/package-lock.json
++++ b/test-fixture/javascript/package-lock.json
+@@ -3 +3 @@
+-  "version": "0.0.0",
++  "version": "1.0.0",
+@@ -9 +9 @@
+-      "version": "0.0.0"
++      "version": "1.0.0"
+diff --git a/test-fixture/javascript/package.json b/test-fixture/javascript/package.json
+--- a/test-fixture/javascript/package.json
++++ b/test-fixture/javascript/package.json
+@@ -3 +3 @@
+-  "version": "0.0.0"
++  "version": "1.0.0"
+diff --git a/test-fixture/ruby/VERSION b/test-fixture/ruby/VERSION
+--- a/test-fixture/ruby/VERSION
++++ b/test-fixture/ruby/VERSION
+@@ -1 +1 @@
+-0.0.0
++1.0.0
