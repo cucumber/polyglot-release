@@ -11,5 +11,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## 0.0.0 - 2019-08-23
 
-[Unreleased]: https://github.com/cucumber/html-formatter/compare/v0.0.1...main
-[0.0.1]: https://github.com/cucumber/html-formatter/compare/v0.0.0...main
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
+[0.0.1]: https://github.com/cucumber/polyglot-release/compare/v0.0.0...main
