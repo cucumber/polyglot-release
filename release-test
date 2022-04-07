@@ -12,6 +12,7 @@ popd
 git diff --unified=0 > 01-actual.diff
 sed -i.bak '/^index/d' 01-actual.diff
 diff 01-actual.diff 01-expected.diff
+[[ $? != 0 ]] && failure="true"
 git restore --source=HEAD --staged --worktree -- test-fixture
 
 ## 02: Only release
@@ -21,6 +22,7 @@ popd
 git diff --unified=0 > 02-actual.diff
 sed -i.bak '/^index/d' 02-actual.diff
 diff 02-actual.diff 02-expected.diff
+[[ $? != 0 ]] && failure="true"
 git restore --source=HEAD --staged --worktree -- test-fixture
 
-test
+test -z $failure
