@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -ex
 
 function release_javascript() {
   if [[ -d javascript ]]; then
