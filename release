@@ -63,7 +63,7 @@ function post_release_ruby() {
   :
 }
 
-function validate_args() {
+function validate_new_version_argument() {
   if [[ ! "$NEW_VERSION" =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
     echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
     showUsage
@@ -166,7 +166,7 @@ if [[ $# -ne 1 ]]; then
 fi
 NEW_VERSION=$1
 
-validate_args
+validate_new_version_argument
 
 ###
 ## release
