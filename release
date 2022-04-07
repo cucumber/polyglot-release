@@ -16,8 +16,8 @@ function post_release_javascript() {
 function release_java() {
   if [[ -d java ]]; then
     pushd java
-    mvn --quiet versions:set -DnewVersion="$NEW_VERSION"
-    mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION"
+    mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2> /dev/null
+    mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2> /dev/null
     popd
   fi
 }
@@ -28,7 +28,8 @@ function post_release_java() {
     mvn --quiet \
       build-helper:parse-version \
       versions:set -DnewVersion="$NEW_VERSION_TEMPLATE" \
-      versions:set-scm-tag -DnewTag="HEAD"
+      versions:set-scm-tag -DnewTag="HEAD" \
+      2> /dev/null
     popd
   fi
 }
