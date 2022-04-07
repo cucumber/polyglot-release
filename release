@@ -83,7 +83,7 @@ function validate_environment() {
    [[ -d java ]] && required_tools+=("mvn")
    for tool in ${required_tools[@]}
    do
-     if ! command -v $tool; then
+     if ! command -v $tool > /dev/null; then
        echo "$tool is not installed!"
        missing_tool="true"
      fi
