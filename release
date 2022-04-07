@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -e
 
 function release_javascript() {
   if [[ -d javascript ]]; then
@@ -61,9 +61,10 @@ function post_release_ruby() {
 function showUsage() {
   echo "Usage: $0 [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
-  echo "  --help           shows this help"
-  echo "  --no-git-push    do not push to git"
-  echo "  --no-git-commit  do not commit git"
+  echo "  --help             shows this help"
+  echo "  --no-git-push      do not push to git"
+  echo "  --no-git-commit    do not commit git"
+  echo "  --only-release     do not update versions after release"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -75,6 +76,10 @@ while [[ $# -gt 0 ]]; do
   --no-git-commit)
     NO_GIT_COMMIT="true"
     NO_GIT_PUSH="true"
+    shift # past argument
+    ;;
+  --only-release)
+    ONLY_RELEASE="true"
     shift # past argument
     ;;
   -h | --help)
@@ -143,6 +148,10 @@ fi
 ###
 ## post release
 ###
+if [[ -z $ONLY_RELEASE ]]; then
+  exit 0
+fi
+
 post_release_javascript
 post_release_java
 post_release_ruby
