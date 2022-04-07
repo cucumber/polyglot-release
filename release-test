@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 ## 01: Release and post release
 pushd test-fixture
