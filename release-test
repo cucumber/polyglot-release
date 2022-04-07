@@ -6,6 +6,7 @@ pushd test-fixture
 popd
 git diff --unified=0 > 01-actual.diff
 diff 01-actual.diff 01-expected.diff
+sed --in-place '/^index/d' 01-expected.diff
 git restore --source=HEAD --staged --worktree -- test-fixture
 
 ## 02: Only release
@@ -14,4 +15,7 @@ pushd test-fixture
 popd
 git diff --unified=0 > 02-actual.diff
 diff 02-actual.diff 02-expected.diff
+sed --in-place '/^index/d' 02-expected.diff
 git restore --source=HEAD --staged --worktree -- test-fixture
+
+test
