@@ -5,13 +5,13 @@
 
     <groupId>com.example</groupId>
     <artifactId>project</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <scm>
         <connection>scm:git:git://github.com/cucumber/polyglot-release.git</connection>
         <developerConnection>scm:git:git@github.com:cucumber/polyglot-release.git</developerConnection>
         <url>git://github.com/cucumber/polyglot-release.git</url>
-        <tag>HEAD</tag>
+        <tag>v1.0.0</tag>
     </scm>
 </project>
