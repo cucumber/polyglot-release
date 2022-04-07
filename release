@@ -108,7 +108,6 @@ function validate_environment() {
   fi
 }
 
-
 function showUsage() {
   echo "Usage: $0 [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
@@ -158,14 +157,18 @@ done
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 validate_environment
-
 if [[ $# -ne 1 ]]; then
-  echo "Missing MAJOR.MINOR.PATCH argument"
+  echo "Missing MAJOR.MINOR.PATCH argument. Please specify a version to release."
+  echo
   showUsage
+  echo
+  echo "To help you choose the next version, here are the unreleased changes:"
+  echo
+  echo "$(changelog show unreleased)"
+  echo
   exit 1
 fi
 NEW_VERSION=$1
-
 validate_new_version_argument
 
 ###
