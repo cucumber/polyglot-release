@@ -7,7 +7,7 @@ fi
 
 ## 01: Release and post release
 pushd test-fixture
-../release 1.0.0 --no-git-commit > /dev/null
+../release 1.0.0 --no-git-commit
 popd
 git diff --unified=0 > 01-actual.diff
 sed -i.bak '/^index/d' 01-actual.diff
@@ -16,7 +16,7 @@ git restore --source=HEAD --staged --worktree -- test-fixture
 
 ## 02: Only release
 pushd test-fixture
-../release 1.0.0 --no-git-commit --only-release > /dev/null
+../release 1.0.0 --no-git-commit --only-release
 popd
 git diff --unified=0 > 02-actual.diff
 sed -i.bak '/^index/d' 02-actual.diff
