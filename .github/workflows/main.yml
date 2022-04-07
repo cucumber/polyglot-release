@@ -21,9 +21,4 @@ jobs:
         with:
           distribution: "temurin" # See 'Supported distributions' for available options
           java-version: "17"
-      - name: Install `npm` tool
-        uses: actions/setup-node@v3
-        with:
-          node-version: "14"
-
       - run: ./release-test
