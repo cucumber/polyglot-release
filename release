@@ -1,6 +1,14 @@
 #!/bin/bash
 set -e
 
+# TODO:
+# Version4:
+# Bootstrap from single git repo.
+# Add tests
+
+# Version5:
+# Version bumping
+
 # quiet output from pushd / popd
 pushd () { 
   command pushd "$@" > /dev/null
@@ -100,19 +108,7 @@ function validate_environment() {
   fi
 }
 
-# TODO:
-# Version3:
-# Integrity check (are all the tools installed?)
-# Present the user with the current version?
-# Show unreleased
-# Reduce the output from git
 
-# Version4:
-# Bootstrap from single git repo.
-# Add tests
-
-# Version5:
-# Version bumping
 function showUsage() {
   echo "Usage: $0 [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
