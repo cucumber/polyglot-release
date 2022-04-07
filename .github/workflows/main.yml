@@ -11,9 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: |
+      - name: Install `changelog` tool
+        run: |
           mkdir -p $HOME/.local/bin
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           wget -qO- https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz | tar xvz -C $HOME/.local/bin changelog
+      - name: Install `mvn` tool
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin" # See 'Supported distributions' for available options
+          java-version: "17"
+      - name: Install `npm` tool
+        uses: actions/setup-node@v3
+        with:
+          node-version: "14"
 
       - run: ./release-test
