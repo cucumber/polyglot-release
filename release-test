@@ -1,7 +1,12 @@
 #!/bin/bash
+set -e
 
 cd test-fixture
+
+## 01: Full release
 ../release 1.0.0 --no-git-commit
 
-git diff --unified=0
-#git reset --hard HEAD
+git diff --unified=0 > 01-actual.diff
+diff 01-actual.diff 01-expected.diff
+
+git reset --hard HEAD
