@@ -13,5 +13,5 @@ pushd test-fixture
 ../release 1.0.0 --no-git-commit --only-release > /dev/null
 popd
 git diff --unified=0 > 02-actual.diff
-diff 02-actual.diff 01-expected.diff
+diff 02-actual.diff 02-expected.diff
 git restore --source=HEAD --staged --worktree -- test-fixture
