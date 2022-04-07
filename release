@@ -12,7 +12,7 @@ popd () {
 function release_javascript() {
   if [[ -d javascript ]]; then
     pushd javascript
-    npm version $NEW_VERSION
+    npm version $NEW_VERSION > /dev/null
     popd
   fi
 }
