@@ -25,4 +25,12 @@ diff 02-actual.diff 02-expected.diff
 [[ $? != 0 ]] && failure="true"
 git restore --source=HEAD --staged --worktree -- test-fixture
 
+## 03: Show unreleased changes
+pushd test-fixture
+../release --no-git-tag-check > ../03-actual.output
+popd
+diff 03-actual.output 03-expected.output
+[[ $? != 0 ]] && failure="true"
+git restore --source=HEAD --staged --worktree -- test-fixture
+
 test -z $failure

@@ -1,13 +1,12 @@
 diff --git a/test-fixture/CHANGELOG.md b/test-fixture/CHANGELOG.md
 --- a/test-fixture/CHANGELOG.md
 +++ b/test-fixture/CHANGELOG.md
-@@ -9,0 +10,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
+@@ -9,0 +10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 +## [1.0.0] - 2022-04-07
-+
-@@ -12 +14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
+@@ -15 +16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -## [0.0.0] - 2019-08-23
 +## 0.0.0 - 2019-08-23
-@@ -14 +16,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
+@@ -17 +18,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 +[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
