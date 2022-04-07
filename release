@@ -148,7 +148,7 @@ fi
 ###
 ## post release
 ###
-if [[ -z $ONLY_RELEASE ]]; then
+if [[ -n $ONLY_RELEASE ]]; then
   exit 0
 fi
 
