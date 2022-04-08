@@ -43,10 +43,10 @@ function post_release_java() {
   check_for_tools "mvn"
   if [[ -d java ]]; then
     pushd java
-    NEW_VERSION_TEMPLATE="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
+    new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
     mvn --quiet \
       build-helper:parse-version \
-      versions:set -DnewVersion="$NEW_VERSION_TEMPLATE" \
+      versions:set -DnewVersion="$new_version_template" \
       versions:set-scm-tag -DnewTag="HEAD" \
       2> /dev/null
     popd
