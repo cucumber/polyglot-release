@@ -5,32 +5,47 @@ if ! git diff-index --quiet HEAD; then
   exit 1
 fi
 
-echo "## 01: Release and post release"
+echo -n "## 01: Release and post release "
 pushd test-fixture > /dev/null
 ../release 1.0.0 --no-git-commit --no-git-tag-check
 popd > /dev/null
 git diff --unified=0 > 01-actual.diff
 sed -i.bak '/^index/d' 01-actual.diff
 cat 01-expected.diff | sed 's/2022-04-07/2022-04-08/' | diff 01-actual.diff -
-[[ $? != 0 ]] && failure="true"
+if [[ $? != 0 ]]; then
+  failure="true"
+  echo "🛑"
+else
+  echo "✅"
+fi
 git restore --source=HEAD --staged --worktree -- test-fixture
 
-echo "## 02: Only release"
+echo -n "## 02: Only release "
 pushd test-fixture > /dev/null
 ../release 1.0.0 --no-git-commit --no-git-tag-check --only-release
 popd > /dev/null
 git diff --unified=0 > 02-actual.diff
 sed -i.bak '/^index/d' 02-actual.diff
 cat 02-expected.diff | sed 's/2022-04-07/2022-04-08/' | diff 02-actual.diff -
-[[ $? != 0 ]] && failure="true"
+if [[ $? != 0 ]]; then
+  failure="true"
+  echo "🛑"
+else
+  echo "✅"
+fi
 git restore --source=HEAD --staged --worktree -- test-fixture
 
-echo "03: Show unreleased changes"
+echo -n "## 03: Show unreleased changes "
 pushd test-fixture > /dev/null
 ../release --no-git-tag-check > ../03-actual.output
 popd > /dev/null
 diff 03-expected.output 03-actual.output
-[[ $? != 0 ]] && failure="true"
+if [[ $? != 0 ]]; then
+  failure="true"
+  echo "🛑"
+else
+  echo "✅"
+fi
 git restore --source=HEAD --staged --worktree -- test-fixture
 
 test -z $failure
