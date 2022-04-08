@@ -18,7 +18,7 @@ function pre_release_javascript() {
 function release_javascript() {
   if [[ -d javascript ]]; then
     pushd javascript
-    npm version $NEW_VERSION >/dev/null
+    npm version --no-git-tag-version $NEW_VERSION >/dev/null
     popd
   fi
 }
