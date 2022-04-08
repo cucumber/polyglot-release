@@ -1,12 +1,24 @@
 #!/bin/bash
 set -e
 
-COMMAND="${BOOTSTRAPPER_NAME:-$0}"
+# quiet output from pushd / popd
+pushd() {
+  command pushd "$@" >/dev/null
+}
+popd() {
+  command popd "$@" >/dev/null
+}
+
+function pre_release_javascript() {
+  if [[ -d javascript ]]; then
+    check_for_tools "npm"
+  fi
+}
 
 function release_javascript() {
   if [[ -d javascript ]]; then
     pushd javascript
-    npm version $NEW_VERSION
+    npm version --no-git-tag-version $NEW_VERSION >/dev/null
     popd
   fi
 }
@@ -15,25 +27,36 @@ function post_release_javascript() {
   :
 }
 
+function pre_release_java() {
+  if [[ -d java ]]; then
+    check_for_tools "mvn"
+  fi
+}
+
 function release_java() {
   if [[ -d java ]]; then
     pushd java
-    mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2> /dev/null
-    mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2> /dev/null
+    mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
+    mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
     popd
   fi
 }
 function post_release_java() {
   if [[ -d java ]]; then
     pushd java
-    NEW_VERSION_TEMPLATE="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
+    new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
     mvn --quiet \
       build-helper:parse-version \
-      versions:set -DnewVersion="$NEW_VERSION_TEMPLATE" \
+      versions:set -DnewVersion="$new_version_template" \
       versions:set-scm-tag -DnewTag="HEAD" \
-      2> /dev/null
+      2>/dev/null
     popd
   fi
+}
+
+function pre_release_ruby() {
+  # noop
+  :
 }
 
 function release_ruby() {
@@ -43,32 +66,74 @@ function release_ruby() {
     popd
   fi
 }
+
 function post_release_ruby() {
   # noop
   :
 }
 
-# TODO:
-# Version3:
-# Integrity check (are all the tools installed?)
-# Present the user with the current version?
-# Show unreleased
-# Reduce the output from git and pushd/popo
+function validate_new_version_argument() {
+  if [[ ! "$NEW_VERSION" =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
+    echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
+    show_usage
+    exit 1
+  fi
 
-# Version4:
-# Bootstrap from single git repo.
-# Add tests
+  if [ -n "$(git tag --list "v$NEW_VERSION")" ]; then
+    echo "Version $NEW_VERSION has already been released."
+    exit 1
+  fi
+}
 
-# Version5:
-# Version bumping
-function showUsage() {
+function check_for_tools() {
+  for tool in "$@"; do
+    if ! command -v $tool >/dev/null; then
+      echo "$tool is not installed!"
+      missing_tool="true"
+    fi
+  done
+  if [ "$missing_tool" ]; then
+    echo
+    echo "Please install the missing required tool(s)."
+    exit 1
+  fi
+}
+
+function validate_local_git() {
+  check_for_tools "git" "changelog"
+
+  if [[ (-z $NO_GIT_TAG_CHECK) && (-z "$(git tag --list "v$(changelog latest)")") ]]; then
+    echo "No git tag found for v$(changelog latest) (found in CHANGELOG.md)!"
+    echo
+    echo "Do you need to run this?"
+    echo "    git fetch --tags"
+    exit 1
+  fi
+
+  if ! git diff-index --quiet HEAD; then
+    echo "Git has uncommitted changes."
+    exit 1
+  fi
+}
+
+function show_usage() {
   echo "Usage: $COMMAND [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
-  echo "  --help             shows this help"
-  echo "  --no-git-push      do not push to git"
-  echo "  --no-git-commit    do not commit git"
-  echo "  --only-release     do not update versions after release"
+  echo "  --help                 shows this help"
+  echo "  --no-git-push          do not push to git"
+  echo "  --no-git-commit        do not commit git"
+  echo "  --no-git-tag-check     do not check local git tags are up to date with CHANGELOG.md"
+  echo "  --only-release         do not update versions after release"
 }
+
+# Initialize global variables
+COMMAND="${BOOTSTRAPPER_NAME:-$0}"
+NEW_VERSION=
+NO_GIT_TAG_CHECK=
+NO_GIT_PUSH=
+NO_GIT_TAG=
+ONLY_RELEASE=
+POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -81,18 +146,22 @@ while [[ $# -gt 0 ]]; do
     NO_GIT_PUSH="true"
     shift # past argument
     ;;
+  --no-git-tag-check)
+    NO_GIT_TAG_CHECK="true"
+    shift # past argument
+    ;;
   --only-release)
     ONLY_RELEASE="true"
     shift # past argument
     ;;
   -h | --help)
     echo "Makes a release to GitHub"
-    showUsage
+    show_usage
     exit 0
     ;;
   -* | --*)
     echo "Unknown option $1"
-    showUsage
+    show_usage
     exit 1
     ;;
   *)
@@ -104,35 +173,27 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
+validate_local_git
 if [[ $# -ne 1 ]]; then
-  echo "Missing MAJOR.MINOR.PATCH argument"
-  showUsage
+  echo "Missing MAJOR.MINOR.PATCH argument. Please specify a version to release."
+  echo
+  show_usage
+  echo
+  echo "To help you choose the next version, here are the unreleased changes:"
+  echo
+  echo "$(changelog show unreleased)"
+  echo
   exit 1
 fi
-
 NEW_VERSION=$1
+validate_new_version_argument
 
-if [[ ! "$NEW_VERSION" =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
-  echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
-  showUsage
-  exit 1
-fi
-
-if [[ ! "$NEW_VERSION" =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
-  echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
-  showUsage
-  exit 1
-fi
-
-if [ -n "$(git tag --list "v$NEW_VERSION")" ]; then
-  echo "Version $NEW_VERSION has already been released"
-  exit 1
-fi
-
-if ! git diff-index --quiet HEAD; then
-  echo "Git has uncommitted changes"
-  exit 1
-fi
+###
+## pre release
+###
+pre_release_javascript
+pre_release_java
+pre_release_ruby
 
 ###
 ## release
@@ -144,7 +205,7 @@ release_ruby
 changelog release "$NEW_VERSION" --tag-format "v%s" -o CHANGELOG.md
 
 if [[ -z $NO_GIT_COMMIT ]]; then
-  git commit -am "Prepare release v$NEW_VERSION"
+  git commit --quiet --all --message="Prepare release v$NEW_VERSION"
   git tag "v$NEW_TAG"
 fi
 
@@ -160,13 +221,13 @@ post_release_java
 post_release_ruby
 
 if [[ -z $NO_GIT_COMMIT ]]; then
-  git commit -am "Prepare for the next development iteration"
+  git commit --quiet --all --message="Prepare for the next development iteration"
 fi
 
 ###
 # push to github
 ##
 if [[ -z $NO_GIT_PUSH ]]; then
-  git push origin
-  git push origin "$(git rev-list --max-count=1 "v$NEW_VERSION"):refs/heads/release/v$NEW_VERSION"
+  git push --quiet origin
+  git push --quiet origin "$(git rev-list --max-count=1 "v$NEW_VERSION"):refs/heads/release/v$NEW_VERSION"
 fi
