@@ -4,7 +4,7 @@ set -e
 function release_javascript() {
   if [[ -d javascript ]]; then
     pushd javascript
-    npm version $NEW_VERSION
+    npm version $NEW_VERSION --no-git-tag-version
     popd
   fi
 }
