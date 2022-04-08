@@ -18,6 +18,7 @@ popd () {
 }
 
 function release_javascript() {
+  check_for_tools "npm"
   if [[ -d javascript ]]; then
     pushd javascript
     npm version $NEW_VERSION > /dev/null
@@ -30,6 +31,7 @@ function post_release_javascript() {
 }
 
 function release_java() {
+  check_for_tools "mvn"
   if [[ -d java ]]; then
     pushd java
     mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2> /dev/null
@@ -38,6 +40,7 @@ function release_java() {
   fi
 }
 function post_release_java() {
+  check_for_tools "mvn"
   if [[ -d java ]]; then
     pushd java
     NEW_VERSION_TEMPLATE="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
@@ -76,23 +79,23 @@ function validate_new_version_argument() {
   fi
 }
 
-function validate_environment() {
+function check_for_tools() {
+  for tool in "$@"
+  do
+    if ! command -v $tool > /dev/null; then
+      echo "$tool is not installed!"
+      missing_tool="true"
+    fi
+  done
+  if [ "$missing_tool" ]; then
+    echo
+    echo "Please install the missing required tool(s)."
+    exit 1
+  fi
+}
 
-   required_tools=("git" "changelog")
-   [[ -d javascript ]] && required_tools+=("npm")
-   [[ -d java ]] && required_tools+=("mvn")
-   for tool in ${required_tools[@]}
-   do
-     if ! command -v $tool > /dev/null; then
-       echo "$tool is not installed!"
-       missing_tool="true"
-     fi
-   done
-   if [ "$missing_tool" ]; then
-     echo
-     echo "Please install the missing required tool(s)."
-     exit 1
-   fi
+function validate_local_git() {
+  check_for_tools "git" "changelog"
 
   if [[ (-z $NO_GIT_TAG_CHECK) && (-z "$(git tag --list "v$(changelog latest)")") ]]; then
     echo "No git tag found for v$(changelog latest) (found in CHANGELOG.md)!"
@@ -156,7 +159,7 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
-validate_environment
+validate_local_git
 if [[ $# -ne 1 ]]; then
   echo "Missing MAJOR.MINOR.PATCH argument. Please specify a version to release."
   echo
