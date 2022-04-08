@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+COMMAND="${BOOTSTRAPPER_NAME:-$0}"
+
 function release_javascript() {
   if [[ -d javascript ]]; then
     pushd javascript
@@ -60,7 +62,7 @@ function post_release_ruby() {
 # Version5:
 # Version bumping
 function showUsage() {
-  echo "Usage: $0 [OPTIONS] MAJOR.MINOR.PATCH"
+  echo "Usage: $COMMAND [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help             shows this help"
   echo "  --no-git-push      do not push to git"
