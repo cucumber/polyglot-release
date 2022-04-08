@@ -69,7 +69,7 @@ function post_release_ruby() {
 function validate_new_version_argument() {
   if [[ ! "$NEW_VERSION" =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
     echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
-    showUsage
+    show_usage
     exit 1
   fi
 
@@ -111,7 +111,7 @@ function validate_local_git() {
   fi
 }
 
-function showUsage() {
+function show_usage() {
   echo "Usage: $0 [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help                 shows this help"
@@ -142,12 +142,12 @@ while [[ $# -gt 0 ]]; do
     ;;
   -h | --help)
     echo "Makes a release to GitHub"
-    showUsage
+    show_usage
     exit 0
     ;;
   -* | --*)
     echo "Unknown option $1"
-    showUsage
+    show_usage
     exit 1
     ;;
   *)
@@ -163,7 +163,7 @@ validate_local_git
 if [[ $# -ne 1 ]]; then
   echo "Missing MAJOR.MINOR.PATCH argument. Please specify a version to release."
   echo
-  showUsage
+  show_usage
   echo
   echo "To help you choose the next version, here are the unreleased changes:"
   echo
