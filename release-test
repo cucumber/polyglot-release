@@ -5,23 +5,23 @@ if ! git diff-index --quiet HEAD; then
   exit 1
 fi
 
-## 01: Release and post release
+echo "## 01: Release and post release"
 pushd test-fixture
 ../release 1.0.0 --no-git-commit
 popd
 git diff --unified=0 > 01-actual.diff
 sed -i.bak '/^index/d' 01-actual.diff
-diff 01-actual.diff 01-expected.diff
+cat 01-expected.diff | sed 's/2022-04-07/2022-04-08/' | diff 01-actual.diff -
 [[ $? != 0 ]] && failure="true"
 git restore --source=HEAD --staged --worktree -- test-fixture
 
-## 02: Only release
+echo "## 02: Only release"
 pushd test-fixture
 ../release 1.0.0 --no-git-commit --only-release
 popd
 git diff --unified=0 > 02-actual.diff
 sed -i.bak '/^index/d' 02-actual.diff
-diff 02-actual.diff 02-expected.diff
+cat 02-expected.diff | sed 's/2022-04-07/2022-04-08/' | diff 02-actual.diff -
 [[ $? != 0 ]] && failure="true"
 git restore --source=HEAD --staged --worktree -- test-fixture
 
