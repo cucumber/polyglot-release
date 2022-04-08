@@ -1,27 +1,24 @@
 #!/bin/bash
 set -e
 
-# TODO:
-# Version4:
-# Bootstrap from single git repo.
-# Add tests
-
-# Version5:
-# Version bumping
-
 # quiet output from pushd / popd
-pushd () { 
-  command pushd "$@" > /dev/null
+pushd() {
+  command pushd "$@" >/dev/null
 }
-popd () { 
-  command popd "$@" > /dev/null
+popd() {
+  command popd "$@" >/dev/null
+}
+
+function pre_release_javascript() {
+  if [[ -d javascript ]]; then
+    check_for_tools "npm"
+  fi
 }
 
 function release_javascript() {
-  check_for_tools "npm"
   if [[ -d javascript ]]; then
     pushd javascript
-    npm version $NEW_VERSION > /dev/null
+    npm version $NEW_VERSION >/dev/null
     popd
   fi
 }
@@ -30,17 +27,21 @@ function post_release_javascript() {
   :
 }
 
+function pre_release_java() {
+  if [[ -d java ]]; then
+    check_for_tools "mvn"
+  fi
+}
+
 function release_java() {
-  check_for_tools "mvn"
   if [[ -d java ]]; then
     pushd java
-    mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2> /dev/null
-    mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2> /dev/null
+    mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
+    mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
     popd
   fi
 }
 function post_release_java() {
-  check_for_tools "mvn"
   if [[ -d java ]]; then
     pushd java
     new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
@@ -48,9 +49,14 @@ function post_release_java() {
       build-helper:parse-version \
       versions:set -DnewVersion="$new_version_template" \
       versions:set-scm-tag -DnewTag="HEAD" \
-      2> /dev/null
+      2>/dev/null
     popd
   fi
+}
+
+function pre_release_ruby() {
+  # noop
+  :
 }
 
 function release_ruby() {
@@ -80,9 +86,8 @@ function validate_new_version_argument() {
 }
 
 function check_for_tools() {
-  for tool in "$@"
-  do
-    if ! command -v $tool > /dev/null; then
+  for tool in "$@"; do
+    if ! command -v $tool >/dev/null; then
       echo "$tool is not installed!"
       missing_tool="true"
     fi
@@ -120,6 +125,14 @@ function show_usage() {
   echo "  --no-git-tag-check     do not check local git tags are up to date with CHANGELOG.md"
   echo "  --only-release         do not update versions after release"
 }
+
+# Unset variables
+NEW_VERSION=
+NO_GIT_TAG_CHECK=
+NO_GIT_PUSH=
+NO_GIT_TAG=
+ONLY_RELEASE=
+POSITIONAL_ARGS=()
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -173,6 +186,13 @@ if [[ $# -ne 1 ]]; then
 fi
 NEW_VERSION=$1
 validate_new_version_argument
+
+###
+## pre release
+###
+pre_release_javascript
+pre_release_java
+pre_release_ruby
 
 ###
 ## release

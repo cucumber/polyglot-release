@@ -1,51 +1,53 @@
 #!/bin/bash
 
+FAILURE=
+
+function start_test() {
+    echo -n $1
+}
+
+function finish_test() {
+    if [[ $? != 0 ]]; then
+      FAILURE="true"
+      echo " 🔴"
+    else
+      echo " ✅"
+    fi
+}
+
 if ! git diff-index --quiet HEAD; then
   echo "Git has uncommitted changes"
   exit 1
 fi
 
-echo -n "## 01: Release and post release "
+start_test "## 01: Release and post release"
 pushd test-fixture > /dev/null
 ../release 1.0.0 --no-git-commit --no-git-tag-check
 popd > /dev/null
 git diff --unified=0 > 01-actual.diff
 sed -i.bak '/^index/d' 01-actual.diff
-cat 01-expected.diff | sed 's/2022-04-07/2022-04-08/' | diff 01-actual.diff -
-if [[ $? != 0 ]]; then
-  failure="true"
-  echo "🛑"
-else
-  echo "✅"
-fi
+sed -i.bak 's/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/2000-01-01/g' 01-actual.diff
+diff 01-expected.diff 01-actual.diff
+finish_test
 git restore --source=HEAD --staged --worktree -- test-fixture
 
-echo -n "## 02: Only release "
+start_test "## 02: Only release "
 pushd test-fixture > /dev/null
 ../release 1.0.0 --no-git-commit --no-git-tag-check --only-release
 popd > /dev/null
 git diff --unified=0 > 02-actual.diff
 sed -i.bak '/^index/d' 02-actual.diff
-cat 02-expected.diff | sed 's/2022-04-07/2022-04-08/' | diff 02-actual.diff -
-if [[ $? != 0 ]]; then
-  failure="true"
-  echo "🛑"
-else
-  echo "✅"
-fi
+sed -i.bak 's/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/2000-01-01/g' 02-actual.diff
+diff 02-expected.diff 02-actual.diff
+finish_test
 git restore --source=HEAD --staged --worktree -- test-fixture
 
-echo -n "## 03: Show unreleased changes "
+start_test "## 03: Show unreleased changes "
 pushd test-fixture > /dev/null
 ../release --no-git-tag-check > ../03-actual.output
 popd > /dev/null
 diff 03-expected.output 03-actual.output
-if [[ $? != 0 ]]; then
-  failure="true"
-  echo "🛑"
-else
-  echo "✅"
-fi
+finish_test
 git restore --source=HEAD --staged --worktree -- test-fixture
 
-test -z $failure
+test -z $FAILURE
