@@ -1,0 +1,5 @@
+#!/bin/bash
+TMP_FILE=$(mktemp)
+curl --silent -o "$TMP_FILE" https://raw.githubusercontent.com/cucumber/polyglot-release/main/polyglot-release
+chmod 744 "$TMP_FILE"
+$TMP_FILE $@
