@@ -22,7 +22,7 @@ fi
 
 start_test "## 01: Release and post release"
 pushd test-fixture > /dev/null
-../release 1.0.0 --no-git-commit --no-git-tag-check
+../polyglot-release 1.0.0 --no-git-commit --no-git-tag-check
 popd > /dev/null
 git diff --unified=0 > 01-actual.diff
 sed -i.bak '/^index/d' 01-actual.diff
@@ -33,7 +33,7 @@ git restore --source=HEAD --staged --worktree -- test-fixture
 
 start_test "## 02: Only release "
 pushd test-fixture > /dev/null
-../release 1.0.0 --no-git-commit --no-git-tag-check --only-release
+../polyglot-release 1.0.0 --no-git-commit --no-git-tag-check --only-release
 popd > /dev/null
 git diff --unified=0 > 02-actual.diff
 sed -i.bak '/^index/d' 02-actual.diff
@@ -44,7 +44,7 @@ git restore --source=HEAD --staged --worktree -- test-fixture
 
 start_test "## 03: Show unreleased changes "
 pushd test-fixture > /dev/null
-../release --no-git-tag-check > ../03-actual.output
+../polyglot-release --no-git-tag-check > ../03-actual.output
 popd > /dev/null
 diff 03-expected.output 03-actual.output
 finish_test

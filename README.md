@@ -3,12 +3,14 @@
 # polyglot-release
 Make polyglot releases with a single command
 
-Automates Cucumber Release process as documented in [RELEASING.md](https://github.com/cucumber/.github/blob/main/RELEASING.md).
+Supports the release process for polyglot repos as documented in [RELEASING.md](https://github.com/cucumber/.github/blob/main/RELEASING.md).
+
+## Installation
 
 To install in a project run:
 
 ```shell
-curl --silent -o release https://raw.githubusercontent.com/cucumber/polyglot-release/main/bootstrapper
-chmod 744 release
-./release --help
+curl --silent -o ~/.local/bin/polyglot-release https://raw.githubusercontent.com/cucumber/polyglot-release/main/polyglot-release-bootstrapper
+chmod 744 polyglot-release
+./polyglot-release --help
 ```

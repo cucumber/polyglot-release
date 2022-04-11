@@ -1,6 +1,6 @@
 Missing MAJOR.MINOR.PATCH argument. Please specify a version to release.
 
-Usage: ../release [OPTIONS] MAJOR.MINOR.PATCH
+Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
 OPTIONS:
   --help                 shows this help
   --no-git-push          do not push to git

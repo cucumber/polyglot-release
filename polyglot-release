@@ -117,7 +117,7 @@ function validate_local_git() {
 }
 
 function show_usage() {
-  echo "Usage: $COMMAND [OPTIONS] MAJOR.MINOR.PATCH"
+  echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help                 shows this help"
   echo "  --no-git-push          do not push to git"
@@ -127,7 +127,6 @@ function show_usage() {
 }
 
 # Initialize global variables
-COMMAND="${BOOTSTRAPPER_NAME:-$0}"
 NEW_VERSION=
 NO_GIT_TAG_CHECK=
 NO_GIT_PUSH=
