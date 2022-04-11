@@ -13,5 +13,5 @@ To install in a project run:
 curl --silent -o ~/.local/bin/polyglot-release https://raw.githubusercontent.com/cucumber/polyglot-release/main/polyglot-release-bootstrapper
 chmod 744 ~/.local/bin/polyglot-release
 # Ensure ~/.local/bin is in your $PATH
-./polyglot-release --help
+polyglot-release --help
 ```
