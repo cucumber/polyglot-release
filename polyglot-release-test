@@ -4,7 +4,7 @@ FAILURE=
 SRC=$(realpath .)
 
 function setup_git_repo() {
-  git init --quiet
+  git init --quiet --initial-branch=main
   git config user.email "tests@example.com"
   git config user.name "Cucumber tests"
   git add .
