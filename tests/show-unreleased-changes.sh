@@ -1,1 +1,1 @@
-polyglot-release --no-git-tag-check
+polyglot-release

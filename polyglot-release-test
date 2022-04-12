@@ -12,6 +12,7 @@ for test in $TESTS/*.sh; do
   git init --quiet
   git add .
   git commit -m "Initial commit" --quiet
+  git tag v0.0.1
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \

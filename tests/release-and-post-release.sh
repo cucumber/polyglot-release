@@ -1,1 +1,1 @@
-polyglot-release 1.0.0 --no-git-commit --no-git-tag-check
+polyglot-release 1.0.0 --no-git-commit
