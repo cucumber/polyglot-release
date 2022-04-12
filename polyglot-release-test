@@ -1,33 +1,14 @@
 #!/bin/bash
 
 FAILURE=
-
-function start_test() {
-    echo -n $1
-}
-
-function finish_test() {
-    if [[ $? != 0 ]]; then
-      FAILURE="true"
-      echo " 🔴"
-    else
-      echo " ✅"
-    fi
-}
-
-# if ! git diff-index --quiet HEAD; then
-#   echo "Git has uncommitted changes"
-#   exit 1
-# fi
-
 SRC=$(realpath .)
 TESTS=$(realpath tests)
 
 for test in $TESTS/*.sh; do
-  start_test ${test##*/}
-  WORKDIR=$(mktemp -d)
-  cp -R ./tests/fixture $WORKDIR
-  pushd $WORKDIR/fixture > /dev/null
+  echo -n ${test##*/}
+  workdir=$(mktemp -d)
+  cp -R ./tests/fixture $workdir
+  pushd $workdir/fixture > /dev/null
   git init --quiet
   git add .
   git commit -m "Initial commit" --quiet
@@ -41,15 +22,12 @@ for test in $TESTS/*.sh; do
   else
     diff $test.expected.output $test.actual.output
   fi
-  finish_test
+  if [[ $? != 0 ]]; then
+    FAILURE="true"
+    echo " 🔴"
+  else
+    echo " ✅"
+  fi
 done
 
-# # start_test "## 03: Show unreleased changes "
-# # pushd test-fixture > /dev/null
-# # ../polyglot-release --no-git-tag-check > ../03-actual.output
-# # popd > /dev/null
-# # diff 03-expected.output 03-actual.output
-# # finish_test
-# # git restore --source=HEAD --staged --worktree -- test-fixture
-
-# test -z $FAILURE
+test -z $FAILURE
