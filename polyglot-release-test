@@ -2,9 +2,9 @@
 
 FAILURE=
 SRC=$(realpath .)
-TESTS=$(realpath tests)
 
-for test in $TESTS/*.sh; do
+function run_test() {
+  test=$1
   echo -n ${test##*/}
   workdir=$(mktemp -d)
   cp -R ./tests/fixture $workdir
@@ -32,6 +32,16 @@ for test in $TESTS/*.sh; do
   else
     echo " ✅"
   fi
-done
+}
 
+if [ $1 ]; then
+  # Run a single test
+  run_test $(realpath $1)
+else
+  # Run all tests
+  tests=$(realpath tests)
+  for test in $tests/*.sh; do
+    run_test $test
+  done
+fi
 test -z $FAILURE
