@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
+
 # quiet output from pushd / popd
 pushd() {
   command pushd "$@" >/dev/null
@@ -201,7 +203,10 @@ release_javascript
 release_java
 release_ruby
 
-changelog release "$NEW_VERSION" --tag-format "v%s" -o CHANGELOG.md
+changelog release "$NEW_VERSION" \
+  --release-date $RELEASE_DATE \
+  --tag-format "v%s" \
+  --output CHANGELOG.md
 
 if [[ -z $NO_GIT_COMMIT ]]; then
   git commit --quiet --all --message="Prepare release v$NEW_VERSION"
