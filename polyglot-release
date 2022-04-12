@@ -104,7 +104,7 @@ function check_for_tools() {
 function validate_local_git() {
   check_for_tools "git" "changelog"
 
-  if [[ (-z $NO_GIT_TAG_CHECK) && (-z "$(git tag --list "v$(changelog latest)")") ]]; then
+  if [[ -z "$(git tag --list "v$(changelog latest)")" ]]; then
     echo "No git tag found for v$(changelog latest) (found in CHANGELOG.md)!"
     echo
     echo "Do you need to run this?"
@@ -124,13 +124,11 @@ function show_usage() {
   echo "  --help                 shows this help"
   echo "  --no-git-push          do not push to git"
   echo "  --no-git-commit        do not commit git"
-  echo "  --no-git-tag-check     do not check local git tags are up to date with CHANGELOG.md"
   echo "  --only-release         do not update versions after release"
 }
 
 # Initialize global variables
 NEW_VERSION=
-NO_GIT_TAG_CHECK=
 NO_GIT_PUSH=
 NO_GIT_TAG=
 ONLY_RELEASE=
@@ -145,10 +143,6 @@ while [[ $# -gt 0 ]]; do
   --no-git-commit)
     NO_GIT_COMMIT="true"
     NO_GIT_PUSH="true"
-    shift # past argument
-    ;;
-  --no-git-tag-check)
-    NO_GIT_TAG_CHECK="true"
     shift # past argument
     ;;
   --only-release)
