@@ -3,16 +3,22 @@
 FAILURE=
 SRC=$(realpath .)
 
+function setup_git_repo() {
+  git init --quiet
+  git config user.email "tests@example.com"
+  git config user.name "Cucumber tests"
+  git add .
+  git commit -m "Initial commit" --quiet
+  git tag v0.0.1
+}
+
 function run_test() {
   test=$1
   echo -n ${test##*/}
   workdir=$(mktemp -d)
   cp -R ./tests/fixture $workdir
   pushd $workdir/fixture > /dev/null
-  git init --quiet
-  git add .
-  git commit -m "Initial commit" --quiet
-  git tag v0.0.1
+  setup_git_repo
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \
