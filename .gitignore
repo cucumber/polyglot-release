@@ -2,4 +2,6 @@
 
 *-actual.diff
 *-actual.output
+*.actual.diff
+*.actual.output
 *.bak
