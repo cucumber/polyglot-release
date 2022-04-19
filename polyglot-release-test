@@ -13,11 +13,8 @@ function setup_git_repo() {
   git tag v0.0.1
 }
 
-function run_test() {
+function get_fixture() {
   test=$1
-  test_failed=
-  echo -n "${test##*/} "
-  workdir=$(mktemp -d)
   header="$(head -n 1 $test)"
   fixture_pattern="# fixture: (.+)"
   if [[ $header =~ $fixture_pattern ]]
@@ -26,6 +23,15 @@ function run_test() {
   else
     fixture=polyglot
   fi
+  echo $fixture
+}
+
+function run_test() {
+  test=$1
+  test_failed=
+  echo -n "${test##*/} "
+  workdir=$(mktemp -d)
+  fixture=$(get_fixture $test)
   cp -R ./tests/fixtures/$fixture $workdir/local
   pushd $workdir/local > /dev/null
   setup_git_repo
