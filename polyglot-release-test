@@ -16,7 +16,7 @@ function setup_git_repo() {
 function run_test() {
   test=$1
   test_failed=
-  echo -n "${test##*/} "
+  echo -n ${test##*/}
   workdir=$(mktemp -d)
   cp -R ./tests/fixture $workdir
   pushd $workdir/fixture > /dev/null
@@ -25,7 +25,6 @@ function run_test() {
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \
     > $test.actual.output
-  if [[ $? != 0 ]]; then test_failed="true"; fi
   git diff --unified=0 \
     | sed -e '/^index/d' \
     > $test.actual.git-diff
@@ -40,9 +39,9 @@ function run_test() {
   done
   if [ -n "$test_failed" ]; then
     FAILURE="true"
-    echo "🔴"
+    echo " 🔴"
   else
-    echo "✅"
+    echo " ✅"
   fi
 }
 
