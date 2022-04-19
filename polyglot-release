@@ -14,13 +14,20 @@ function run() {
     pushd "$2"
     eval "$1_$2"
     popd
+  elif eval "is_monoglot_$2"; then
+    echo "Was $2 monoglot invoking $1_$2"
+    eval "$1_$2"
+  else
+      echo "Was not $2 monoglot"
   fi
 }
 
+function is_monoglot_javascript() {
+  [[ -f package.json ]]
+}
 function pre_release_javascript() {
   check_for_tools "npm"
 }
-
 function release_javascript() {
   npm version --no-git-tag-version "$NEW_VERSION" >/dev/null
 }
@@ -29,10 +36,12 @@ function post_release_javascript() {
   :
 }
 
+function is_monoglot_java() {
+  [[ -f pom.xml ]]
+}
 function pre_release_java() {
   check_for_tools "mvn"
 }
-
 function release_java() {
   mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
   mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
@@ -46,15 +55,16 @@ function post_release_java() {
     2>/dev/null
 }
 
+function is_monoglot_ruby() {
+  [[ -f Rakefile ]]
+}
 function pre_release_ruby() {
   # noop
   :
 }
-
 function release_ruby() {
   echo "$NEW_VERSION" >VERSION
 }
-
 function post_release_ruby() {
   # noop
   :
