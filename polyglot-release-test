@@ -5,6 +5,7 @@ SRC=$(realpath .)
 
 function setup_git_repo() {
   git init --quiet
+  git checkout -b main
   git config user.email "tests@example.com"
   git config user.name "Cucumber tests"
   git add .
