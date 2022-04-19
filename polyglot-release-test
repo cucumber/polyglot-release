@@ -34,7 +34,12 @@ function run_test() {
   for type in output git-diff git-log; do
     if [ -f "$test.expected.$type" ]; then
       diff $test.expected.$type $test.actual.$type
-      if [[ $? != 0 ]]; then test_failed="true";fi
+      if [[ $? != 0 ]]; then 
+        echo "Files do not match!"
+        echo "$test.actual.$type" 
+        echo "$test.expected.$type"
+        test_failed="true"
+      fi
     fi
   done
   if [ -n "$test_failed" ]; then
