@@ -16,7 +16,7 @@ function setup_git_repo() {
 function run_test() {
   test=$1
   test_failed=
-  echo -n ${test##*/}
+  echo -n "${test##*/} "
   workdir=$(mktemp -d)
   cp -R ./tests/fixture $workdir
   pushd $workdir/fixture > /dev/null
@@ -25,23 +25,32 @@ function run_test() {
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \
     > $test.actual.output
+  echo $? > $test.actual.exit-status
   git diff --unified=0 \
     | sed -e '/^index/d' \
     > $test.actual.git-diff
   git log --format="%s %d" \
     > $test.actual.git-log
   popd > /dev/null
-  for type in output git-diff git-log; do
+  for type in output git-diff git-log exit-status; do
     if [ -f "$test.expected.$type" ]; then
-      diff $test.expected.$type $test.actual.$type
-      if [[ $? != 0 ]]; then test_failed="true";fi
+      failure=$(diff $test.expected.$type $test.actual.$type)
+      if [[ $? != 0 ]]; then 
+        echo
+        echo Actual output different to expected!
+        echo "$test.expected.$type"
+        echo "$test.actual.$type"
+        echo
+        echo "$failure"
+        test_failed="true";
+      fi
     fi
   done
   if [ -n "$test_failed" ]; then
     FAILURE="true"
-    echo " 🔴"
+    echo 🔴
   else
-    echo " ✅"
+    echo ✅
   fi
 }
 
