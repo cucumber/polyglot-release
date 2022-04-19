@@ -18,7 +18,14 @@ function run_test() {
   test_failed=
   echo -n "${test##*/} "
   workdir=$(mktemp -d)
-  fixture=$(cat $test.fixture)
+  header="$(head -n 1 $test)"
+  fixture_pattern="# fixture: (.+)"
+  if [[ $header =~ $fixture_pattern ]]
+  then
+    fixture="${BASH_REMATCH[1]}"
+  else
+    fixture=polyglot
+  fi
   cp -R ./tests/fixtures/$fixture $workdir/local
   pushd $workdir/local > /dev/null
   setup_git_repo
