@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 
-RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
-
 # quiet output from pushd / popd
 pushd() {
   command pushd "$@" >/dev/null
@@ -133,6 +131,7 @@ NO_GIT_PUSH=
 NO_GIT_TAG=
 ONLY_RELEASE=
 POSITIONAL_ARGS=()
+RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
 
 while [[ $# -gt 0 ]]; do
   case $1 in
