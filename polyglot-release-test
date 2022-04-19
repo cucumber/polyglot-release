@@ -1,53 +1,58 @@
 #!/bin/bash
 
 FAILURE=
+SRC=$(realpath .)
 
-function start_test() {
-    echo -n $1
+function setup_git_repo() {
+  git init --quiet
+  git checkout --quiet -b main
+  git config user.email "tests@example.com"
+  git config user.name "Cucumber tests"
+  git add .
+  git commit -m "Initial commit" --quiet
+  git tag v0.0.1
 }
 
-function finish_test() {
-    if [[ $? != 0 ]]; then
-      FAILURE="true"
-      echo " 🔴"
-    else
-      echo " ✅"
+function run_test() {
+  test=$1
+  test_failed=
+  echo -n ${test##*/}
+  workdir=$(mktemp -d)
+  cp -R ./tests/fixture $workdir
+  pushd $workdir/fixture > /dev/null
+  setup_git_repo
+  PATH=$PATH:$SRC \
+    RELEASE_DATE=2000-01-01 \
+    /bin/sh $test \
+    > $test.actual.output
+  git diff --unified=0 \
+    | sed -e '/^index/d' \
+    > $test.actual.git-diff
+  git log --format="%s %d" \
+    > $test.actual.git-log
+  popd > /dev/null
+  for type in output git-diff git-log; do
+    if [ -f "$test.expected.$type" ]; then
+      diff $test.expected.$type $test.actual.$type
+      if [[ $? != 0 ]]; then test_failed="true";fi
     fi
+  done
+  if [ -n "$test_failed" ]; then
+    FAILURE="true"
+    echo " 🔴"
+  else
+    echo " ✅"
+  fi
 }
 
-if ! git diff-index --quiet HEAD; then
-  echo "Git has uncommitted changes"
-  exit 1
+if [ $1 ]; then
+  # Run a single test
+  run_test $(realpath $1)
+else
+  # Run all tests
+  tests=$(realpath tests)
+  for test in $tests/*.sh; do
+    run_test $test
+  done
 fi
-
-start_test "## 01: Release and post release"
-pushd test-fixture > /dev/null
-../polyglot-release 1.0.0 --no-git-commit --no-git-tag-check
-popd > /dev/null
-git diff --unified=0 > 01-actual.diff
-sed -i.bak '/^index/d' 01-actual.diff
-sed -i.bak 's/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/2000-01-01/g' 01-actual.diff
-diff 01-expected.diff 01-actual.diff
-finish_test
-git restore --source=HEAD --staged --worktree -- test-fixture
-
-start_test "## 02: Only release "
-pushd test-fixture > /dev/null
-../polyglot-release 1.0.0 --no-git-commit --no-git-tag-check --only-release
-popd > /dev/null
-git diff --unified=0 > 02-actual.diff
-sed -i.bak '/^index/d' 02-actual.diff
-sed -i.bak 's/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]/2000-01-01/g' 02-actual.diff
-diff 02-expected.diff 02-actual.diff
-finish_test
-git restore --source=HEAD --staged --worktree -- test-fixture
-
-start_test "## 03: Show unreleased changes "
-pushd test-fixture > /dev/null
-../polyglot-release --no-git-tag-check > ../03-actual.output
-popd > /dev/null
-diff 03-expected.output 03-actual.output
-finish_test
-git restore --source=HEAD --staged --worktree -- test-fixture
-
 test -z $FAILURE

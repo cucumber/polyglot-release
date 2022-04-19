@@ -1,5 +1,6 @@
 .idea/
 
-*-actual.diff
-*-actual.output
+*.actual.git-diff
+*.actual.output
+*.actual.git-log
 *.bak
