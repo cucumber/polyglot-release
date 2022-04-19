@@ -19,7 +19,7 @@ function run_test() {
   echo -n "${test##*/} "
   workdir=$(mktemp -d)
   cp -R ./tests/fixture $workdir
-  pushd $workdir/fixture > /dev/null
+  pushd $workdir/fixtures > /dev/null
   setup_git_repo
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
