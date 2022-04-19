@@ -15,10 +15,7 @@ function run() {
     eval "$1_$2"
     popd
   elif eval "is_monoglot_$2"; then
-    echo "Was $2 monoglot invoking $1_$2"
     eval "$1_$2"
-  else
-      echo "Was not $2 monoglot"
   fi
 }
 
