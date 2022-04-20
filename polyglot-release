@@ -56,8 +56,11 @@ function is_monoglot_ruby() {
   [[ -f Rakefile ]]
 }
 function pre_release_ruby() {
-  # noop
-  :
+  if [[ ! -f VERSION ]];
+  then
+    echo "This looks like a Ruby project, but there is no VERSION file"
+    exit 1
+  fi
 }
 function release_ruby() {
   echo "$NEW_VERSION" >VERSION
