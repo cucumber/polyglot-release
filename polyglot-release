@@ -100,6 +100,17 @@ function check_for_tools() {
 function validate_local_git() {
   check_for_tools "git" "changelog"
 
+  git_root=$(git rev-parse --show-toplevel)
+  pwd=$(realpath $(pwd))
+  if [[ "$git_root" != "$pwd" ]]; then
+    relative_path=$(realpath --relative-to="$(pwd)" "$git_root")
+    echo "You're not in the root directory of your git repo!"
+    echo
+    echo "Try this:"
+    echo "    cd $relative_path"
+    exit 1
+  fi
+
   if [[ -z "$(git tag --list "v$(changelog latest)")" ]]; then
     echo "No git tag found for v$(changelog latest) (found in CHANGELOG.md)!"
     echo

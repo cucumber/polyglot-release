@@ -1,0 +1,4 @@
+You're not in the root directory of your git repo!
+
+Try this:
+    cd ..

@@ -38,7 +38,8 @@ function run_test() {
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \
-    > $test.actual.output
+    > $test.actual.output \
+    2> $test.actual.stderr
   echo $? > $test.actual.exit-status
   git diff --unified=0 \
     | sed -e '/^index/d' \
@@ -46,7 +47,7 @@ function run_test() {
   git log --format="%s %d" \
     > $test.actual.git-log
   popd > /dev/null
-  for type in output git-diff git-log exit-status; do
+  for type in output git-diff git-log exit-status stderr; do
     if [ -f "$test.expected.$type" ]; then
       failure=$(diff $test.expected.$type $test.actual.$type)
       if [[ $? != 0 ]]; then 
