@@ -18,7 +18,8 @@ function setup_git_repos() {
   git add .
   git commit -m "Initial commit" --quiet
   git tag v0.0.1
-  git push --quiet && git push --tags --quiet
+  git push --set-upstream origin main --quiet
+  git push --tags --quiet
   popd > /dev/null
 }
 
