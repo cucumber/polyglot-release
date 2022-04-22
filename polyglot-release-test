@@ -3,14 +3,23 @@
 FAILURE=
 SRC=$(realpath .)
 
-function setup_git_repo() {
-  git init --quiet
+function setup_git_repos() {
+  fixture=$1
+  mkdir origin
+  pushd origin > /dev/null
+  git init --quiet --bare
+  popd > /dev/null
+  git clone origin local --quiet 2> /dev/null
+  pushd local > /dev/null
   git checkout --quiet -b main
   git config user.email "tests@example.com"
   git config user.name "Cucumber tests"
+  cp -R $fixture/* . 
   git add .
   git commit -m "Initial commit" --quiet
   git tag v0.0.1
+  git push --quiet && git push --tags --quiet
+  popd > /dev/null
 }
 
 function get_fixture() {
@@ -31,10 +40,11 @@ function run_test() {
   test_failed=
   echo -n "${test##*/} "
   workdir=$(mktemp -d)
-  fixture=$(get_fixture $test)
-  cp -R ./tests/fixtures/$fixture $workdir/local
+  fixture=$(realpath ./tests/fixtures/$(get_fixture $test))
+  pushd $workdir > /dev/null
+  setup_git_repos $fixture
+  popd > /dev/null
   pushd $workdir/local > /dev/null
-  setup_git_repo
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \
@@ -47,7 +57,11 @@ function run_test() {
   git log --format="%s %d" \
     > $test.actual.git-log
   popd > /dev/null
-  for type in output git-diff git-log exit-status stderr; do
+  pushd $workdir/origin > /dev/null
+  git log --format="%s %d" \
+    > $test.actual.origin-git-log
+  popd > /dev/null
+  for type in output git-diff git-log exit-status stderr origin-git-log; do
     if [ -f "$test.expected.$type" ]; then
       failure=$(diff $test.expected.$type $test.actual.$type)
       if [[ $? != 0 ]]; then 
