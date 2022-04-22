@@ -2,71 +2,69 @@
 set -e
 
 # quiet output from pushd / popd
-pushd() {
+function pushd() {
   command pushd "$@" >/dev/null
 }
-popd() {
-  command popd "$@" >/dev/null
+function popd() {
+  command popd >/dev/null
 }
-
-function pre_release_javascript() {
-  if [[ -d javascript ]]; then
-    check_for_tools "npm"
-  fi
-}
-
-function release_javascript() {
-  if [[ -d javascript ]]; then
-    pushd javascript
-    npm version --no-git-tag-version $NEW_VERSION >/dev/null
+# Usage: 'run pre_release|release|post_release <language>'
+function run() {
+  if [[ -d $2 ]]; then
+    pushd "$2"
+    eval "$1_$2"
     popd
+  elif eval "is_monoglot_$2"; then
+    eval "$1_$2"
   fi
+}
+
+function is_monoglot_javascript() {
+  [[ -f package.json ]]
+}
+function pre_release_javascript() {
+  check_for_tools "npm"
+}
+function release_javascript() {
+  npm version --no-git-tag-version "$NEW_VERSION" >/dev/null
 }
 function post_release_javascript() {
   # noop
   :
 }
 
-function pre_release_java() {
-  if [[ -d java ]]; then
-    check_for_tools "mvn"
-  fi
+function is_monoglot_java() {
+  [[ -f pom.xml ]]
 }
-
+function pre_release_java() {
+  check_for_tools "mvn"
+}
 function release_java() {
-  if [[ -d java ]]; then
-    pushd java
-    mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
-    mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
-    popd
-  fi
+  mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
+  mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
 }
 function post_release_java() {
-  if [[ -d java ]]; then
-    pushd java
-    new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
-    mvn --quiet \
-      build-helper:parse-version \
-      versions:set -DnewVersion="$new_version_template" \
-      versions:set-scm-tag -DnewTag="HEAD" \
-      2>/dev/null
-    popd
-  fi
+  new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
+  mvn --quiet \
+    build-helper:parse-version \
+    versions:set -DnewVersion="$new_version_template" \
+    versions:set-scm-tag -DnewTag="HEAD" \
+    2>/dev/null
 }
 
+function is_monoglot_ruby() {
+  [[ -f Rakefile ]]
+}
 function pre_release_ruby() {
-  # noop
-  :
-}
-
-function release_ruby() {
-  if [[ -d ruby ]]; then
-    pushd ruby
-    echo "$NEW_VERSION" >VERSION
-    popd
+  if [[ ! -f VERSION ]];
+  then
+    echo "This looks like a Ruby project, but there is no VERSION file"
+    exit 1
   fi
 }
-
+function release_ruby() {
+  echo "$NEW_VERSION" >VERSION
+}
 function post_release_ruby() {
   # noop
   :
@@ -102,6 +100,17 @@ function check_for_tools() {
 function validate_local_git() {
   check_for_tools "git" "changelog"
 
+  git_root=$(git rev-parse --show-toplevel)
+  pwd=$(realpath $(pwd))
+  if [[ "$git_root" != "$pwd" ]]; then
+    relative_path=$(realpath --relative-to="$(pwd)" "$git_root")
+    echo "You're not in the root directory of your git repo!"
+    echo
+    echo "Try this:"
+    echo "    cd $relative_path"
+    exit 1
+  fi
+
   if [[ -z "$(git tag --list "v$(changelog latest)")" ]]; then
     echo "No git tag found for v$(changelog latest) (found in CHANGELOG.md)!"
     echo
@@ -128,10 +137,10 @@ function show_usage() {
 # Initialize global variables
 NEW_VERSION=
 NO_GIT_PUSH=
-NO_GIT_TAG=
 ONLY_RELEASE=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
+SUPPORTED_LANGUAGES="java javascript ruby"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -153,7 +162,7 @@ while [[ $# -gt 0 ]]; do
     show_usage
     exit 0
     ;;
-  -* | --*)
+  --* | -*)
     echo "Unknown option $1"
     show_usage
     exit 1
@@ -185,19 +194,19 @@ validate_new_version_argument
 ###
 ## pre release
 ###
-pre_release_javascript
-pre_release_java
-pre_release_ruby
+for language in $SUPPORTED_LANGUAGES; do
+  run pre_release "$language"
+done
 
 ###
 ## release
 ###
-release_javascript
-release_java
-release_ruby
+for language in $SUPPORTED_LANGUAGES; do
+  run release "$language"
+done
 
 changelog release "$NEW_VERSION" \
-  --release-date $RELEASE_DATE \
+  --release-date "$RELEASE_DATE" \
   --tag-format "v%s" \
   --output CHANGELOG.md
 
@@ -213,9 +222,9 @@ if [[ -n $ONLY_RELEASE ]]; then
   exit 0
 fi
 
-post_release_javascript
-post_release_java
-post_release_ruby
+for language in $SUPPORTED_LANGUAGES; do
+  run post_release "$language"
+done
 
 if [[ -z $NO_GIT_COMMIT ]]; then
   git commit --quiet --all --message="Prepare for the next development iteration"

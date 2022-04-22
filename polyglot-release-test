@@ -13,35 +13,60 @@ function setup_git_repo() {
   git tag v0.0.1
 }
 
+function get_fixture() {
+  test=$1
+  header="$(head -n 1 $test)"
+  fixture_pattern="# fixture: (.+)"
+  if [[ $header =~ $fixture_pattern ]]
+  then
+    fixture="${BASH_REMATCH[1]}"
+  else
+    fixture=polyglot
+  fi
+  echo $fixture
+}
+
 function run_test() {
   test=$1
   test_failed=
-  echo -n ${test##*/}
+  echo -n "${test##*/} "
   workdir=$(mktemp -d)
-  cp -R ./tests/fixture $workdir
-  pushd $workdir/fixture > /dev/null
+  fixture=$(get_fixture $test)
+  cp -R ./tests/fixtures/$fixture $workdir/local
+  pushd $workdir/local > /dev/null
   setup_git_repo
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \
-    > $test.actual.output
+    > $test.actual.output \
+    2> $test.actual.stderr
+  echo $? > $test.actual.exit-status
   git diff --unified=0 \
     | sed -e '/^index/d' \
     > $test.actual.git-diff
   git log --format="%s %d" \
     > $test.actual.git-log
   popd > /dev/null
-  for type in output git-diff git-log; do
+  for type in output git-diff git-log exit-status stderr; do
     if [ -f "$test.expected.$type" ]; then
-      diff $test.expected.$type $test.actual.$type
-      if [[ $? != 0 ]]; then test_failed="true";fi
+      failure=$(diff $test.expected.$type $test.actual.$type)
+      if [[ $? != 0 ]]; then 
+        echo
+        echo Actual output different to expected!
+        echo "$test.expected.$type"
+        echo "$test.actual.$type"
+        echo
+        echo "$failure"
+        test_failed="true";
+      fi
     fi
   done
   if [ -n "$test_failed" ]; then
     FAILURE="true"
-    echo " 🔴"
+    echo "Examine files in $workdir"
+    echo 🔴
   else
-    echo " ✅"
+    echo ✅
   fi
 }
 

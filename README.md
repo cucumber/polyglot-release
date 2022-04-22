@@ -1,9 +1,39 @@
 [![Tests](https://github.com/cucumber/polyglot-release/actions/workflows/main.yml/badge.svg)](https://github.com/cucumber/polyglot-release/actions/workflows/main.yml)
 
 # polyglot-release
-Make polyglot releases with a single command
 
-Supports the release process for polyglot repos as documented in [RELEASING.md](https://github.com/cucumber/.github/blob/main/RELEASING.md).
+Make releases with a single command
+
+Supports the release process for Cucumber repos as documented in [RELEASING.md](https://github.com/cucumber/.github/blob/main/RELEASING.md).
+
+## Works with polyglot repos
+
+If we have a project structure with distinct folders for each language, it will release each language, updating the version number in the different package manager manifests in a single git commit.
+
+```
+$ tree
+.
+├── CHANGELOG.md
+├── java
+│   └── pom.xml
+├── javascript
+│   ├── package.json
+│   └── package-lock.json
+└── ruby
+    ├── Rakefile
+    └── VERSION
+```
+
+## Works with monoglot repos
+
+If certain key files (`pom.xml`, `Rakefile`, `package.json`) are present in the root directory, the project is assumed to be a "monoglot" repo and we just release that language.
+
+```
+$ tree
+.
+├── CHANGELOG.md
+├── pom.xml
+```
 
 ## Installation
 
