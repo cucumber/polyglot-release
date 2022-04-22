@@ -8,6 +8,7 @@ function setup_git_repos() {
   mkdir origin
   pushd origin > /dev/null
   git init --quiet --bare
+  git symbolic-ref HEAD refs/heads/main
   popd > /dev/null
   git clone origin local --quiet 2> /dev/null
   pushd local > /dev/null
