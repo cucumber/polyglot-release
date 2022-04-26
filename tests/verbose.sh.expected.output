@@ -1,0 +1,6 @@
+changelog release 1.0.0 --release-date 2000-01-01 --tag-format v%s --output CHANGELOG.md
+git commit --quiet --all --message='Prepare release v1.0.0'
+git tag v1.0.0
+git commit --quiet --all --message='Prepare for the next development iteration'
+git push --quiet origin
+git push --quiet origin <sha-to-release>:refs/heads/release/v1.0.0

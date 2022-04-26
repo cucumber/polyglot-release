@@ -19,6 +19,15 @@ function run() {
   fi
 }
 
+
+function cmd() {
+  cmd="$@"
+  if [[ $VERBOSE ]]; then
+    echo $cmd
+  fi
+  eval "$cmd"
+}
+
 function is_monoglot_javascript() {
   [[ -f package.json ]]
 }
@@ -138,6 +147,7 @@ function show_usage() {
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help                 shows this help"
+  echo "  --verbose              print all commands as they run"
   echo "  --no-git-push          do not push to git"
   echo "  --no-git-commit        do not commit git"
   echo "  --only-release         do not update versions after release"
@@ -153,6 +163,10 @@ SUPPORTED_LANGUAGES="java javascript ruby"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
+  --verbose)
+    VERBOSE="true"
+    shift # past argument
+    ;;
   --no-git-push)
     NO_GIT_PUSH="true"
     shift # past argument
@@ -219,14 +233,15 @@ for language in $SUPPORTED_LANGUAGES; do
   run release "$language"
 done
 
-changelog release "$NEW_VERSION" \
+cmd changelog release "$NEW_VERSION" \
   --release-date "$RELEASE_DATE" \
   --tag-format "v%s" \
   --output CHANGELOG.md
 
 if [[ -z $NO_GIT_COMMIT ]]; then
-  git commit --quiet --all --message="Prepare release v$NEW_VERSION"
-  git tag "v$NEW_VERSION"
+  message="Prepare release v$NEW_VERSION"
+  cmd git commit --quiet --all --message="'$message'"
+  cmd git tag "v$NEW_VERSION"
 fi
 
 ###
@@ -241,13 +256,14 @@ for language in $SUPPORTED_LANGUAGES; do
 done
 
 if [[ -z $NO_GIT_COMMIT ]]; then
-  git commit --quiet --all --message="Prepare for the next development iteration"
+  message="Prepare for the next development iteration"
+  cmd git commit --quiet --all --message="'$message'"
 fi
 
 ###
 # push to github
 ##
 if [[ -z $NO_GIT_PUSH ]]; then
-  git push --quiet origin
-  git push --quiet origin "$(git rev-list --max-count=1 "v$NEW_VERSION"):refs/heads/release/v$NEW_VERSION"
+  cmd git push --quiet origin
+  cmd git push --quiet origin "$(git rev-list --max-count=1 "v$NEW_VERSION"):refs/heads/release/v$NEW_VERSION"
 fi
