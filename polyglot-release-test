@@ -67,8 +67,12 @@ function run_test() {
     if [ -f "$test.expected.$type" ]; then
       failure=$(diff $test.expected.$type $test.actual.$type)
       if [[ $? != 0 ]]; then 
+        if [ -z $test_failed ]; then
+          echo " 🔴"
+        fi
         echo
-        echo Actual output different to expected!
+        echo Actual $type output different to expected!
+        echo
         echo "$test.expected.$type"
         echo "$test.actual.$type"
         echo
@@ -79,8 +83,9 @@ function run_test() {
   done
   if [ -n "$test_failed" ]; then
     FAILURE="true"
+    echo
     echo "Examine files in $workdir"
-    echo 🔴
+    echo 
   else
     echo ✅
   fi
