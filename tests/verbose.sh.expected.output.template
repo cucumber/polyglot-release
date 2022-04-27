@@ -1,8 +1,11 @@
 [ java ] mvn --quiet versions:set -DnewVersion=1.0.0
 [ java ] mvn --quiet versions:set-scm-tag -DnewTag=v1.0.0
+[ javascript ] npm version --no-git-tag-version 1.0.0 >/dev/null
+[ ruby ] echo 1.0.0 >VERSION
 changelog release 1.0.0 --release-date 2000-01-01 --tag-format v%s --output CHANGELOG.md
 git commit --quiet --all --message='Prepare release v1.0.0'
 git tag v1.0.0
+[ java ] mvn --quiet build-helper:parse-version versions:set -DnewVersion=${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.nextIncrementalVersion}-SNAPSHOT versions:set-scm-tag -DnewTag=HEAD 2>/dev/null
 git commit --quiet --all --message='Prepare for the next development iteration'
 git push --quiet origin
 git push --quiet origin $(git rev-parse HEAD^):refs/heads/release/v1.0.0
