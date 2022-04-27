@@ -64,6 +64,13 @@ function run_test() {
     > $test.actual.origin-git-log
   popd > /dev/null
   for type in output git-diff git-log exit-status stderr origin-git-log; do
+    if [ -f "$test.expected.$type.template" ]; then
+      pushd $workdir/local > /dev/null
+      echo -e \
+        "$(eval "echo -e \"`<$test.expected.$type.template`\"")" \
+        > $test.expected.$type
+      popd > /dev/null
+    fi
     if [ -f "$test.expected.$type" ]; then
       failure=$(diff $test.expected.$type $test.actual.$type)
       if [[ $? != 0 ]]; then 

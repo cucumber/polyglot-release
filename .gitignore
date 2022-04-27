@@ -2,3 +2,5 @@
 
 *.actual.*
 *.bak
+verbose.sh.expected.output
+

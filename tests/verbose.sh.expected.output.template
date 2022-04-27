@@ -3,4 +3,4 @@ git commit --quiet --all --message='Prepare release v1.0.0'
 git tag v1.0.0
 git commit --quiet --all --message='Prepare for the next development iteration'
 git push --quiet origin
-git push --quiet origin 1702f354c8d6c4eab8fbaaeec6c33b0af9504409:refs/heads/release/v1.0.0
+git push --quiet origin $(git rev-parse HEAD^):refs/heads/release/v1.0.0
