@@ -157,6 +157,7 @@ function show_usage() {
 NEW_VERSION=
 NO_GIT_PUSH=
 ONLY_RELEASE=
+VERBOSE=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
 SUPPORTED_LANGUAGES="java javascript ruby"
