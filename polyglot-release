@@ -11,19 +11,25 @@ function popd() {
 # Usage: 'run pre_release|release|post_release <language>'
 function run() {
   if [[ -d $2 ]]; then
+    CURRENT_LANGUAGE=$2
     pushd "$2"
     eval "$1_$2"
     popd
+    CURRENT_LANGUAGE=
   elif eval "is_monoglot_$2"; then
     eval "$1_$2"
   fi
 }
 
-
 function cmd() {
   cmd="$@"
   if [[ $VERBOSE ]]; then
-    echo $cmd
+    if [[ $CURRENT_LANGUAGE ]]; then
+      prefix="[ $CURRENT_LANGUAGE ] "
+    else
+      prefix=
+    fi
+    echo $prefix$cmd
   fi
   eval "$cmd"
 }
@@ -49,8 +55,8 @@ function pre_release_java() {
   check_for_tools "mvn"
 }
 function release_java() {
-  mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
-  mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
+  cmd mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
+  cmd mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
 }
 function post_release_java() {
   new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
