@@ -15,7 +15,7 @@ function setup_git_repos() {
   git checkout --quiet -b main
   git config user.email "tests@example.com"
   git config user.name "Cucumber tests"
-  cp -R $fixture/* . 
+  cp -R $fixture/. . 
   git add .
   git commit -m "Initial commit" --quiet
   git tag v0.0.1
