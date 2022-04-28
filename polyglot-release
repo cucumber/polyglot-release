@@ -30,8 +30,8 @@ function cmd() {
     else
       prefix=
     fi
+    echo $prefix$cmd
   fi
-  echo $prefix$cmd
   eval $cmd
 }
 
