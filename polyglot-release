@@ -23,15 +23,16 @@ function run() {
 
 function cmd() {
   cmd="$@"
+
   if [[ $VERBOSE ]]; then
     if [[ $CURRENT_LANGUAGE ]]; then
       prefix="[ $CURRENT_LANGUAGE ] "
     else
       prefix=
     fi
-    echo $prefix$cmd
   fi
-  eval "$cmd"
+  echo $prefix$cmd
+  eval $cmd
 }
 
 function is_monoglot_javascript() {
@@ -41,7 +42,7 @@ function pre_release_javascript() {
   check_for_tools "npm"
 }
 function release_javascript() {
-  npm version --no-git-tag-version "$NEW_VERSION" >/dev/null
+  cmd "npm version --no-git-tag-version $NEW_VERSION >/dev/null"
 }
 function post_release_javascript() {
   # noop
@@ -55,16 +56,16 @@ function pre_release_java() {
   check_for_tools "mvn"
 }
 function release_java() {
-  cmd mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
-  cmd mvn --quiet versions:set-scm-tag -DnewTag="v$NEW_VERSION" 2>/dev/null
+  cmd "mvn --quiet versions:set -DnewVersion=$NEW_VERSION"
+  cmd "mvn --quiet versions:set-scm-tag -DnewTag=v$NEW_VERSION"
 }
 function post_release_java() {
   new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
-  mvn --quiet \
+  cmd <<CMD mvn --quiet \
     build-helper:parse-version \
-    versions:set -DnewVersion="$new_version_template" \
-    versions:set-scm-tag -DnewTag="HEAD" \
-    2>/dev/null
+    versions:set -DnewVersion='$new_version_template' \
+    versions:set-scm-tag -DnewTag="HEAD"
+CMD
 }
 
 function is_monoglot_ruby() {
@@ -78,7 +79,7 @@ function pre_release_ruby() {
   fi
 }
 function release_ruby() {
-  echo "$NEW_VERSION" >VERSION
+  cmd "echo $NEW_VERSION >VERSION"
 }
 function post_release_ruby() {
   # noop
@@ -247,8 +248,8 @@ cmd changelog release "$NEW_VERSION" \
 
 if [[ -z $NO_GIT_COMMIT ]]; then
   message="Prepare release v$NEW_VERSION"
-  cmd git commit --quiet --all --message="'$message'"
-  cmd git tag "v$NEW_VERSION"
+  cmd "git commit --quiet --all --message='$message'"
+  cmd "git tag v$NEW_VERSION"
 fi
 
 ###
@@ -264,13 +265,13 @@ done
 
 if [[ -z $NO_GIT_COMMIT ]]; then
   message="Prepare for the next development iteration"
-  cmd git commit --quiet --all --message="'$message'"
+  cmd "git commit --quiet --all --message='$message'"
 fi
 
 ###
 # push to github
 ##
 if [[ -z $NO_GIT_PUSH ]]; then
-  cmd git push --quiet origin
-  cmd git push --quiet origin "$(git rev-list --max-count=1 "v$NEW_VERSION"):refs/heads/release/v$NEW_VERSION"
+  cmd "git push --quiet origin"
+  cmd "git push --quiet origin $(git rev-list --max-count=1 v$NEW_VERSION):refs/heads/release/v$NEW_VERSION"
 fi
