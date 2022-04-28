@@ -60,10 +60,9 @@ function release_java() {
   cmd "mvn --quiet versions:set-scm-tag -DnewTag=v$NEW_VERSION"
 }
 function post_release_java() {
-  new_version_template="\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT"
   cmd <<CMD mvn --quiet \
     build-helper:parse-version \
-    versions:set -DnewVersion='$new_version_template' \
+    versions:set -DnewVersion='\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT' \
     versions:set-scm-tag -DnewTag="HEAD"
 CMD
 }
