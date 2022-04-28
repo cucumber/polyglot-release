@@ -60,11 +60,10 @@ function release_java() {
   cmd "mvn --quiet versions:set-scm-tag -DnewTag=v$NEW_VERSION"
 }
 function post_release_java() {
-  cmd <<CMD mvn --quiet \
+  cmd "mvn --quiet \
     build-helper:parse-version \
-    versions:set -DnewVersion='\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT' \
-    versions:set-scm-tag -DnewTag="HEAD"
-CMD
+    versions:set '-DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}-SNAPSHOT' \
+    versions:set-scm-tag -DnewTag='HEAD'"
 }
 
 function is_monoglot_ruby() {
