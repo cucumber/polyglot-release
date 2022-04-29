@@ -1,11 +1,6 @@
 Missing MAJOR.MINOR.PATCH argument. Please specify a version to release.
 
-Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
-OPTIONS:
-  --help                 shows this help
-  --no-git-push          do not push to git
-  --no-git-commit        do not commit git
-  --only-release         do not update versions after release
+Use --help to show usage.
 
 To help you choose the next version, here are the unreleased changes:
 
