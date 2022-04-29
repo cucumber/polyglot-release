@@ -3,6 +3,11 @@
 FAILURE=
 SRC=$(realpath .)
 
+function import_gpg_key() {
+  gpg --batch -q --fast-import "$SRC/tests/gpg-key.private.pgp"
+  GPG_KEY_ID=D8C4AB54E1AB7D53
+}
+
 function setup_git_repos() {
   fixture=$1
   mkdir origin
@@ -15,6 +20,7 @@ function setup_git_repos() {
   git checkout --quiet -b main
   git config user.email "tests@example.com"
   git config user.name "Cucumber tests"
+  git config user.signingkey $GPG_KEY_ID
   cp -R $fixture/. . 
   git add .
   git commit --message "Initial commit" --quiet
@@ -92,6 +98,8 @@ function run_test() {
     echo ✅
   fi
 }
+
+import_gpg_key
 
 if [ $1 ]; then
   # Run a single test
