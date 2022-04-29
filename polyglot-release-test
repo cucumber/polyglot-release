@@ -2,9 +2,10 @@
 
 FAILURE=
 SRC=$(realpath .)
+GNUPGHOME=$(mktemp -d)
 
 function import_gpg_key() {
-  gpg --batch -q --fast-import "$SRC/tests/gpg-key.private.pgp"
+  gpg --homedir=$GNUPGHOME --batch -q --fast-import "$SRC/tests/gpg-key.private.pgp"
   GPG_KEY_ID=D8C4AB54E1AB7D53
 }
 
@@ -56,6 +57,7 @@ function run_test() {
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_NOGLOBAL=1 \
+    GNUPGHOME=$GNUPGHOME \
     /bin/sh $test \
     > $test.actual.output \
     2> $test.actual.stderr
@@ -67,7 +69,8 @@ function run_test() {
     > $test.actual.git-log
   popd > /dev/null
   pushd $workdir/origin > /dev/null
-  git log \
+  GNUPGHOME=$GNUPGHOME \
+    git log \
     --format="%s %d %GS" \
     > $test.actual.origin-git-log
   popd > /dev/null
@@ -81,8 +84,8 @@ function run_test() {
         echo
         echo Actual $type output different to expected!
         echo
-        echo "$test.expected.$type"
-        echo "$test.actual.$type"
+        echo $(realpath --relative-to="$SRC" "$test.expected.$type")
+        echo $(realpath --relative-to="$SRC" "$test.actual.$type")
         echo
         echo "$failure"
         test_failed="true";
@@ -92,7 +95,8 @@ function run_test() {
   if [ -n "$test_failed" ]; then
     FAILURE="true"
     echo
-    echo "Examine files in $workdir"
+    echo "Working directory: $workdir"
+    echo "GNUPGHOME: $GNUPGHOME"
     echo 
   else
     echo ✅
