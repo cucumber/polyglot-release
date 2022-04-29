@@ -192,9 +192,7 @@ check_git_tags_fetched
 check_git_index_clean
 
 if [[ $# -ne 1 ]]; then
-  echo "Missing MAJOR.MINOR.PATCH argument. Please specify a version to release."
-  echo
-  echo "Use --help to show usage."
+  echo "Please specify a version to release. Use --help to show usage instructions."
   echo
   echo "To help you choose the next version, here are the unreleased changes:"
   echo

@@ -1,6 +1,4 @@
-Missing MAJOR.MINOR.PATCH argument. Please specify a version to release.
-
-Use --help to show usage.
+Please specify a version to release. Use --help to show usage instructions.
 
 To help you choose the next version, here are the unreleased changes:
 
