@@ -219,11 +219,14 @@ function check_git_index_clean() {
 function show_usage() {
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
-  echo "  --help                 shows this help"
-  echo "  --no-git-push          do not push to git"
-  echo "  --no-git-commit        do not commit git"
-  echo "  --only-release         do not update versions after release"
-  echo "  --quiet                don't log progress messages"
+  echo "  --help                              shows this help"
+  echo "  --no-git-push                       do not push to git"
+  echo "  --no-git-commit                     do not commit git"
+  echo "  --only-release                      do not update versions after release"
+  echo "  --quiet                             don't log progress messages"
+  echo '  --release-branch-template=TEMPLATE  use TEMPLATE for release branch to push to. Include <new-version> to'
+  echo "                                      substitute the new release's version number."
+  echo "                                      default: $RELEASE_BRANCH_TEMPLATE"
 }
 
 function log() {
@@ -239,9 +242,11 @@ ONLY_RELEASE=
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
+RELEASE_BRANCH_TEMPLATE='release/v<new-version>'
 
-while [[ $# -gt 0 ]]; do
-  case $1 in
+# See https://stackoverflow.com/questions/192249/how-do-i-parse-command-line-arguments-in-bash
+for i in "$@"; do
+  case $i in
   --no-git-push)
     NO_GIT_PUSH="true"
     shift # past argument
@@ -259,13 +264,17 @@ while [[ $# -gt 0 ]]; do
     QUIET="true"
     shift # past argument
     ;;
+  --release-branch-template=*)
+    RELEASE_BRANCH_TEMPLATE="${i#*=}"
+    shift # past argument=value
+    ;;
   -h | --help)
     echo "Makes a release to GitHub"
     show_usage
     exit 0
     ;;
   --* | -*)
-    echo "Unknown option $1"
+    echo "Unknown option $i"
     show_usage
     exit 1
     ;;
@@ -351,7 +360,7 @@ if [[ -z $NO_GIT_PUSH ]]; then
   git push --quiet origin $local_branch
   log "All commit(s) pushed to origin/$local_branch"
   release_commit=$(git rev-list --max-count=1 $TAG)
-  release_branch="release/$TAG"
+  release_branch="${RELEASE_BRANCH_TEMPLATE/<new-version>/$NEW_VERSION}"
   git push --quiet origin "$release_commit:refs/heads/$release_branch"
   log "Release commit (tagged with $TAG) pushed to origin/$release_branch"
   if [[ -n $QUIET ]]; then

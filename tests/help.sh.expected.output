@@ -1,8 +1,11 @@
 Makes a release to GitHub
 Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
 OPTIONS:
-  --help                 shows this help
-  --no-git-push          do not push to git
-  --no-git-commit        do not commit git
-  --only-release         do not update versions after release
-  --quiet                don't log progress messages
+  --help                              shows this help
+  --no-git-push                       do not push to git
+  --no-git-commit                     do not commit git
+  --only-release                      do not update versions after release
+  --quiet                             don't log progress messages
+  --release-branch-template=TEMPLATE  use TEMPLATE for release branch to push to. Include <new-version> to
+                                      substitute the new release's version number.
+                                      default: release/v<new-version>
