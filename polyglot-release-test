@@ -68,7 +68,7 @@ function run_test() {
   popd > /dev/null
   pushd $workdir/origin > /dev/null
   git log \
-    --format="%s %d %G?" \
+    --format="%s %d %GS" \
     > $test.actual.origin-git-log
   popd > /dev/null
   for type in output git-diff git-log exit-status stderr origin-git-log; do
