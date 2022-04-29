@@ -17,7 +17,7 @@ function setup_git_repos() {
   git config user.name "Cucumber tests"
   cp -R $fixture/. . 
   git add .
-  git commit -m "Initial commit" --quiet
+  git commit --message "Initial commit" --quiet --gpg-sign
   git tag v0.0.1
   git push --set-upstream origin main --quiet
   git push --tags --quiet
@@ -49,6 +49,7 @@ function run_test() {
   pushd $workdir/local > /dev/null
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
+    GIT_CONFIG_NOSYSTEM=1 \
     /bin/sh $test \
     > $test.actual.output \
     2> $test.actual.stderr
@@ -60,7 +61,8 @@ function run_test() {
     > $test.actual.git-log
   popd > /dev/null
   pushd $workdir/origin > /dev/null
-  git log --format="%s %d" \
+  git log \
+    --format="%s %d %G?" \
     > $test.actual.origin-git-log
   popd > /dev/null
   for type in output git-diff git-log exit-status stderr origin-git-log; do
