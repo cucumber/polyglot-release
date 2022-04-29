@@ -45,3 +45,11 @@ chmod 744 ~/.local/bin/polyglot-release
 # Ensure ~/.local/bin is in your $PATH
 polyglot-release --help
 ```
+
+## Contributing
+
+Use `./polyglot-release-test` to run the tests.
+
+We use an [approval testing](https://approvaltests.com/) style for testing this app.
+
+Each test is a shell script in the [`tests`](./tests) folder. Alongside the test file you will find `.expected` files that show different kinds of expected outputs and effects from running the test script. If you've run the tests you will also find matching `.actual` files.
