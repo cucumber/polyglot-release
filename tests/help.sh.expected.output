@@ -1,0 +1,7 @@
+Makes a release to GitHub
+Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
+OPTIONS:
+  --help                 shows this help
+  --no-git-push          do not push to git
+  --no-git-commit        do not commit git
+  --only-release         do not update versions after release
