@@ -2,6 +2,12 @@
 
 FAILURE=
 SRC=$(realpath .)
+GNUPGHOME=$(mktemp -d)
+
+function import_gpg_key() {
+  gpg --homedir=$GNUPGHOME --batch -q --fast-import "$SRC/tests/gpg-key.private.pgp"
+  GPG_KEY_ID=D8C4AB54E1AB7D53
+}
 
 function setup_git_repos() {
   fixture=$1
@@ -15,9 +21,10 @@ function setup_git_repos() {
   git checkout --quiet -b main
   git config user.email "tests@example.com"
   git config user.name "Cucumber tests"
+  git config user.signingkey $GPG_KEY_ID
   cp -R $fixture/. . 
   git add .
-  git commit -m "Initial commit" --quiet
+  git commit --message "Initial commit" --quiet
   git tag v0.0.1
   git push --set-upstream origin main --quiet
   git push --tags --quiet
@@ -49,6 +56,8 @@ function run_test() {
   pushd $workdir/local > /dev/null
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
+    GIT_CONFIG_NOGLOBAL=1 \
+    GNUPGHOME=$GNUPGHOME \
     /bin/sh $test \
     > $test.actual.output \
     2> $test.actual.stderr
@@ -60,7 +69,9 @@ function run_test() {
     > $test.actual.git-log
   popd > /dev/null
   pushd $workdir/origin > /dev/null
-  git log --format="%s %d" \
+  GNUPGHOME=$GNUPGHOME \
+    git log \
+    --format="%s %d %GS" \
     > $test.actual.origin-git-log
   popd > /dev/null
   for type in output git-diff git-log exit-status stderr origin-git-log; do
@@ -73,8 +84,8 @@ function run_test() {
         echo
         echo Actual $type output different to expected!
         echo
-        echo "$test.expected.$type"
-        echo "$test.actual.$type"
+        echo $(realpath --relative-to="$SRC" "$test.expected.$type")
+        echo $(realpath --relative-to="$SRC" "$test.actual.$type")
         echo
         echo "$failure"
         test_failed="true";
@@ -84,12 +95,15 @@ function run_test() {
   if [ -n "$test_failed" ]; then
     FAILURE="true"
     echo
-    echo "Examine files in $workdir"
+    echo "Working directory: $workdir"
+    echo "GNUPGHOME: $GNUPGHOME"
     echo 
   else
     echo ✅
   fi
 }
+
+import_gpg_key
 
 if [ $1 ]; then
   # Run a single test
