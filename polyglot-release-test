@@ -44,21 +44,48 @@ function get_fixture() {
   echo $fixture
 }
 
+function setup_workdir() {
+  workdir=$1
+  fixture=$2
+  pushd $workdir > /dev/null
+  setup_git_repos $fixture
+  popd > /dev/null
+  mkdir $workdir/bin
+  for tool in gpg git mvn npm changelog realpath node; do
+    cat << EOF > $workdir/bin/$tool
+#!/bin/sh
+$(which $tool) "\$@"
+EOF
+    chmod +x $workdir/bin/$tool
+  done
+}
+
+function manual_test() {
+  fixture=$1
+  workdir=$(mktemp -d)
+  setup_workdir $workdir $fixture
+  pushd $workdir/local > /dev/null
+  PATH=$workdir/bin:/bin:/usr/bin:$SRC \
+    RELEASE_DATE=2000-01-01 \
+    GIT_CONFIG_GLOBAL=/dev/null \
+    GNUPGHOME=$GNUPGHOME \
+    /bin/bash
+  popd > /dev/null
+}
+
 function run_test() {
   test=$1
   test_failed=
   echo -n "${test##*/} "
   workdir=$(mktemp -d)
   fixture=$(realpath ./tests/fixtures/$(get_fixture $test))
-  pushd $workdir > /dev/null
-  setup_git_repos $fixture
-  popd > /dev/null
+  setup_workdir $workdir $fixture
   pushd $workdir/local > /dev/null
-  PATH=$PATH:$SRC \
+  PATH=$workdir/bin:/bin:/usr/bin:$SRC \
     RELEASE_DATE=2000-01-01 \
-    GIT_CONFIG_NOGLOBAL=1 \
+    GIT_CONFIG_GLOBAL=/dev/null \
     GNUPGHOME=$GNUPGHOME \
-    /bin/sh $test \
+    /bin/bash $test \
     > $test.actual.output \
     2> $test.actual.stderr
   echo $? > $test.actual.exit-status
@@ -106,8 +133,14 @@ function run_test() {
 import_gpg_key
 
 if [ $1 ]; then
-  # Run a single test
-  run_test $(realpath $1)
+  if [[ $1 =~ tests/.*\.sh$ ]]; then
+    # Run a single test
+    run_test $(realpath $1)
+  fi
+  if [[ $1 =~ fixtures/ ]]; then
+    # Start a manual test session
+    manual_test $(realpath $1)
+  fi
 else
   # Run all tests
   tests=$(realpath tests)
