@@ -63,6 +63,7 @@ EOF
 function manual_test() {
   fixture=$1
   workdir=$(mktemp -d)
+  import_gpg_key
   setup_workdir $workdir $fixture
   pushd $workdir/local > /dev/null
   PATH=$workdir/bin:/bin:/usr/bin:$SRC \
@@ -79,6 +80,7 @@ function run_test() {
   echo -n "${test##*/} "
   workdir=$(mktemp -d)
   fixture=$(realpath ./tests/fixtures/$(get_fixture $test))
+  import_gpg_key
   setup_workdir $workdir $fixture
   pushd $workdir/local > /dev/null
   PATH=$workdir/bin:/bin:/usr/bin:$SRC \
@@ -130,7 +132,6 @@ function run_test() {
   fi
 }
 
-import_gpg_key
 
 if [ $1 ]; then
   if [[ $1 =~ tests/.*\.sh$ ]]; then
