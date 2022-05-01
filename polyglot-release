@@ -75,6 +75,22 @@ function post_release_java() {
     2>/dev/null
 }
 
+SUPPORTED_LANGUAGES+=("perl")
+function is_monoglot_perl() {
+  [[ -f VERSION ]]
+}
+function pre_release_perl() {
+  # noop
+  :
+}
+function release_perl() {
+  echo "$NEW_VERSION" >VERSION
+}
+function post_release_perl() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("ruby")
 function is_monoglot_ruby() {
   [[ -f Rakefile ]]
