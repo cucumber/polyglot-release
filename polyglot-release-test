@@ -62,7 +62,6 @@ function manual_test() {
   PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
-    GNUPGHOME=$GNUPGHOME \
     BASH_SILENCE_DEPRECATION_WARNING=1 \
     /bin/bash --init-file <(echo echo "You are in a manual test sandbox. You can safely git push and commits will be pushed to the repo in ../origin")
   popd > /dev/null
