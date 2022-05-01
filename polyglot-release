@@ -20,6 +20,23 @@ function run() {
 }
 SUPPORTED_LANGUAGES=()
 
+SUPPORTED_LANGUAGES+=("github-action")
+function is_monoglot_github-action() {
+  [[ -f action.yaml ]]
+}
+function pre_release_github-action() {
+  # noop
+  :
+}
+function release_github-action() {
+  # noop, publishing github only uses git tags
+  :
+}
+function post_release_github-action() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("go")
 function is_monoglot_go() {
   [[ -f go.mod ]]
