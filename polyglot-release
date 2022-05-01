@@ -75,6 +75,23 @@ function post_release_java() {
     2>/dev/null
 }
 
+SUPPORTED_LANGUAGES+=("php")
+function is_monoglot_php() {
+  [[ -f composer.json ]]
+}
+function pre_release_php() {
+  # noop
+  :
+}
+function release_php() {
+  # noop, composer relies on git tags
+  :
+}
+function post_release_php() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("ruby")
 function is_monoglot_ruby() {
   [[ -f Rakefile ]]
