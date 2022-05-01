@@ -20,6 +20,32 @@ function run() {
 }
 SUPPORTED_LANGUAGES=()
 
+SUPPORTED_LANGUAGES+=("dotnet")
+function is_monoglot_dotnet() {
+  ls *.sln &> /dev/null
+}
+function pre_release_dotnet() {
+  check_for_tools "xmlstarlet"
+  SOLUTION_FILE=$(ls *.sln)
+  PROJECT_NAME=${SOLUTION_FILE%.sln}
+  CS_PROJECT_FILE="$PROJECT_NAME/$PROJECT_NAME.csproj"
+  if [[ ! -f "$CS_PROJECT_FILE" ]];
+  then
+    echo "This looks like a .Net project, but there is no $CS_PROJECT_FILE file"
+    exit 1
+  fi
+}
+function release_dotnet() {
+  SOLUTION_FILE=$(ls *.sln)
+  PROJECT_NAME=${SOLUTION_FILE%.sln}
+  CS_PROJECT_FILE="$PROJECT_NAME/$PROJECT_NAME.csproj"
+  xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$CS_PROJECT_FILE"
+}
+function post_release_dotnet() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("go")
 function is_monoglot_go() {
   [[ -f go.mod ]]
