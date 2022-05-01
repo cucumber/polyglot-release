@@ -50,14 +50,6 @@ function setup_workdir() {
   pushd $workdir > /dev/null
   setup_git_repos $fixture
   popd > /dev/null
-  mkdir $workdir/bin
-  for tool in gpg git mvn npm changelog realpath node; do
-    cat << EOF > $workdir/bin/$tool
-#!/bin/sh
-$(which $tool) "\$@"
-EOF
-    chmod +x $workdir/bin/$tool
-  done
 }
 
 function manual_test() {
@@ -66,7 +58,7 @@ function manual_test() {
   import_gpg_key
   setup_workdir $workdir $fixture
   pushd $workdir/local > /dev/null
-  PATH=$workdir/bin:/bin:/usr/bin:$SRC \
+  PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
     GNUPGHOME=$GNUPGHOME \
@@ -84,7 +76,7 @@ function run_test() {
   import_gpg_key
   setup_workdir $workdir $fixture
   pushd $workdir/local > /dev/null
-  PATH=$workdir/bin:/bin:/usr/bin:$SRC \
+  PATH=$PATH:$SRC \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
     GNUPGHOME=$GNUPGHOME \
