@@ -18,7 +18,9 @@ function run() {
     eval "$1_$2"
   fi
 }
+SUPPORTED_LANGUAGES=()
 
+SUPPORTED_LANGUAGES+=("go")
 function is_monoglot_go() {
   [[ -f go.mod ]]
 }
@@ -38,6 +40,7 @@ function post_release_go() {
   :
 }
 
+SUPPORTED_LANGUAGES+=("javascript")
 function is_monoglot_javascript() {
   [[ -f package.json ]]
 }
@@ -52,6 +55,7 @@ function post_release_javascript() {
   :
 }
 
+SUPPORTED_LANGUAGES+=("java")
 function is_monoglot_java() {
   [[ -f pom.xml ]]
 }
@@ -71,6 +75,7 @@ function post_release_java() {
     2>/dev/null
 }
 
+SUPPORTED_LANGUAGES+=("ruby")
 function is_monoglot_ruby() {
   [[ -f Rakefile ]]
 }
@@ -168,7 +173,6 @@ NO_GIT_PUSH=
 ONLY_RELEASE=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
-SUPPORTED_LANGUAGES="go java javascript ruby"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -225,14 +229,14 @@ validate_new_version_argument
 ###
 ## pre release
 ###
-for language in $SUPPORTED_LANGUAGES; do
+for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run pre_release "$language"
 done
 
 ###
 ## release
 ###
-for language in $SUPPORTED_LANGUAGES; do
+for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run release "$language"
 done
 
@@ -253,7 +257,7 @@ if [[ -n $ONLY_RELEASE ]]; then
   exit 0
 fi
 
-for language in $SUPPORTED_LANGUAGES; do
+for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run post_release "$language"
 done
 
