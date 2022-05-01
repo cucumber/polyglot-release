@@ -19,6 +19,25 @@ function run() {
   fi
 }
 
+function is_monoglot_go() {
+  [[ -f go.mod ]]
+}
+function pre_release_go() {
+  check_for_tools "go" "jq" "sed"
+}
+function release_go() {
+  MODULE_WITH_NEW_VERSION=$(
+    go mod edit -json |\
+    jq -r '.Module.Path' |\
+    sed -E "s/(.*)v[0-9]+.[0-9]+.[0-9]+$/\1v$NEW_VERSION/"
+  )
+  go mod edit -module "$MODULE_WITH_NEW_VERSION"
+}
+function post_release_go() {
+  # noop
+  :
+}
+
 function is_monoglot_javascript() {
   [[ -f package.json ]]
 }
@@ -90,7 +109,7 @@ function check_for_tools() {
       missing_tool="true"
     fi
   done
-  if [ "$missing_tool" ]; then
+  if [ -n "$missing_tool" ]; then
     echo
     echo "Please install the missing required tool(s)."
     exit 1
@@ -167,7 +186,7 @@ NO_GIT_PUSH=
 ONLY_RELEASE=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
-SUPPORTED_LANGUAGES="java javascript ruby"
+SUPPORTED_LANGUAGES="go java javascript ruby"
 
 while [[ $# -gt 0 ]]; do
   case $1 in
