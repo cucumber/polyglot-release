@@ -23,14 +23,14 @@ function is_monoglot_go() {
   [[ -f go.mod ]]
 }
 function pre_release_go() {
-  check_for_tools "go" "jq"
+  check_for_tools "go" "jq" "sed"
 }
 function release_go() {
-  GO_MODULE=$(
+  MODULE_WITH_NEW_VERSION=$(
     go mod edit -json |\
-    jq -r '.Module.Path'
+    jq -r '.Module.Path' |\
+    sed -E "s/(.*)v[0-9]+.[0-9]+.[0-9]+$/\1v$NEW_VERSION/"
   )
-  MODULE_WITH_NEW_VERSION=$(shopt -s extglob; echo "${GO_MODULE/%v+([0-9]).+([0-9]).+([0-9])/}v$NEW_VERSION")
   go mod edit -module "$MODULE_WITH_NEW_VERSION"
 }
 function post_release_go() {
