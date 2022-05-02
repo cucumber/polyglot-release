@@ -71,9 +71,9 @@ e.g.
 polyglot-release 1.0.0
 ```
 
-### Manual testing
+### Exploratory testing
 
-Sometimes it's helpful to run a manual test to play around with how the tool works in a sandbox environment.
+Sometimes it's helpful to play around with how the tool works in a safe, sandbox environment.
 
 You can start a bash prompt in the same environment as an automated test would run in (with `local` and `origin` git repo folders) like this:
 
