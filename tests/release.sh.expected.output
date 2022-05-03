@@ -1,9 +1,9 @@
-Package manager versions updated for 1.0.0. The following files were modified:
+Package manager manifests and CHANGELOG.md updated for 1.0.0. The following files were modified:
+  CHANGELOG.md
   java/pom.xml
   javascript/package-lock.json
   javascript/package.json
   ruby/VERSION
-CHANGELOG.md updated
 Files committed to to git and tagged
 Post-release changes committed to to git
 Commit(s) pushed to origin/main

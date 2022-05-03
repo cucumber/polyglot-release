@@ -291,14 +291,14 @@ done
 for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run release "$language"
 done
-log "Package manager versions updated for $NEW_VERSION. The following files were modified:"
-log "$(git status --porcelain | cut -c 4- | sed 's/^/  /')"
 
 changelog release "$NEW_VERSION" \
   --release-date "$RELEASE_DATE" \
   --tag-format "v%s" \
   --output CHANGELOG.md
-log "CHANGELOG.md updated"
+
+log "Package manager manifests and CHANGELOG.md updated for $NEW_VERSION. The following files were modified:"
+log "$(git status --porcelain | cut -c 4- | sed 's/^/  /')"
 
 if [[ -z $NO_GIT_COMMIT ]]; then
   git commit --gpg-sign --quiet --all --message="Prepare release v$NEW_VERSION"
