@@ -301,9 +301,10 @@ log "Package manager manifests and CHANGELOG.md updated for $NEW_VERSION. The fo
 log "$(git status --porcelain | cut -c 4- | sed 's/^/  /')"
 
 if [[ -z $NO_GIT_COMMIT ]]; then
-  git commit --gpg-sign --quiet --all --message="Prepare release v$NEW_VERSION"
-  git tag --sign --message "v$NEW_VERSION" "v$NEW_VERSION"
-  log "Files committed to to git and tagged"
+  TAG="v$NEW_VERSION"
+  git commit --gpg-sign --quiet --all --message="Prepare release $TAG"
+  git tag --sign --message "$TAG" "$TAG"
+  log "Files committed to to git and tagged '$TAG'"
 fi
 
 ###
@@ -326,14 +327,13 @@ fi
 # push to github
 ##
 if [[ -z $NO_GIT_PUSH ]]; then
-  tag="v$NEW_VERSION"
   local_branch=$(git rev-parse --abbrev-ref HEAD)
   git push --quiet origin $local_branch
-  log "Commit(s) pushed to origin/$local_branch"
-  release_commit=$(git rev-list --max-count=1 $tag)
-  release_branch="release/$tag"
+  log "All commit(s) pushed to origin/$local_branch"
+  release_commit=$(git rev-list --max-count=1 $TAG)
+  release_branch="release/$TAG"
   git push --quiet origin "$release_commit:refs/heads/$release_branch"
-  log "Release commit (tagged with $tag) pushed to origin/$release_branch"
+  log "Release commit (tagged with $TAG) pushed to origin/$release_branch"
   if [[ -n $QUIET ]]; then
     echo $release_branch
   fi
