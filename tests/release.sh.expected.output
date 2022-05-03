@@ -1,4 +1,5 @@
-Package manager manifests and CHANGELOG.md updated for 1.0.0. The following files were modified:
+Package manager manifests and CHANGELOG.md updated for 1.0.0
+Here's what changed:
 [1mdiff --git a/CHANGELOG.md b/CHANGELOG.md[m
 [1mindex 5c5d610..e849b16 100644[m
 [1m--- a/CHANGELOG.md[m
