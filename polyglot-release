@@ -117,7 +117,7 @@ function post_release_python() {
 
 SUPPORTED_LANGUAGES+=("ruby")
 function is_monoglot_ruby() {
-  [[ -f Rakefile ]]
+  [[ $(find *.gemspec -type f | wc -l) -gt 0 ]]
 }
 function pre_release_ruby() {
   if [[ ! -f VERSION ]];
