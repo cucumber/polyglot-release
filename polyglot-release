@@ -189,7 +189,7 @@ function check_git_tags_fetched() {
     expected_tag="v$latest_version_from_changelog"
   fi
   if [[ -z $(git tag --list "$expected_tag") ]]; then
-    echo "No git tag found for $($expected_tag) (found in CHANGELOG.md)!"
+    echo "No git tag found for $expected_tag (found in CHANGELOG.md)!"
     echo
     echo "Do you need to run this?"
     echo "    git fetch --tags"
