@@ -184,9 +184,9 @@ function check_in_git_root_directory() {
 function check_git_tags_fetched() {
   latest_version_from_changelog=$(changelog latest)
   if [[ $latest_version_from_changelog == v* ]]; then
-    expected_tag=$latest_version_from_changelog
+    expected_tag="$latest_version_from_changelog"
   else
-    expected_tag=v$latest_version_from_changelog
+    expected_tag="v$latest_version_from_changelog"
   fi
   if [[ -z $(git tag --list "$expected_tag") ]]; then
     echo "No git tag found for $($expected_tag) (found in CHANGELOG.md)!"
