@@ -200,8 +200,14 @@ function check_gpg_keys_configured() {
 }
 
 function check_git_tags_fetched() {
-  if [[ -z "$(git tag --list "v$(changelog latest)")" ]]; then
-    echo "No git tag found for v$(changelog latest) (found in CHANGELOG.md)!"
+  latest_version_from_changelog=$(changelog latest)
+  if [[ $latest_version_from_changelog == v* ]]; then
+    expected_tag="$latest_version_from_changelog"
+  else
+    expected_tag="v$latest_version_from_changelog"
+  fi
+  if [[ -z $(git tag --list "$expected_tag") ]]; then
+    echo "No git tag found for $expected_tag (found in CHANGELOG.md)!"
     echo
     echo "Do you need to run this?"
     echo "    git fetch --tags"
@@ -338,7 +344,7 @@ for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run post_release "$language"
 done
 
-if [[ -z $NO_GIT_COMMIT ]]; then
+if [[ -z $NO_GIT_COMMIT && $(git status --porcelain) ]]; then
   git commit --gpg-sign --quiet --all --message="Prepare for the next development iteration"
   log "Post-release changes committed to to git"
 fi
