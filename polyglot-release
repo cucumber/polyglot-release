@@ -92,6 +92,25 @@ function post_release_java() {
     2>/dev/null
 }
 
+SUPPORTED_LANGUAGES+=("perl")
+function is_monoglot_perl() {
+  [[ -f cpanfile ]]
+}
+function pre_release_perl() {
+  if [[ ! -f VERSION ]];
+  then
+    echo "This looks like a Perl project, but there is no VERSION file"
+    exit 1
+  fi
+}
+function release_perl() {
+  echo "$NEW_VERSION" >VERSION
+}
+function post_release_perl() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("python")
 function is_monoglot_python() {
   [[ -f pyproject.toml  || -f setup.py ]]
