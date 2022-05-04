@@ -20,6 +20,32 @@ function run() {
 }
 SUPPORTED_LANGUAGES=()
 
+SUPPORTED_LANGUAGES+=("dotnet")
+function is_monoglot_dotnet() {
+  [[ $(find ./*.sln -type f | wc -l) -gt 0 ]]
+}
+function pre_release_dotnet() {
+  check_for_tools "xmlstarlet"
+  solution_file=$(find ./*.sln -type f)
+  project_name=${solution_file%.sln}
+  cs_project_file="$project_name/$project_name.csproj"
+  if [[ ! -f "$cs_project_file" ]];
+  then
+    echo "This looks like a .Net project, but there is no $cs_project_file file"
+    exit 1
+  fi
+}
+function release_dotnet() {
+  solution_file=$(find ./*.sln -type f)
+  project_name=${solution_file%.sln}
+  cs_project_file="$project_name/$project_name.csproj"
+  xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$cs_project_file"
+}
+function post_release_dotnet() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("github-action")
 function is_monoglot_github-action() {
   [[ -f action.yaml ]]
@@ -90,6 +116,25 @@ function post_release_java() {
     versions:set -DnewVersion="$new_version_template" \
     versions:set-scm-tag -DnewTag="HEAD" \
     2>/dev/null
+}
+
+SUPPORTED_LANGUAGES+=("perl")
+function is_monoglot_perl() {
+  [[ -f cpanfile ]]
+}
+function pre_release_perl() {
+  if [[ ! -f VERSION ]];
+  then
+    echo "This looks like a Perl project, but there is no VERSION file"
+    exit 1
+  fi
+}
+function release_perl() {
+  echo "$NEW_VERSION" >VERSION
+}
+function post_release_perl() {
+  # noop
+  :
 }
 
 SUPPORTED_LANGUAGES+=("php")
