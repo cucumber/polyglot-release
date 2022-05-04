@@ -77,11 +77,14 @@ function post_release_java() {
 
 SUPPORTED_LANGUAGES+=("perl")
 function is_monoglot_perl() {
-  [[ -f VERSION ]]
+  [[ -f cpanfile ]]
 }
 function pre_release_perl() {
-  # noop
-  :
+  if [[ ! -f VERSION ]];
+  then
+    echo "This looks like a Perl project, but there is no VERSION file"
+    exit 1
+  fi
 }
 function release_perl() {
   echo "$NEW_VERSION" >VERSION
