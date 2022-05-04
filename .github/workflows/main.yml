@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Install `shellcheck` tool
+        run: sudo apt-get install shellcheck
       - name: Install `changelog` tool
         run: |
           mkdir -p $HOME/.local/bin

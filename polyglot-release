@@ -168,7 +168,7 @@ function validate_new_version_argument() {
 
 function check_for_tools() {
   for tool in "$@"; do
-    if ! command -v $tool >/dev/null; then
+    if ! command -v "$tool" >/dev/null; then
       echo "$tool is not installed!"
       missing_tool="true"
     fi
@@ -189,7 +189,7 @@ function check_changelog_exists() {
 
 function check_in_git_root_directory() {
   git_root=$(git rev-parse --show-toplevel)
-  pwd=$(realpath $(pwd))
+  pwd=$(realpath "$(pwd)")
   if [[ "$git_root" != "$pwd" ]]; then
     relative_path=$(realpath --relative-to="$(pwd)" "$git_root")
     echo "You're not in the root directory of your git repo!"
@@ -201,14 +201,15 @@ function check_in_git_root_directory() {
 }
 
 function check_gpg_keys_configured() {
-  if [[ -z $(git config user.signingkey) ]]; then
+  key="$(git config user.signingkey)"
+  if [[ -z $key ]]; then
     echo "You do not have a user.signingkey configured in git!"
     echo
     echo "All commits need to be signed. Please see https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key"
     exit 1
   fi
-  if [[ ! $(gpg --list-secret-keys | grep $(git config user.signingkey)) ]]; then
-    echo "Your git user.signingkey ($(git config user.signingkey)) was not found in your GPG keys."
+  if ! gpg --list-secret-keys | grep -q "$key"; then
+    echo "Your git user.signingkey ($key) was not found in your GPG keys."
     echo
     echo "To see all your GPG keys, use:"
     echo "    gpg --list-secret-keys"
@@ -315,7 +316,7 @@ if [[ $# -ne 1 ]]; then
   echo
   echo "To help you choose the next version, here are the unreleased changes:"
   echo
-  echo "$(changelog show unreleased)"
+  changelog show unreleased
   echo
   exit 1
 fi
@@ -373,13 +374,13 @@ fi
 ##
 if [[ -z $NO_GIT_PUSH ]]; then
   local_branch=$(git rev-parse --abbrev-ref HEAD)
-  git push --quiet origin $local_branch
+  git push --quiet origin "$local_branch"
   log "All commit(s) pushed to origin/$local_branch"
-  release_commit=$(git rev-list --max-count=1 $TAG)
+  release_commit=$(git rev-list --max-count=1 "$TAG")
   release_branch="release/$TAG"
   git push --quiet origin "$release_commit:refs/heads/$release_branch"
   log "Release commit (tagged with $TAG) pushed to origin/$release_branch"
   if [[ -n $QUIET ]]; then
-    echo $release_branch
+    echo "$release_branch"
   fi
 fi
