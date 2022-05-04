@@ -39,7 +39,7 @@ $ tree
 
 ## Works with monoglot repos
 
-If certain key files (`pom.xml`, `Rakefile`, `package.json`) are present in the root directory, the project is assumed to be a "monoglot" repo and we just release that language.
+If certain key files (`pom.xml`, `*.gemspec`, `package.json`, etc.) are present in the root directory, the project is assumed to be a "monoglot" repo and we just release that language.
 
 ```
 $ tree
