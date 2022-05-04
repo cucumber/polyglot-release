@@ -14,13 +14,26 @@ If we have a project structure with distinct folders for each language, it will 
 $ tree
 .
 ├── CHANGELOG.md
-├── java
-│   └── pom.xml
+│── dotnet
+│   ├── project.sln
+│   └── project.csproj
+├── github-action
+│   └── action.yml
+├── go
+│   └── go.mod
 ├── javascript
 │   ├── package.json
-│   └── package-lock.json
+├── java
+│   └── pom.xml
 └── ruby
-    ├── Rakefile
+│   ├── project.gemspec
+│   └── VERSION
+├── perl
+│   └── cpanfile
+├── python
+│   └── setup.py # or pyproject.toml
+└── ruby
+    ├── project.gemspec
     └── VERSION
 ```
 
