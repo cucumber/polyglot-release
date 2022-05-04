@@ -14,19 +14,31 @@ If we have a project structure with distinct folders for each language, it will 
 $ tree
 .
 ├── CHANGELOG.md
+│── dotnet
+│   ├── Project.sln
+│   └── Project
+│       └── Project.csproj
+├── github-action
+│   └── action.yml
+├── go
+│   └── go.mod
+├── javascript
+│   └── package.json
 ├── java
 │   └── pom.xml
-├── javascript
-│   ├── package.json
-│   └── package-lock.json
+├── perl
+│   ├── cpanfile
+│   └── VERSION
+├── python
+│   └── setup.py # or pyproject.toml
 └── ruby
-    ├── Rakefile
+    ├── project.gemspec
     └── VERSION
 ```
 
 ## Works with monoglot repos
 
-If certain key files (`pom.xml`, `Rakefile`, `package.json`) are present in the root directory, the project is assumed to be a "monoglot" repo and we just release that language.
+If certain key files (`pom.xml`, `*.gemspec`, `package.json`, etc.) are present in the root directory, the project is assumed to be a "monoglot" repo and we just release that language.
 
 ```
 $ tree
