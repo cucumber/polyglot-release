@@ -325,7 +325,7 @@ for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run post_release "$language"
 done
 
-if [[ -z $NO_GIT_COMMIT ]]; then
+if [[ -z $NO_GIT_COMMIT && $(git status --porcelain) ]]; then
   git commit --gpg-sign --quiet --all --message="Prepare for the next development iteration"
   log "Post-release changes committed to to git"
 fi
