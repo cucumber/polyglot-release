@@ -26,7 +26,7 @@ function is_monoglot_dotnet() {
 }
 function pre_release_dotnet() {
   check_for_tools "xmlstarlet"
-  solution_file=$(ls *.sln)
+  solution_file=$(ls -- *.sln)
   project_name=${solution_file%.sln}
   cs_project_file="$project_name/$project_name.csproj"
   if [[ ! -f "$cs_project_file" ]];
