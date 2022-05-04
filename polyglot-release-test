@@ -1,5 +1,9 @@
 #!/bin/bash
 
+set -e
+shellcheck polyglot-release*
+set +e
+
 FAILURE=
 SRC=$(realpath .)
 GNUPGHOME=$(mktemp -d)
