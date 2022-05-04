@@ -26,9 +26,6 @@ $ tree
 │   ├── package.json
 ├── java
 │   └── pom.xml
-└── ruby
-│   ├── project.gemspec
-│   └── VERSION
 ├── perl
 │   └── cpanfile
 ├── python
