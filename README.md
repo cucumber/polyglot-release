@@ -15,8 +15,9 @@ $ tree
 .
 ├── CHANGELOG.md
 │── dotnet
-│   ├── project.sln
-│   └── project.csproj
+│   ├── Project.sln
+│   └── Project
+│       └── Project.csproj
 ├── github-action
 │   └── action.yml
 ├── go
