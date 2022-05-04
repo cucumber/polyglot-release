@@ -10,9 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 - This is a test
 
-## [v0.0.1] - 2000-01-01
+## [0.0.1] - 2000-01-01
 
-## [v0.0.0] - 2000-01-01
+## [0.0.0] - 2000-01-01
 
 [Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
-[v0.0.1]: https://github.com/cucumber/polyglot-release/compare/v0.0.0...v0.0.1
+[0.0.1]: https://github.com/cucumber/polyglot-release/compare/v0.0.0...v0.0.1
