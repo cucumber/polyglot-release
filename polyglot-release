@@ -26,22 +26,25 @@ function is_monoglot_dotnet() {
 }
 function pre_release_dotnet() {
   check_for_tools "xmlstarlet"
-  SOLUTION_FILE=$(ls *.sln)
-  PROJECT_NAME=${SOLUTION_FILE%.sln}
-  CS_PROJECT_FILE="$PROJECT_NAME/$PROJECT_NAME.csproj"
-  if [[ ! -f "$CS_PROJECT_FILE" ]];
+  solution_file=$(ls *.sln)
+  project_name=${solution_file%.sln}
+  cs_project_file="$project_name/$project_name.csproj"
+  if [[ ! -f "$cs_project_file" ]];
   then
-    echo "This looks like a .Net project, but there is no $CS_PROJECT_FILE file"
+    echo "This looks like a .Net project, but there is no $cs_project_file file"
     exit 1
   fi
 }
 function release_dotnet() {
-  SOLUTION_FILE=$(ls *.sln)
-  PROJECT_NAME=${SOLUTION_FILE%.sln}
-  CS_PROJECT_FILE="$PROJECT_NAME/$PROJECT_NAME.csproj"
-  xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$CS_PROJECT_FILE"
+  solution_file=$(ls *.sln)
+  project_name=${solution_file%.sln}
+  cs_project_file="$project_name/$project_name.csproj"
+  xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$cs_project_file"
 }
 function post_release_dotnet() {
+  # noop
+  :
+}
 
 SUPPORTED_LANGUAGES+=("github-action")
 function is_monoglot_github-action() {
