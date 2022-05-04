@@ -23,11 +23,12 @@ $ tree
 ├── go
 │   └── go.mod
 ├── javascript
-│   ├── package.json
+│   └── package.json
 ├── java
 │   └── pom.xml
 ├── perl
-│   └── cpanfile
+│   ├── cpanfile
+│   └── VERSION
 ├── python
 │   └── setup.py # or pyproject.toml
 └── ruby
