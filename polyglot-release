@@ -22,7 +22,7 @@ SUPPORTED_LANGUAGES=()
 
 SUPPORTED_LANGUAGES+=("dotnet")
 function is_monoglot_dotnet() {
-  ls *.sln &> /dev/null
+  ls -- *.sln &> /dev/null
 }
 function pre_release_dotnet() {
   check_for_tools "xmlstarlet"
