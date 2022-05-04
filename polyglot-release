@@ -36,7 +36,7 @@ function pre_release_dotnet() {
   fi
 }
 function release_dotnet() {
-  solution_file=$(ls *.sln)
+  solution_file=$(ls -- *.sln)
   project_name=${solution_file%.sln}
   cs_project_file="$project_name/$project_name.csproj"
   xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$cs_project_file"
