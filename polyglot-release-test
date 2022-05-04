@@ -59,7 +59,7 @@ function manual_test() {
   import_gpg_key
   setup_workdir $workdir $fixture
   pushd $workdir/local > /dev/null
-  PATH=$PATH:$SRC \
+  PATH=$SRC:$PATH \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
     BASH_SILENCE_DEPRECATION_WARNING=1 \
