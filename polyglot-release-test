@@ -55,7 +55,7 @@ function run_test() {
   setup_git_repos $fixture
   popd > /dev/null
   pushd $workdir/local > /dev/null
-  PATH=$PATH:$SRC \
+  PATH=$SRC:$PATH \
     RELEASE_DATE=2000-01-01 \
     /bin/sh $test \
     > $test.actual.output \
