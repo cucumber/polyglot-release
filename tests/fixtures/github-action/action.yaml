@@ -1,0 +1,8 @@
+name: "Project"
+description: "A Project"
+runs:
+  using: "composite"
+  steps:
+    - name: Hello world
+      run: echo "Hello world"
+      shell: bash

@@ -5,3 +5,4 @@ OPTIONS:
   --no-git-push          do not push to git
   --no-git-commit        do not commit git
   --only-release         do not update versions after release
+  --quiet                don't log progress messages
