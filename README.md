@@ -66,7 +66,7 @@ To run all the tests:
 
 To run a single test:
 
-    ./polyglot-releaset-test <path-to-test-script>
+    ./polyglot-release-test <path-to-test-script>
 
 We use an [approval testing](https://approvaltests.com/) style for testing this app.
 
