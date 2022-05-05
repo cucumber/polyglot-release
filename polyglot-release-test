@@ -100,9 +100,7 @@ function run_test() {
   popd > /dev/null || exit 1
   for type in output git-diff git-log exit-status stderr origin-git-log; do
     if [ -f "$test.expected.$type" ]; then
-      difference=$(diff "$test.expected.$type" "$test.actual.$type")
-      different=$(test $? != 0)
-      if [[ $different ]]; then 
+      if [[ $(diff "$test.expected.$type" "$test.actual.$type") ]]; then 
         if [ -z "$test_failed" ]; then
           echo " 🔴"
         fi
@@ -112,7 +110,7 @@ function run_test() {
         realpath --relative-to="$SRC" "$test.expected.$type"
         realpath --relative-to="$SRC" "$test.actual.$type"
         echo
-        echo "$difference"
+        diff "$test.expected.$type" "$test.actual.$type"
         test_failed="true";
       fi
     fi
