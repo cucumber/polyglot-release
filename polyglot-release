@@ -396,15 +396,25 @@ fi
 ###
 # push to github
 ##
+local_branch=$(git rev-parse --abbrev-ref HEAD)
+release_commit=$(git rev-list --max-count=1 "$TAG")
+release_branch="release/$TAG"
 if [[ -z $NO_GIT_PUSH ]]; then
-  local_branch=$(git rev-parse --abbrev-ref HEAD)
   git push --quiet origin "refs/heads/$local_branch" "refs/tags/$TAG"
   log "All commit(s) pushed to origin/$local_branch"
-  release_commit=$(git rev-list --max-count=1 "$TAG")
-  release_branch="release/$TAG"
   git push --quiet origin "$release_commit:refs/heads/$release_branch"
   log "Release commit (tagged with $TAG) pushed to origin/$release_branch"
   if [[ -n $QUIET ]]; then
     echo "$release_branch"
   fi
+else
+  log "You now need to eyeball these commits, then push manually:"
+  log
+  log "# push commits and tags"
+  log "git push origin --tags"
+  log "git push origin $local_branch"
+  log
+  log "# push to release branch"
+  log "release_commit=\$(git rev-list --max-count=1 '$TAG')"
+  log "git push origin \$release_commit:refs/heads/$release_branch"
 fi
