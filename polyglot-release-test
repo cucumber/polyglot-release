@@ -121,10 +121,20 @@ function run_test() {
     echo "Working directory: $workdir"
     echo "GNUPGHOME: $GNUPGHOME"
     echo 
+    return 1
   else
     echo ✅
+    return 0
   fi
 }
+
+# test the tests!
+if run_test "$(realpath tests/.test-the-tests.sh)" > /dev/null; then
+  echo "Expected that testing tests/.test-the-tests.sh would fail, but it didn't!"
+  echo "This suggests the test runner script itself ($0) is not working properly."
+  exit 1
+fi
+FAILURE=
 
 if [ "$1" ]; then
   if [[ $1 =~ tests/.*\.sh$ ]]; then
@@ -142,4 +152,4 @@ else
     run_test "$test"
   done
 fi
-test -z $FAILURE
+test -z "$FAILURE"
