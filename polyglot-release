@@ -410,9 +410,8 @@ if [[ -z $NO_GIT_PUSH ]]; then
 else
   log "You now need to eyeball these commits, then push manually:"
   log
-  log "# push commits and tags"
-  log "git push origin --tags"
-  log "git push origin $local_branch"
+  log "# push local commits and tags to $local_branch"
+  log "git push origin $local_branch --follow-tags"
   log
   log "# push to release branch"
   log "release_commit=\$(git rev-list --max-count=1 '$TAG')"

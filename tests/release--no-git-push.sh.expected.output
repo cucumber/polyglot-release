@@ -81,9 +81,8 @@ Files committed to to git and tagged 'v1.0.0'
 Post-release changes committed to to git
 You now need to eyeball these commits, then push manually:
 
-# push commits and tags
-git push origin --tags
-git push origin main
+# push local commits and tags to main
+git push origin main --follow-tags
 
 # push to release branch
 release_commit=$(git rev-list --max-count=1 'v1.0.0')
