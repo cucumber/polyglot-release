@@ -4,7 +4,6 @@ set -e
 shellcheck polyglot-release*
 set +e
 
-FAILURE=
 SRC=$(realpath .)
 GNUPGHOME=$(mktemp -d)
 export GNUPGHOME
@@ -102,7 +101,7 @@ function run_test() {
     if [ -f "$test.expected.$type" ]; then
       if [[ $(diff "$test.expected.$type" "$test.actual.$type") ]]; then 
         if [ -z "$test_failed" ]; then
-          echo " 🔴"
+          echo 🔴
         fi
         echo
         echo Actual $type output different to expected!
@@ -116,30 +115,45 @@ function run_test() {
     fi
   done
   if [ -n "$test_failed" ]; then
-    FAILURE="true"
     echo
     echo "Working directory: $workdir"
     echo "GNUPGHOME: $GNUPGHOME"
     echo 
+    return 1
   else
     echo ✅
+    return 0
   fi
 }
 
-if [ "$1" ]; then
-  if [[ $1 =~ tests/.*\.sh$ ]]; then
-    # Run a single test
-    run_test "$(realpath "$1")"
+# test the tests!
+if [[ ! $* =~ test-the-tests ]]; then
+  echo -n "testing the tests "
+  if $0 tests/.test-the-tests.sh > /dev/null; then
+    echo 🔴
+    echo "Expected that testing tests/.test-the-tests.sh would fail, but it didn't!"
+    echo "This suggests the test runner script itself ($0) is not working properly."
+  else
+    echo ✅
   fi
-  if [[ $1 =~ fixtures/ ]]; then
-    # Start a manual test session
-    manual_test "$(realpath "$1")"
-  fi
-else
-  # Run all tests
-  tests=$(realpath tests)
-  for test in "$tests"/*.sh; do
-    run_test "$test"
-  done
 fi
-test -z $FAILURE
+
+if [[ $1 =~ fixtures/ ]]; then
+  # Start a manual test session
+  manual_test "$(realpath "$1")"
+  exit 0
+fi
+
+# Run all tests
+if [[ "$1" ]]; then
+  tests=$(realpath "$1")
+else
+  tests="$(realpath tests)/*.sh"
+fi
+failure=
+for test in $tests; do
+  if [[ ! "$1" || $(realpath "$1") == "$test" ]]; then
+    run_test "$test" || failure="true"
+  fi
+done
+test -z "$failure"
