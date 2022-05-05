@@ -26,8 +26,7 @@ function is_monoglot_dotnet() {
 }
 function pre_release_dotnet() {
   check_for_tools "xmlstarlet"
-  if [[ ! -f "$(cs_project_file)" ]];
-  then
+  if [[ ! -f "$(cs_project_file)" ]]; then
     echo "This looks like a .Net project, but there is no $(cs_project_file) file"
     exit 1
   fi
