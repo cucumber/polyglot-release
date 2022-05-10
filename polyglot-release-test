@@ -86,6 +86,15 @@ function run_test() {
     > "$test.actual.output" \
     2> "$test.actual.stderr"
   echo $? > "$test.actual.exit-status"
+  first_commit=$(git log main --pretty=%H --reverse | head -n1)
+  git log \
+    --reverse \
+    --patch \
+    --unified=0 \
+    --pretty=%n%x2A%x20%s \
+    "$first_commit..HEAD" \
+    | sed -e '/^index/d' \
+    > "$test.actual.git-commits"
   git diff --unified=0 \
     | sed -e '/^index/d' \
     > "$test.actual.git-diff"
@@ -97,7 +106,7 @@ function run_test() {
     --format="%s %d %GS" \
     > "$test.actual.origin-git-log"
   popd > /dev/null || exit 1
-  for type in output git-diff git-log exit-status stderr origin-git-log; do
+  for type in output git-commits git-diff git-log exit-status stderr origin-git-log; do
     if [ -f "$test.expected.$type" ]; then
       if [[ $(diff "$test.expected.$type" "$test.actual.$type") ]]; then 
         if [ -z "$test_failed" ]; then
