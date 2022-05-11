@@ -82,7 +82,7 @@ Post-release changes committed to to git
 You now need to eyeball these commits, then push manually:
 
 # push local commits and tags to main
-git push origin main --follow-tags
+git push origin refs/heads/main refs/tags/v1.0.0
 
 # push to release branch
 git push origin <a-git-sha>:refs/heads/release/v1.0.0

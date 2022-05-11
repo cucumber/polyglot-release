@@ -411,7 +411,7 @@ else
   log "You now need to eyeball these commits, then push manually:"
   log
   log "# push local commits and tags to $local_branch"
-  log "git push origin $local_branch --follow-tags"
+  log "git push origin refs/heads/$local_branch refs/tags/$TAG"
   log
   log "# push to release branch"
   log "git push origin $release_commit:refs/heads/$release_branch"
