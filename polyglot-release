@@ -414,6 +414,5 @@ else
   log "git push origin $local_branch --follow-tags"
   log
   log "# push to release branch"
-  log "release_commit=\$(git rev-list --max-count=1 '$TAG')"
-  log "git push origin \$release_commit:refs/heads/$release_branch"
+  log "git push origin $release_commit:refs/heads/$release_branch"
 fi

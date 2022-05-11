@@ -85,5 +85,4 @@ You now need to eyeball these commits, then push manually:
 git push origin main --follow-tags
 
 # push to release branch
-release_commit=$(git rev-list --max-count=1 'v1.0.0')
-git push origin $release_commit:refs/heads/release/v1.0.0
+git push origin <a-git-sha>:refs/heads/release/v1.0.0
