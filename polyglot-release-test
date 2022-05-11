@@ -13,6 +13,11 @@ function import_gpg_key() {
   GPG_KEY_ID=D8C4AB54E1AB7D53
 }
 
+function normalize_git_sha() {
+    # shellcheck disable=SC2001
+    sed -e 's/[0-9a-f]\{40\}/<a-git-sha>/g' < /dev/stdin
+}
+
 function setup_git_repos() {
   fixture=$1
   mkdir origin
@@ -86,6 +91,7 @@ function run_test() {
     > "$test.actual.output" \
     2> "$test.actual.stderr"
   echo $? > "$test.actual.exit-status"
+  normalize_git_sha < "$test.actual.output" > "$test.actual.output-normalized"
   first_commit=$(git log main --pretty=%H --reverse | head -n1)
   git log \
     --reverse \
@@ -106,7 +112,7 @@ function run_test() {
     --format="%s %d %GS" \
     > "$test.actual.origin-git-log"
   popd > /dev/null || exit 1
-  for type in output git-commits git-diff git-log exit-status stderr origin-git-log; do
+  for type in output output-normalized git-commits git-diff git-log exit-status stderr origin-git-log; do
     if [ -f "$test.expected.$type" ]; then
       if [[ $(diff "$test.expected.$type" "$test.actual.$type") ]]; then 
         if [ -z "$test_failed" ]; then
