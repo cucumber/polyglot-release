@@ -70,9 +70,9 @@ function pre_release_go() {
 }
 function release_go() {
   MODULE_WITH_NEW_VERSION=$(
-    go mod edit -json |\
-    jq -r '.Module.Path' |\
-    sed -E "s/(.*)v[0-9]+.[0-9]+.[0-9]+$/\1v$NEW_VERSION/"
+    go mod edit -json |
+      jq -r '.Module.Path' |
+      sed -E "s/(.*)v[0-9]+.[0-9]+.[0-9]+$/\1v$NEW_VERSION/"
   )
   go mod edit -module "$MODULE_WITH_NEW_VERSION"
 }
@@ -121,8 +121,7 @@ function is_monoglot_perl() {
   [[ -f cpanfile ]]
 }
 function pre_release_perl() {
-  if [[ ! -f VERSION ]];
-  then
+  if [[ ! -f VERSION ]]; then
     echo "This looks like a Perl project, but there is no VERSION file"
     exit 1
   fi
@@ -135,23 +134,43 @@ function post_release_perl() {
   :
 }
 
+SUPPORTED_LANGUAGES+=("polyglot-release")
+function is_monoglot_polyglot-release() {
+  [[ -f polyglot-release ]]
+}
+function pre_release_polyglot-release() {
+  check_for_tools "sed"
+  if [[ ! -f README.md ]]; then
+    echo "This looks like the polyglot-release project, but there is no README.md file"
+    exit 1
+  fi
+}
+function release_polyglot-release() {
+    for file in polyglot-release README.md; do
+      sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file"
+    done
+}
+function post_release_polyglot-release() {
+  sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release
+}
+
 SUPPORTED_LANGUAGES+=("python")
 function is_monoglot_python() {
-  [[ -f pyproject.toml  || -f setup.py ]]
+  [[ -f pyproject.toml || -f setup.py ]]
 }
 function pre_release_python() {
   check_for_tools "sed"
 }
 function release_python() {
-  if  [[ -f pyproject.toml ]]; then
+  if [[ -f pyproject.toml ]]; then
     PROJECT_FILE=pyproject.toml
   else
     PROJECT_FILE=setup.py
   fi
 
   sed -i \
-  		-e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
-  		"$PROJECT_FILE"
+    -e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
+    "$PROJECT_FILE"
 }
 function post_release_python() {
   # noop
@@ -163,8 +182,7 @@ function is_monoglot_ruby() {
   [[ $(find ./*.gemspec -type f | wc -l) -gt 0 ]]
 }
 function pre_release_ruby() {
-  if [[ ! -f VERSION ]];
-  then
+  if [[ ! -f VERSION ]]; then
     echo "This looks like a Ruby project, but there is no VERSION file"
     exit 1
   fi
@@ -202,6 +220,24 @@ function check_for_tools() {
     echo "Please install the missing required tool(s)."
     exit 1
   fi
+}
+
+function check_up_to_date() {
+  if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
+    return
+  fi
+
+  latest_tag_in_git="$(git ls-remote --tags --sort='version:refname' https://github.com/cucumber/polyglot-release.git 'v*.*.*' | cut -d '/' -f 3)"
+
+  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_tag_in_git" ]; then
+    return
+  fi
+
+  echo "Please update polyglot-release."
+  echo " - current version: v$POLYGLOT_RELEASE_VERSION"
+  echo " - latest version: $latest_tag_in_git"
+
+  exit 1
 }
 
 function check_changelog_exists() {
@@ -267,6 +303,7 @@ function check_git_index_clean() {
 }
 
 function show_usage() {
+  echo "polyglot-release v${POLYGLOT_RELEASE_VERSION:--unknown}"
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help                 shows this help"
@@ -281,6 +318,7 @@ function log() {
 }
 
 # Initialize global variables
+POLYGLOT_RELEASE_VERSION=
 NEW_VERSION=
 NO_GIT_PUSH=
 QUIET=
@@ -317,6 +355,7 @@ done
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 check_for_tools "git" "changelog" "gpg"
+check_up_to_date
 check_in_git_root_directory
 check_changelog_exists
 check_gpg_keys_configured

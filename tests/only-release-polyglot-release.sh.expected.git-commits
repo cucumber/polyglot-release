@@ -1,0 +1,36 @@
+
+* Prepare release v1.0.0
+
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+--- a/CHANGELOG.md
++++ b/CHANGELOG.md
+@@ -9,0 +10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
++## [1.0.0] - 2000-01-01
+@@ -15 +16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
+-## [0.0.0] - 2000-01-01
++## 0.0.0 - 2000-01-01
+@@ -17 +18,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
+-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
++[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
++[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
+diff --git a/README.md b/README.md
+--- a/README.md
++++ b/README.md
+@@ -1 +1 @@
+-POLYGLOT_RELEASE_VERSION=0.0.1
++POLYGLOT_RELEASE_VERSION=1.0.0
+diff --git a/polyglot-release b/polyglot-release
+--- a/polyglot-release
++++ b/polyglot-release
+@@ -1 +1 @@
+-POLYGLOT_RELEASE_VERSION=
++POLYGLOT_RELEASE_VERSION=1.0.0
+
+* Prepare for the next development iteration
+
+diff --git a/polyglot-release b/polyglot-release
+--- a/polyglot-release
++++ b/polyglot-release
+@@ -1 +1 @@
+-POLYGLOT_RELEASE_VERSION=1.0.0
++POLYGLOT_RELEASE_VERSION=
