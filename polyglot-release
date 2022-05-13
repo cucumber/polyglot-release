@@ -272,7 +272,6 @@ function show_usage() {
   echo "  --help                 shows this help"
   echo "  --no-git-push          do not push to git"
   echo "  --no-git-commit        do not commit git"
-  echo "  --only-release         do not update versions after release"
   echo "  --quiet                don't log progress messages"
 }
 
@@ -285,7 +284,6 @@ function log() {
 # Initialize global variables
 NEW_VERSION=
 NO_GIT_PUSH=
-ONLY_RELEASE=
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
@@ -299,10 +297,6 @@ while [[ $# -gt 0 ]]; do
   --no-git-commit)
     NO_GIT_COMMIT="true"
     NO_GIT_PUSH="true"
-    shift # past argument
-    ;;
-  --only-release)
-    ONLY_RELEASE="true"
     shift # past argument
     ;;
   --quiet)
@@ -380,10 +374,6 @@ fi
 ###
 ## post release
 ###
-if [[ -n $ONLY_RELEASE ]]; then
-  exit 0
-fi
-
 for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run post_release "$language"
 done
