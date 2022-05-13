@@ -227,7 +227,11 @@ function check_up_to_date() {
     return
   fi
 
-  latest_tag_in_git="$(git ls-remote --tags --sort='version:refname' https://github.com/cucumber/polyglot-release.git 'v*.*.*' | cut -d '/' -f 3)"
+  latest_tag_in_git="$(
+    git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" 'v*.*.*' \
+    | cut -d '/' -f 3 \
+    | tail --lines=1
+    )"
 
   if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_tag_in_git" ]; then
     return
@@ -318,9 +322,10 @@ function log() {
 }
 
 # Initialize global variables
-POLYGLOT_RELEASE_VERSION=
 NEW_VERSION=
 NO_GIT_PUSH=
+POLYGLOT_RELEASE_VERSION=
+POLYGLOT_RELEASE_GIT_REPO=https://github.com/cucumber/polyglot-release.git
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
