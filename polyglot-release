@@ -325,7 +325,7 @@ function log() {
 NEW_VERSION=
 NO_GIT_PUSH=
 POLYGLOT_RELEASE_VERSION=
-POLYGLOT_RELEASE_GIT_REPO=https://github.com/cucumber/polyglot-release.git
+POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release.git}
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
