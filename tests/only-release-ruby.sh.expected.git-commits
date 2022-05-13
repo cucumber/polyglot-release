@@ -1,3 +1,6 @@
+
+* Prepare release v1.0.0
+
 diff --git a/CHANGELOG.md b/CHANGELOG.md
 --- a/CHANGELOG.md
 +++ b/CHANGELOG.md
@@ -10,18 +13,9 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 +[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
-diff --git a/package-lock.json b/package-lock.json
---- a/package-lock.json
-+++ b/package-lock.json
-@@ -3 +3 @@
--  "version": "0.0.0",
-+  "version": "1.0.0",
-@@ -9 +9 @@
--      "version": "0.0.0"
-+      "version": "1.0.0"
-diff --git a/package.json b/package.json
---- a/package.json
-+++ b/package.json
-@@ -3 +3 @@
--  "version": "0.0.0"
-+  "version": "1.0.0"
+diff --git a/VERSION b/VERSION
+--- a/VERSION
++++ b/VERSION
+@@ -1 +1 @@
+-0.0.0
++1.0.0
