@@ -271,7 +271,6 @@ function show_usage() {
   echo "OPTIONS:"
   echo "  --help                 shows this help"
   echo "  --no-git-push          do not push to git"
-  echo "  --no-git-commit        do not commit git"
   echo "  --quiet                don't log progress messages"
 }
 
@@ -291,11 +290,6 @@ RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
 while [[ $# -gt 0 ]]; do
   case $1 in
   --no-git-push)
-    NO_GIT_PUSH="true"
-    shift # past argument
-    ;;
-  --no-git-commit)
-    NO_GIT_COMMIT="true"
     NO_GIT_PUSH="true"
     shift # past argument
     ;;
@@ -364,12 +358,10 @@ log "Package manager manifests and CHANGELOG.md updated for $NEW_VERSION"
 log "Here's what changed:"
 log "$(git -c color.diff=always diff)"
 
-if [[ -z $NO_GIT_COMMIT ]]; then
-  TAG="v$NEW_VERSION"
-  git commit --gpg-sign --quiet --all --message="Prepare release $TAG"
-  git tag --sign --message "$TAG" "$TAG"
-  log "Files committed to to git and tagged '$TAG'"
-fi
+TAG="v$NEW_VERSION"
+git commit --gpg-sign --quiet --all --message="Prepare release $TAG"
+git tag --sign --message "$TAG" "$TAG"
+log "Files committed to to git and tagged '$TAG'"
 
 ###
 ## post release
@@ -378,7 +370,7 @@ for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run post_release "$language"
 done
 
-if [[ -z $NO_GIT_COMMIT && $(git status --porcelain) ]]; then
+if [[ $(git status --porcelain) ]]; then
   git commit --gpg-sign --quiet --all --message="Prepare for the next development iteration"
   log "Post-release changes committed to to git"
 fi
