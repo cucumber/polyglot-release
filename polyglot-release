@@ -369,7 +369,7 @@ log "$(git -c color.diff=always diff)"
 
 TAG="v$NEW_VERSION"
 git commit --gpg-sign --quiet --all --message="$(format_commit_message "Prepare release $TAG")"
-git tag --sign --message "$TAG" "$TAG"
+git tag --sign --message "$(format_commit_message "$TAG")" "$TAG"
 log "Files committed to to git and tagged '$TAG'"
 
 ###
