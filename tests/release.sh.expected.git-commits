@@ -1,9 +1,5 @@
 
-**
-Prepare release v1.0.0
-
-Created-by: polyglot-release v-unknown
-
+* Prepare release v1.0.0
 
 diff --git a/CHANGELOG.md b/CHANGELOG.md
 --- a/CHANGELOG.md
