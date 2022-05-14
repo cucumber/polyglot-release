@@ -344,7 +344,7 @@ fi
 NEW_VERSION=$1
 validate_new_version_argument
 
-COMMIT_BEFORE_RELEASE="$(git rev-parse HEAD)"
+commit_before_release="$(git rev-parse HEAD)"
 
 ###
 ## pre release
@@ -413,7 +413,7 @@ else
   log "If things do not look quite right you can roll back the release:"
   log
   log "# reset to the commit before release started"
-  log "git reset --hard $COMMIT_BEFORE_RELEASE"
+  log "git reset --hard $commit_before_release"
   log
   log "# delete the git tag that was created"
   log "git tag -d $TAG"
