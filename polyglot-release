@@ -1,12 +1,15 @@
 #!/bin/bash
 set -e
 
-# quiet output from pushd / popd
+# quiet output from pushd / popd / find
 function pushd() {
   command pushd "$@" >/dev/null
 }
 function popd() {
   command popd >/dev/null
+}
+function find() {
+  command find "$@" 2>/dev/null
 }
 # Usage: 'run pre_release|release|post_release <language>'
 function run() {
