@@ -1,0 +1,88 @@
+Package manager manifests and CHANGELOG.md updated for 1.0.0
+Here's what changed:
+[1mdiff --git a/CHANGELOG.md b/CHANGELOG.md[m
+[1mindex 5c5d610..e849b16 100644[m
+[1m--- a/CHANGELOG.md[m
+[1m+++ b/CHANGELOG.md[m
+[36m@@ -7,12 +7,14 @@[m [mand this project adheres to [Semantic Versioning](http://semver.org/).[m
+ [m
+ ## [Unreleased][m
+ [m
+[32m+[m[32m## [1.0.0] - 2000-01-01[m
+ ### Fixed[m
+ - This is a test[m
+ [m
+ ## [0.0.1] - 2000-01-01[m
+ [m
+[31m-## [0.0.0] - 2000-01-01[m
+[32m+[m[32m## 0.0.0 - 2000-01-01[m
+ [m
+[31m-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main[m
+[32m+[m[32m[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main[m
+[32m+[m[32m[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main[m
+ [0.0.1]: https://github.com/cucumber/polyglot-release/compare/v0.0.0...v0.0.1[m
+[1mdiff --git a/java/pom.xml b/java/pom.xml[m
+[1mindex 1ddc4c5..6879b6c 100644[m
+[1m--- a/java/pom.xml[m
+[1m+++ b/java/pom.xml[m
+[36m@@ -5,13 +5,13 @@[m
+ [m
+     <groupId>com.example</groupId>[m
+     <artifactId>project</artifactId>[m
+[31m-    <version>0.0.1-SNAPSHOT</version>[m
+[32m+[m[32m    <version>1.0.0</version>[m
+     <packaging>jar</packaging>[m
+ [m
+     <scm>[m
+         <connection>scm:git:git://github.com/cucumber/polyglot-release.git</connection>[m
+         <developerConnection>scm:git:git@github.com:cucumber/polyglot-release.git</developerConnection>[m
+         <url>git://github.com/cucumber/polyglot-release.git</url>[m
+[31m-        <tag>HEAD</tag>[m
+[32m+[m[32m        <tag>v1.0.0</tag>[m
+     </scm>[m
+ </project>[m
+[1mdiff --git a/javascript/package-lock.json b/javascript/package-lock.json[m
+[1mindex 2a19e31..67dba24 100644[m
+[1m--- a/javascript/package-lock.json[m
+[1m+++ b/javascript/package-lock.json[m
+[36m@@ -1,12 +1,12 @@[m
+ {[m
+   "name": "@example/project",[m
+[31m-  "version": "0.0.0",[m
+[32m+[m[32m  "version": "1.0.0",[m
+   "lockfileVersion": 2,[m
+   "requires": true,[m
+   "packages": {[m
+     "": {[m
+       "name": "@example/project",[m
+[31m-      "version": "0.0.0"[m
+[32m+[m[32m      "version": "1.0.0"[m
+     }[m
+   }[m
+ }[m
+[1mdiff --git a/javascript/package.json b/javascript/package.json[m
+[1mindex 806abfd..c37a94d 100644[m
+[1m--- a/javascript/package.json[m
+[1m+++ b/javascript/package.json[m
+[36m@@ -1,4 +1,4 @@[m
+ {[m
+   "name": "@example/project",[m
+[31m-  "version": "0.0.0"[m
+[32m+[m[32m  "version": "1.0.0"[m
+ }[m
+[1mdiff --git a/ruby/VERSION b/ruby/VERSION[m
+[1mindex 77d6f4c..3eefcb9 100644[m
+[1m--- a/ruby/VERSION[m
+[1m+++ b/ruby/VERSION[m
+[36m@@ -1 +1 @@[m
+[31m-0.0.0[m
+[32m+[m[32m1.0.0[m
+Files committed to to git and tagged 'v1.0.0'
+Post-release changes committed to to git
+You now need to eyeball these commits, then push manually:
+
+# push local commits and tags to main
+git push origin refs/heads/main refs/tags/v1.0.0
+
+# push to release branch
+git push origin <a-git-sha>:refs/heads/release/v1.0.0
