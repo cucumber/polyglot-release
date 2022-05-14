@@ -1,4 +1,4 @@
-Package manager manifests and CHANGELOG.md updated for 1.0.0
+[0m[0mPackage manager manifests and CHANGELOG.md updated for 1.0.0
 Here's what changed:
 [1mdiff --git a/CHANGELOG.md b/CHANGELOG.md[m
 [1mindex 5c5d610..e849b16 100644[m
@@ -78,7 +78,7 @@ Here's what changed:
 [31m-0.0.0[m
 [32m+[m[32m1.0.0[m
 Files committed to to git and tagged 'v1.0.0'
-Post-release changes committed to to git
+[0m[0mPost-release changes committed to to git
 You now need to eyeball these commits, then push manually:
 
 # push local commits and tags to main
@@ -86,3 +86,12 @@ git push origin refs/heads/main refs/tags/v1.0.0
 
 # push to release branch
 git push origin <a-git-sha>:refs/heads/release/v1.0.0
+
+
+If things do not look quite right you can roll back the release:
+
+# reset to the commit before release started
+git reset --hard <a-git-sha>
+
+# delete the git tag that was created
+git tag -d v1.0.0
