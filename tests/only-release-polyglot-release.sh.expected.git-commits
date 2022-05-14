@@ -2,7 +2,7 @@
 **
 Prepare release v1.0.0
 
-Created-by: polyglot-release v-unknown
+Created-by: polyglot-release v-develop
 
 
 diff --git a/CHANGELOG.md b/CHANGELOG.md
@@ -33,7 +33,7 @@ diff --git a/polyglot-release b/polyglot-release
 **
 Prepare for the next development iteration
 
-Created-by: polyglot-release v-unknown
+Created-by: polyglot-release v-develop
 
 
 diff --git a/polyglot-release b/polyglot-release

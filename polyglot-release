@@ -328,7 +328,7 @@ function log() {
 function format_commit_message() {
   echo "$1
 
-Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--unknown}"
+Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 }
 
 # Initialize global variables
@@ -351,7 +351,7 @@ while [[ $# -gt 0 ]]; do
     shift # past argument
     ;;
   -h | --help)
-    echo "polyglot-release v${POLYGLOT_RELEASE_VERSION:--unknown}: Makes a release to GitHub"
+    echo "polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}: Makes a release to GitHub"
     show_usage
     exit 0
     ;;
