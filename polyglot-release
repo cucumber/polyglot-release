@@ -309,7 +309,6 @@ function check_git_index_clean() {
 }
 
 function show_usage() {
-  echo "polyglot-release v${POLYGLOT_RELEASE_VERSION:--unknown}"
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help                 shows this help"
@@ -343,7 +342,7 @@ while [[ $# -gt 0 ]]; do
     shift # past argument
     ;;
   -h | --help)
-    echo "Makes a release to GitHub"
+    echo "polyglot-release v${POLYGLOT_RELEASE_VERSION:--unknown}: Makes a release to GitHub"
     show_usage
     exit 0
     ;;

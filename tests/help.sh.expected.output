@@ -1,5 +1,4 @@
-Makes a release to GitHub
-polyglot-release v-unknown
+polyglot-release v-unknown: Makes a release to GitHub
 Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
 OPTIONS:
   --help                 shows this help
