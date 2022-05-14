@@ -385,7 +385,9 @@ local_branch=$(git rev-parse --abbrev-ref HEAD)
 release_commit=$(git rev-list --max-count=1 "$TAG")
 release_branch="release/$TAG"
 if [[ -z $NO_GIT_PUSH ]]; then
-  git push --quiet --tags origin "$release_commit:refs/heads/$release_branch"
+  git push --quiet --atomic origin "refs/heads/$local_branch" "refs/tags/$TAG" "$release_commit:refs/heads/$release_branch"
+  log "Tag $TAG pushed to origin"
+  log "All commit(s) pushed to origin/$local_branch"
   log "Release commit (tagged with $TAG) pushed to origin/$release_branch"
   if [[ -n $QUIET ]]; then
     echo "$release_branch"
