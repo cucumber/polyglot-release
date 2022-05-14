@@ -283,10 +283,10 @@ function log() {
   fi
 }
 
-function commit_message() {
+function format_commit_message() {
   echo "$1
 
-This commit was created by https://github.com/cucumber/polyglot-release/"
+Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--unknown}"
 }
 
 # Initialize global variables
@@ -368,7 +368,7 @@ log "Here's what changed:"
 log "$(git -c color.diff=always diff)"
 
 TAG="v$NEW_VERSION"
-git commit --gpg-sign --quiet --all --message="$(commit_message "Prepare release $TAG")"
+git commit --gpg-sign --quiet --all --message="$(format_commit_message "Prepare release $TAG")"
 git tag --sign --message "$TAG" "$TAG"
 log "Files committed to to git and tagged '$TAG'"
 
@@ -380,7 +380,7 @@ for language in "${SUPPORTED_LANGUAGES[@]}"; do
 done
 
 if [[ $(git status --porcelain) ]]; then
-  git commit --gpg-sign --quiet --all --message="$(commit_message Prepare for the next development iteration)"
+  git commit --gpg-sign --quiet --all --message="$(format_commit_message Prepare for the next development iteration)"
   log "Post-release changes committed to to git"
 fi
 

@@ -2,7 +2,7 @@
 **
 Prepare release v1.0.0
 
-This commit was created by https://github.com/cucumber/polyglot-release/
+Created-by: polyglot-release v-unknown
 
 
 diff --git a/CHANGELOG.md b/CHANGELOG.md
@@ -30,7 +30,7 @@ diff --git a/pom.xml b/pom.xml
 **
 Prepare for the next development iteration
 
-This commit was created by https://github.com/cucumber/polyglot-release/
+Created-by: polyglot-release v-unknown
 
 
 diff --git a/pom.xml b/pom.xml
