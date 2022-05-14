@@ -89,7 +89,7 @@ function run_test() {
     POLYGLOT_RELEASE_GIT_REPO="$workdir/origin" \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
-    /bin/sh "$test" \
+    /bin/bash "$test" \
     3> "$test.actual.output" \
     1> >(tee "$test.actual.stdout" >&3) \
     2> >(tee "$test.actual.stderr" >&3)
