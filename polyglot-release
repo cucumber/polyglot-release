@@ -380,7 +380,7 @@ for language in "${SUPPORTED_LANGUAGES[@]}"; do
 done
 
 if [[ $(git status --porcelain) ]]; then
-  git commit --gpg-sign --quiet --all --message="$(format_commit_message Prepare for the next development iteration)"
+  git commit --gpg-sign --quiet --all --message="$(format_commit_message "Prepare for the next development iteration")"
   log "Post-release changes committed to to git"
 fi
 
