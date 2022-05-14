@@ -90,8 +90,9 @@ function run_test() {
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
     /bin/sh "$test" \
-    > "$test.actual.output" \
-    2> "$test.actual.stderr"
+    3> "$test.actual.output" \
+    1> >(tee "$test.actual.stdout" >&3) \
+    2> >(tee "$test.actual.stderr" >&3)
   echo $? > "$test.actual.exit-status"
   normalize_git_sha < "$test.actual.output" > "$test.actual.output-normalized"
   first_commit=$(git log main --pretty=%H --reverse | head -n1)
@@ -114,7 +115,7 @@ function run_test() {
     --format="%s %d %GS" \
     > "$test.actual.origin-git-log"
   popd > /dev/null || exit 1
-  for type in output output-normalized git-commits git-diff git-log exit-status stderr origin-git-log; do
+  for type in output output-normalized git-commits git-diff git-log exit-status stderr stdout origin-git-log; do
     if [ -f "$test.expected.$type" ]; then
       if [[ $(diff "$test.expected.$type" "$test.actual.$type") ]]; then 
         if [ -z "$test_failed" ]; then

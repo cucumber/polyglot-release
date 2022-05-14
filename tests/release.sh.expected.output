@@ -79,5 +79,6 @@ Here's what changed:
 [32m+[m[32m1.0.0[m
 Files committed to to git and tagged 'v1.0.0'
 Post-release changes committed to to git
+Tag v1.0.0 pushed to origin
 All commit(s) pushed to origin/main
 Release commit (tagged with v1.0.0) pushed to origin/release/v1.0.0
