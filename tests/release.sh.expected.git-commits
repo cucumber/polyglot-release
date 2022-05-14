@@ -17,15 +17,36 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 +[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
-diff --git a/pom.xml b/pom.xml
---- a/pom.xml
-+++ b/pom.xml
+diff --git a/java/pom.xml b/java/pom.xml
+--- a/java/pom.xml
++++ b/java/pom.xml
 @@ -8 +8 @@
 -    <version>0.0.1-SNAPSHOT</version>
 +    <version>1.0.0</version>
 @@ -15 +15 @@
 -        <tag>HEAD</tag>
 +        <tag>v1.0.0</tag>
+diff --git a/javascript/package-lock.json b/javascript/package-lock.json
+--- a/javascript/package-lock.json
++++ b/javascript/package-lock.json
+@@ -3 +3 @@
+-  "version": "0.0.0",
++  "version": "1.0.0",
+@@ -9 +9 @@
+-      "version": "0.0.0"
++      "version": "1.0.0"
+diff --git a/javascript/package.json b/javascript/package.json
+--- a/javascript/package.json
++++ b/javascript/package.json
+@@ -3 +3 @@
+-  "version": "0.0.0"
++  "version": "1.0.0"
+diff --git a/ruby/VERSION b/ruby/VERSION
+--- a/ruby/VERSION
++++ b/ruby/VERSION
+@@ -1 +1 @@
+-0.0.0
++1.0.0
 
 **
 Prepare for the next development iteration
@@ -33,9 +54,9 @@ Prepare for the next development iteration
 Created-by: polyglot-release v-unknown
 
 
-diff --git a/pom.xml b/pom.xml
---- a/pom.xml
-+++ b/pom.xml
+diff --git a/java/pom.xml b/java/pom.xml
+--- a/java/pom.xml
++++ b/java/pom.xml
 @@ -8 +8 @@
 -    <version>1.0.0</version>
 +    <version>1.0.1-SNAPSHOT</version>

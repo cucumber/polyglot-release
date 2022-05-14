@@ -100,7 +100,7 @@ function run_test() {
     --reverse \
     --patch \
     --unified=0 \
-    --pretty=%n%x2A%x20%s \
+    --pretty=%n%x2A%x2A%n%s%n%n%b \
     "$first_commit..HEAD" \
     | sed -e '/^index/d' \
     > "$test.actual.git-commits"
