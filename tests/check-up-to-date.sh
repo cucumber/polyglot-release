@@ -1,4 +1,4 @@
-# fixture: polyglot-release
+# fixture: ruby
 set -e
 
 # Copy the polyglot-release script amd set the version to v0.0.1

@@ -229,6 +229,8 @@ function check_for_tools() {
 
 function check_up_to_date() {
   if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
+    # Polyglot release was not released.
+    # This
     return
   fi
 
