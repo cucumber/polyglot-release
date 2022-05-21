@@ -40,6 +40,19 @@ function setup_git_repos() {
   popd > /dev/null || exit 1
 }
 
+function setup_polyglot_release_git_repo() {
+  mkdir "polyglot-release.git"
+  pushd "polyglot-release.git" > /dev/null || exit 1
+  git init --quiet -b main
+  git config user.email "polyglot-release-author@example.com"
+  git config user.name "Polyglot Release Author"
+  git config user.signingkey "$GPG_KEY_ID"
+
+  git commit --allow-empty --message "Initial commit" --quiet
+  git tag v0.0.1
+  popd > /dev/null || exit 1
+}
+
 function get_fixture() {
   test=$1
   header="$(head -n 1 "$test")"
@@ -58,6 +71,7 @@ function setup_workdir() {
   fixture=$2
   pushd "$workdir" > /dev/null || exit 1
   setup_git_repos "$fixture"
+  setup_polyglot_release_git_repo
   popd > /dev/null || exit 1
 }
 
@@ -68,7 +82,7 @@ function manual_test() {
   setup_workdir "$workdir" "$fixture"
   pushd "$workdir/local" > /dev/null || exit 1
   PATH=$SRC:$PATH \
-    POLYGLOT_RELEASE_GIT_REPO="$workdir/origin" \
+    POLYGLOT_RELEASE_GIT_REPO="$workdir/polyglot-release.git" \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
     BASH_SILENCE_DEPRECATION_WARNING=1 \
@@ -83,10 +97,10 @@ function run_test() {
   workdir=$(mktemp -d)
   fixture=$(realpath "./tests/fixtures/$(get_fixture "$test")")
   import_gpg_key
-  setup_workdir "$workdir" "$fixture"
+  setup_workdir "$workdir" "$fixture" "polyglot-release.git"
   pushd "$workdir/local" > /dev/null || exit 1
   PATH=$SRC:$PATH \
-    POLYGLOT_RELEASE_GIT_REPO="$workdir/origin" \
+    POLYGLOT_RELEASE_GIT_REPO="$workdir/polyglot-release.git" \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
     /bin/bash "$test" \
@@ -148,11 +162,11 @@ function run_test() {
 if [[ ! $* =~ test-the-tests ]]; then
   echo -n "testing the tests "
   if $0 tests/.test-the-tests.sh > /dev/null; then
-    echo 🔴
+    echo "🔴"
     echo "Expected that testing tests/.test-the-tests.sh would fail, but it didn't!"
     echo "This suggests the test runner script itself ($0) is not working properly."
   else
-    echo ✅
+    echo "✅"
   fi
 fi
 
