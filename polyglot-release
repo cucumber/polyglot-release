@@ -229,10 +229,49 @@ function check_for_tools() {
   fi
 }
 
+function do_update() {
+  if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
+    # Polyglot release was not released.
+    # Let's assume we're up to date.
+    return
+  fi
+
+  # Note: For each signed tag, Github includes a duplicate appended with ^{}
+  latest_tag_in_git="$(
+    git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" 'v*.*.*' \
+    | grep --invert-match '\^{}' \
+    | cut -d '/' -f 3 \
+    | tail --lines=1
+    )"
+
+  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_tag_in_git" ]; then
+    log "Already up to date"
+    return
+  fi
+
+  check_for_tools "curl"
+
+  current_script=${BASH_SOURCE[0]}
+
+  if [ ! -w "$current_script" ]; then
+    echo "You do not appear to have write permissions to $current_script. Try using sudo."
+    exit 1
+  fi
+
+  new_script=$(mktemp "$current_script".XXXXXX)
+  curl --silent -o "$new_script" "$POLYGLOT_RELEASE_UPDATE_LOCATION/$latest_tag_in_git/polyglot-release"
+  chown --reference="$current_script" -- "$new_script"
+  chmod --reference="$current_script" -- "$new_script"
+  sync # force filesystem to fully flush file contents to disk
+  mv -- "$new_script" "$current_script"
+
+  log "Updated to $latest_tag_in_git"
+}
+
 function check_up_to_date() {
   if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
     # Polyglot release was not released.
-    # This
+    # Let's assume we're up to date.
     return
   fi
 
@@ -248,7 +287,7 @@ function check_up_to_date() {
     return
   fi
 
-  echo "Please update polyglot-release."
+  echo "Please run polyglot-release --update"
   echo " - current version: v$POLYGLOT_RELEASE_VERSION"
   echo " - latest version: $latest_tag_in_git"
 
@@ -321,6 +360,8 @@ function show_usage() {
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help                 shows this help"
+  echo "  --update               updates this script to the latest version"
+  echo "  --version              show the current version"
   echo "  --no-git-push          do not push to git"
   echo "  --quiet                don't log progress messages"
 }
@@ -341,7 +382,8 @@ Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 NEW_VERSION=
 NO_GIT_PUSH=
 POLYGLOT_RELEASE_VERSION=
-POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release.git}
+POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release}
+POLYGLOT_RELEASE_UPDATE_LOCATION=${POLYGLOT_RELEASE_UPDATE_LOCATION:-https://raw.githubusercontent.com/cucumber/polyglot-release}
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
@@ -357,8 +399,16 @@ while [[ $# -gt 0 ]]; do
     shift # past argument
     ;;
   -h | --help)
-    echo "polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}: Makes a release to GitHub"
+    echo "polyglot-release: Makes a release to GitHub"
     show_usage
+    exit 0
+    ;;
+  --update)
+    do_update
+    exit 0
+    ;;
+  --version)
+    echo "v${POLYGLOT_RELEASE_VERSION:--develop}"
     exit 0
     ;;
   --* | -*)
