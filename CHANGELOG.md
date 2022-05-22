@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added
- - Self check to see if polyglot-release is out of date
+- First release of polyglot-release
 
 ### Changed
 
