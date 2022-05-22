@@ -138,6 +138,8 @@ function post_release_perl() {
   :
 }
 
+# Note: Do not repeat this pattern for project specific needs
+# Instead implement https://github.com/cucumber/polyglot-release/issues/67
 SUPPORTED_LANGUAGES+=("polyglot-release")
 function is_monoglot_polyglot-release() {
   [[ -f polyglot-release ]]
