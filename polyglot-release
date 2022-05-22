@@ -138,6 +138,28 @@ function post_release_perl() {
   :
 }
 
+# Note: Do not repeat this pattern for project specific needs
+# Instead implement https://github.com/cucumber/polyglot-release/issues/67
+SUPPORTED_LANGUAGES+=("polyglot-release")
+function is_monoglot_polyglot-release() {
+  [[ -f polyglot-release ]]
+}
+function pre_release_polyglot-release() {
+  check_for_tools "sed"
+  if [[ ! -f README.md ]]; then
+    echo "This looks like the polyglot-release project, but there is no README.md file"
+    exit 1
+  fi
+}
+function release_polyglot-release() {
+    for file in polyglot-release README.md; do
+      sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file"
+    done
+}
+function post_release_polyglot-release() {
+  sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release
+}
+
 SUPPORTED_LANGUAGES+=("python")
 function is_monoglot_python() {
   [[ -f pyproject.toml  || -f setup.py ]]
@@ -205,6 +227,30 @@ function check_for_tools() {
     echo "Please install the missing required tool(s)."
     exit 1
   fi
+}
+
+function check_up_to_date() {
+  if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
+    # Polyglot release was not released.
+    # This
+    return
+  fi
+
+  latest_tag_in_git="$(
+    git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" 'v*.*.*' \
+    | cut -d '/' -f 3 \
+    | tail --lines=1
+    )"
+
+  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_tag_in_git" ]; then
+    return
+  fi
+
+  echo "Please update polyglot-release."
+  echo " - current version: v$POLYGLOT_RELEASE_VERSION"
+  echo " - latest version: $latest_tag_in_git"
+
+  exit 1
 }
 
 function check_changelog_exists() {
@@ -286,12 +332,14 @@ function log() {
 function format_commit_message() {
   echo "$1
 
-Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--unknown}"
+Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 }
 
 # Initialize global variables
 NEW_VERSION=
 NO_GIT_PUSH=
+POLYGLOT_RELEASE_VERSION=
+POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release.git}
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
@@ -307,7 +355,7 @@ while [[ $# -gt 0 ]]; do
     shift # past argument
     ;;
   -h | --help)
-    echo "Makes a release to GitHub"
+    echo "polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}: Makes a release to GitHub"
     show_usage
     exit 0
     ;;
@@ -326,6 +374,7 @@ done
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 check_for_tools "git" "changelog" "gpg"
+check_up_to_date
 check_in_git_root_directory
 check_changelog_exists
 check_gpg_keys_configured
