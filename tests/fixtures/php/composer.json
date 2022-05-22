@@ -1,0 +1,6 @@
+{
+  "name": "example/project",
+  "description": "Example Project",
+  "license": "MIT",
+  "type": "library"
+}
