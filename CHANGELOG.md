@@ -1,4 +1,4 @@
-# Changelog
+~~# Changelog
 
 All notable changes to this project will be documented in this file.
 
@@ -11,15 +11,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 - First release of polyglot-release
 
-### Changed
-
-### Fixed
-
-### Removed
-
-## 0.0.1 - 2020-05-14
-### Added
-- First release of polyglot-release
-
 [Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.9.0...main
-[0.9.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
+[0.9.0]: https://github.com/cucumber/polyglot-release/compare/ad3c912c06971aefdd597d7c315ca75fa93ce83f...v0.9.0~~
