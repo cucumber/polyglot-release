@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+- Fixed broken check_up_to_date due to duplicate signed tags in Github 
+
 ## [0.9.0] - 2022-05-22
 ### Added
 - First release of polyglot-release

@@ -236,8 +236,10 @@ function check_up_to_date() {
     return
   fi
 
+  # Note: For each signed tag, Github includes a duplicate appended with ^{}
   latest_tag_in_git="$(
     git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" 'v*.*.*' \
+    | grep --invert-match '\^{}' \
     | cut -d '/' -f 3 \
     | tail --lines=1
     )"
