@@ -152,12 +152,14 @@ function pre_release_polyglot-release() {
   fi
 }
 function release_polyglot-release() {
-    for file in polyglot-release README.md; do
-      sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file"
-    done
+  for file in polyglot-release README.md; do
+    sed "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file" > "$file.tmp"
+    mv "$file.tmp" "$file"
+  done
 }
 function post_release_polyglot-release() {
-  sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release
+  sed "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release > polyglot-release.tmp
+  mv polyglot-release.tmp polyglot-release
 }
 
 SUPPORTED_LANGUAGES+=("python")
@@ -174,9 +176,9 @@ function release_python() {
     PROJECT_FILE=setup.py
   fi
 
-  sed -i \
-  		-e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
-  		"$PROJECT_FILE"
+  sed -e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
+  		"$PROJECT_FILE" > "$PROJECT_FILE.tmp"
+  mv "$PROJECT_FILE.tmp" > "$PROJECT_FILE"
 }
 function post_release_python() {
   # noop
@@ -238,10 +240,10 @@ function check_up_to_date() {
 
   # Note: For each signed tag, Github includes a duplicate appended with ^{}
   latest_tag_in_git="$(
-    git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" 'v*.*.*' \
-    | grep --invert-match '\^{}' \
+    git ls-remote --tags --sort='version:refname' \
+    | grep -E "refs/tags/v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+[^\^]*$" \
     | cut -d '/' -f 3 \
-    | tail --lines=1
+    | tail -n1
     )"
 
   if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_tag_in_git" ]; then
@@ -341,7 +343,6 @@ Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 NEW_VERSION=
 NO_GIT_PUSH=
 POLYGLOT_RELEASE_VERSION=
-POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release.git}
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
