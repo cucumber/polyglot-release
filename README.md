@@ -61,6 +61,8 @@ polyglot-release --help
 
 ## Contributing
 
+First, install [shellcheck](https://www.shellcheck.net/)
+
 To run all the tests:
 
     ./polyglot-release-test
