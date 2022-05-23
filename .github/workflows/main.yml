@@ -26,6 +26,5 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           wget -qO- ${{ matrix.changelog }} | tar xvz -C $HOME/.local/bin changelog
       - name: Install `xmlstarlet` tool
-        run: |
-          sudo apt install -y xmlstarlet
+        run: brew install xmlstarlet
       - run: ./polyglot-release-test
