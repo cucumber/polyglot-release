@@ -378,7 +378,7 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
-check_for_tools "git" "changelog" "gpg"
+check_for_tools "git" "changelog" "gpg" "realpath"
 check_up_to_date
 check_in_git_root_directory
 check_changelog_exists
