@@ -7,7 +7,8 @@ pushd .. > /dev/null
 cp "$(which polyglot-release)" polyglot-release
 chmod 744 ./polyglot-release
 # Set the real script to a released version
-sed -i "s%^POLYGLOT_RELEASE_VERSION=.*$%POLYGLOT_RELEASE_VERSION=0.0.1%" polyglot-release
+sed "s%^POLYGLOT_RELEASE_VERSION=.*$%POLYGLOT_RELEASE_VERSION=0.0.1%" polyglot-release > polyglot-release.tmp
+mv polyglot-release.tmp polyglot-release
 
 popd > /dev/null
 
