@@ -10,11 +10,11 @@ jobs:
   test:
     strategy:
       matrix:
+        os: macos-latest
+        changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_darwin_amd64.tar.gz
         include:
-          - os: ubuntu-latest
-            changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz
-          - os: macos-latest
-            changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_darwin_amd64.tar.gz
+        - os: ubuntu-latest
+          changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz
     runs-on: runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
