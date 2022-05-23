@@ -99,5 +99,5 @@ You can start a bash prompt in the same environment as an automated test would r
 You can use `polyglot-release` to release polyglot-release:
 
 ```
-./polyglot-release vMAJOR.MINOR.PATCH
+./polyglot-release MAJOR.MINOR.PATCH
 ```
