@@ -4,12 +4,6 @@ set -e
 shellcheck polyglot-release*
 set +e
 
-# MacOS doesn't have a realpath function
-# https://stackoverflow.com/questions/3572030/bash-script-absolute-path-with-os-x
-function realpath() {
-  [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
-}
-
 SRC=$(realpath .)
 GNUPGHOME=$(mktemp -d)
 export GNUPGHOME

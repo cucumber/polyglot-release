@@ -18,6 +18,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - name: Install `coreutils`
+        run: brew install coreutils
+        if: ${{ matrix.os == 'macos-latest' }}
       - name: Install `shellcheck` tool
         run: brew install shellcheck
       - name: Install `changelog` tool
