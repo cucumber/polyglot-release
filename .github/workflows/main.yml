@@ -15,7 +15,7 @@ jobs:
         include:
         - os: ubuntu-latest
           changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz
-    runs-on: runs-on: ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
       - name: Install `shellcheck` tool
