@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- Make the scripts work on MacOS
+
 ## [0.9.1] - 2022-05-22
 ### Fixed
 - Fixed broken check_up_to_date due to duplicate signed tags in Github
