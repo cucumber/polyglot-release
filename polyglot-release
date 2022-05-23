@@ -160,6 +160,7 @@ function release_polyglot-release() {
 function post_release_polyglot-release() {
   sed "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release > polyglot-release.tmp
   mv polyglot-release.tmp polyglot-release
+  chmod +x polyglot-release
 }
 
 SUPPORTED_LANGUAGES+=("python")
