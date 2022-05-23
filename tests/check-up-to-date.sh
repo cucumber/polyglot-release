@@ -6,9 +6,7 @@ set -e
 pushd .. > /dev/null
 cp "$(which polyglot-release)" polyglot-release
 chmod 744 ./polyglot-release
-sed "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.1/" polyglot-release > polyglot-release.tmp
-mv polyglot-release.tmp polyglot-release
-chmod +x polyglot-release
+sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.1/" polyglot-release
 popd > /dev/null
 
 # Create a release for v0.0.2 in polyglot-release.git.

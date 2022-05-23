@@ -153,14 +153,12 @@ function pre_release_polyglot-release() {
 }
 function release_polyglot-release() {
   for file in polyglot-release README.md; do
-    sed "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file" > "$file.tmp"
-    mv "$file.tmp" "$file"
+    sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file"
   done
 }
 function post_release_polyglot-release() {
-  sed "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release > polyglot-release.tmp
-  mv polyglot-release.tmp polyglot-release
-  chmod +x polyglot-release
+  sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release
+  rm -f "polyglot-release.tmp"
 }
 
 SUPPORTED_LANGUAGES+=("python")
@@ -177,9 +175,10 @@ function release_python() {
     PROJECT_FILE=setup.py
   fi
 
-  sed -e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
-  		"$PROJECT_FILE" > "$PROJECT_FILE.tmp"
-  mv "$PROJECT_FILE.tmp" "$PROJECT_FILE"
+  sed -i".tmp" \
+    -e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
+    "$PROJECT_FILE"
+  rm -f "$PROJECT_FILE.tmp"
 }
 function post_release_python() {
   # noop
@@ -344,7 +343,7 @@ Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 NEW_VERSION=
 NO_GIT_PUSH=
 POLYGLOT_RELEASE_VERSION=
-POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-$(git config --get remote.origin.url)}
+POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release.git}
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
