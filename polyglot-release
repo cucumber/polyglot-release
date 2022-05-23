@@ -178,7 +178,7 @@ function release_python() {
 
   sed -e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
   		"$PROJECT_FILE" > "$PROJECT_FILE.tmp"
-  mv "$PROJECT_FILE.tmp" > "$PROJECT_FILE"
+  mv "$PROJECT_FILE.tmp" "$PROJECT_FILE"
 }
 function post_release_python() {
   # noop
