@@ -14,38 +14,50 @@ function import_gpg_key() {
 }
 
 function normalize_git_sha() {
-    # shellcheck disable=SC2001
-    sed -e 's/[0-9a-f]\{40\}/<a-git-sha>/g' < /dev/stdin
+  # shellcheck disable=SC2001
+  sed -e 's/[0-9a-f]\{40\}/<a-git-sha>/g' </dev/stdin
 }
 
 function setup_git_repos() {
   fixture=$1
   mkdir origin
-  pushd origin > /dev/null || exit 1
+  pushd origin >/dev/null || exit 1
   git init --quiet --bare
   git symbolic-ref HEAD refs/heads/main
-  popd > /dev/null || exit 1
-  git clone origin local --quiet 2> /dev/null
-  pushd local > /dev/null || exit 1
+  popd >/dev/null || exit 1
+  git clone origin local --quiet 2>/dev/null
+  pushd local >/dev/null || exit 1
   git checkout --quiet -b main
   git config user.email "tests@example.com"
   git config user.name "Cucumber tests"
   git config user.signingkey "$GPG_KEY_ID"
-  cp -R "$fixture"/. . 
+  cp -R "$fixture"/. .
   git add .
   git commit --message "Initial commit" --quiet
   git tag v0.0.1
   git push --set-upstream origin main --quiet
   git push --tags --quiet
-  popd > /dev/null || exit 1
+  popd >/dev/null || exit 1
+}
+
+function setup_polyglot_release_git_repo() {
+  mkdir "polyglot-release.git"
+  pushd "polyglot-release.git" >/dev/null || exit 1
+  git init --quiet -b main
+  git config user.email "polyglot-release-author@example.com"
+  git config user.name "Polyglot Release Author"
+  git config user.signingkey "$GPG_KEY_ID"
+
+  git commit --allow-empty --message "Initial commit" --quiet
+  git tag v0.0.1
+  popd >/dev/null || exit 1
 }
 
 function get_fixture() {
   test=$1
   header="$(head -n 1 "$test")"
   fixture_pattern="# fixture: (.+)"
-  if [[ $header =~ $fixture_pattern ]]
-  then
+  if [[ $header =~ $fixture_pattern ]]; then
     fixture="${BASH_REMATCH[1]}"
   else
     fixture=polyglot
@@ -56,9 +68,10 @@ function get_fixture() {
 function setup_workdir() {
   workdir=$1
   fixture=$2
-  pushd "$workdir" > /dev/null || exit 1
+  pushd "$workdir" >/dev/null || exit 1
   setup_git_repos "$fixture"
-  popd > /dev/null || exit 1
+  setup_polyglot_release_git_repo
+  popd >/dev/null || exit 1
 }
 
 function manual_test() {
@@ -66,13 +79,14 @@ function manual_test() {
   workdir=$(mktemp -d)
   import_gpg_key
   setup_workdir "$workdir" "$fixture"
-  pushd "$workdir/local" > /dev/null || exit 1
+  pushd "$workdir/local" >/dev/null || exit 1
   PATH=$SRC:$PATH \
+    POLYGLOT_RELEASE_GIT_REPO="$workdir/polyglot-release.git" \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
     BASH_SILENCE_DEPRECATION_WARNING=1 \
     /bin/bash --init-file <(echo echo "You are in a manual test sandbox. You can safely git push and commits will be pushed to the repo in ../origin")
-  popd > /dev/null || exit 1
+  popd >/dev/null || exit 1
 }
 
 function run_test() {
@@ -82,42 +96,43 @@ function run_test() {
   workdir=$(mktemp -d)
   fixture=$(realpath "./tests/fixtures/$(get_fixture "$test")")
   import_gpg_key
-  setup_workdir "$workdir" "$fixture"
-  pushd "$workdir/local" > /dev/null || exit 1
+  setup_workdir "$workdir" "$fixture" "polyglot-release.git"
+  pushd "$workdir/local" >/dev/null || exit 1
   PATH=$SRC:$PATH \
+    POLYGLOT_RELEASE_GIT_REPO="$workdir/polyglot-release.git" \
     RELEASE_DATE=2000-01-01 \
     GIT_CONFIG_GLOBAL=/dev/null \
-    /bin/sh "$test" \
-    3> "$test.actual.output" \
+    /bin/bash "$test" \
+    3>"$test.actual.output" \
     1> >(tee "$test.actual.stdout" >&3) \
     2> >(tee "$test.actual.stderr" >&3)
-  echo $? > "$test.actual.exit-status"
-  normalize_git_sha < "$test.actual.output" > "$test.actual.output-normalized"
+  echo $? >"$test.actual.exit-status"
+  normalize_git_sha <"$test.actual.output" >"$test.actual.output-normalized"
   first_commit=$(git log main --pretty=%H --reverse | head -n1)
   git log \
     --reverse \
     --patch \
     --unified=0 \
-    --pretty=%n%x2A%x20%s \
-    "$first_commit..HEAD" \
-    | sed -e '/^index/d' \
-    > "$test.actual.git-commits"
-  git diff --unified=0 \
-    | sed -e '/^index/d' \
-    > "$test.actual.git-diff"
+    --pretty=%n%x2A%x2A%n%s%n%n%b \
+    "$first_commit..HEAD" |
+    sed -e '/^index/d' \
+      >"$test.actual.git-commits"
+  git diff --unified=0 |
+    sed -e '/^index/d' \
+      >"$test.actual.git-diff"
   git log --format="%s %d" \
-    > "$test.actual.git-log"
-  popd > /dev/null || exit 1
-  pushd "$workdir/origin" > /dev/null || exit 1
-    git log \
+    >"$test.actual.git-log"
+  popd >/dev/null || exit 1
+  pushd "$workdir/origin" >/dev/null || exit 1
+  git log \
     --format="%s %d %GS" \
-    > "$test.actual.origin-git-log"
-  popd > /dev/null || exit 1
+    >"$test.actual.origin-git-log"
+  popd >/dev/null || exit 1
   for type in output output-normalized git-commits git-diff git-log exit-status stderr stdout origin-git-log; do
     if [ -f "$test.expected.$type" ]; then
-      if [[ $(diff "$test.expected.$type" "$test.actual.$type") ]]; then 
+      if [[ $(diff "$test.expected.$type" "$test.actual.$type") ]]; then
         if [ -z "$test_failed" ]; then
-          echo 🔴
+          echo "🔴"
         fi
         echo
         echo Actual $type output different to expected!
@@ -126,7 +141,7 @@ function run_test() {
         realpath --relative-to="$SRC" "$test.actual.$type"
         echo
         diff "$test.expected.$type" "$test.actual.$type"
-        test_failed="true";
+        test_failed="true"
       fi
     fi
   done
@@ -134,10 +149,10 @@ function run_test() {
     echo
     echo "Working directory: $workdir"
     echo "GNUPGHOME: $GNUPGHOME"
-    echo 
+    echo
     return 1
   else
-    echo ✅
+    echo "✅"
     return 0
   fi
 }
@@ -145,12 +160,12 @@ function run_test() {
 # test the tests!
 if [[ ! $* =~ test-the-tests ]]; then
   echo -n "testing the tests "
-  if $0 tests/.test-the-tests.sh > /dev/null; then
-    echo 🔴
+  if $0 tests/.test-the-tests.sh >/dev/null; then
+    echo "🔴"
     echo "Expected that testing tests/.test-the-tests.sh would fail, but it didn't!"
     echo "This suggests the test runner script itself ($0) is not working properly."
   else
-    echo ✅
+    echo "✅"
   fi
 fi
 
@@ -166,10 +181,14 @@ if [[ "$1" ]]; then
 else
   tests="$(realpath tests)/*.sh"
 fi
-failure=
+total_tests=0
+total_failed=0
 for test in $tests; do
   if [[ ! "$1" || $(realpath "$1") == "$test" ]]; then
-    run_test "$test" || failure="true"
+    ((total_tests=total_tests+1))
+    run_test "$test" || ((total_failed=total_failed+1))
   fi
 done
-test -z "$failure"
+echo
+echo "$total_tests tests, $total_failed failed"
+test "$total_failed" -eq "0"

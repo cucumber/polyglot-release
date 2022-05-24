@@ -52,13 +52,16 @@ $ tree
 To install in a project run:
 
 ```shell
-curl --silent -o ~/.local/bin/polyglot-release https://raw.githubusercontent.com/cucumber/polyglot-release/main/polyglot-release-bootstrapper
-chmod 744 ~/.local/bin/polyglot-release
-# Ensure ~/.local/bin is in your $PATH
+POLYGLOT_RELEASE_VERSION=0.9.3
+curl --silent -o /usr/local/bin/polyglot-release https://raw.githubusercontent.com/cucumber/polyglot-release/v$POLYGLOT_RELEASE_VERSION/polyglot-release
+chmod 755 /usr/local/bin/polyglot-release
+# Ensure /usr/local/bin is in your $PATH
 polyglot-release --help
 ```
 
 ## Contributing
+
+First, install [shellcheck](https://www.shellcheck.net/)
 
 To run all the tests:
 
@@ -90,3 +93,11 @@ Sometimes it's helpful to play around with how the tool works in a safe, sandbox
 You can start a bash prompt in the same environment as an automated test would run in (with `local` and `origin` git repo folders) like this:
 
     polyglot-release-test ./tests/fixtures/<some-fixture>
+
+## Releasing
+
+You can use `polyglot-release` to release polyglot-release:
+
+```
+./polyglot-release MAJOR.MINOR.PATCH
+```

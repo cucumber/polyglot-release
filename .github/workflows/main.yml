@@ -8,17 +8,26 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - os: macos-latest
+          changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_darwin_amd64.tar.gz
+        - os: ubuntu-latest
+          changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v3
+      - name: Install `coreutils`
+        run: brew install coreutils
+        if: ${{ matrix.os == 'macos-latest' }}
       - name: Install `shellcheck` tool
-        run: sudo apt-get install shellcheck
+        run: brew install shellcheck
       - name: Install `changelog` tool
         run: |
           mkdir -p $HOME/.local/bin
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-          wget -qO- https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz | tar xvz -C $HOME/.local/bin changelog
+          wget -qO- "${{ matrix.changelog }}" | tar xvz -C $HOME/.local/bin changelog
       - name: Install `xmlstarlet` tool
-        run: |
-          sudo apt install -y xmlstarlet
+        run: brew install xmlstarlet
       - run: ./polyglot-release-test

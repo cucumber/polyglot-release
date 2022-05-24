@@ -86,3 +86,12 @@ git push origin refs/heads/main refs/tags/v1.0.0
 
 # push to release branch
 git push origin <a-git-sha>:refs/heads/release/v1.0.0
+
+
+If things do not look quite right you can roll back the release:
+
+# reset to the commit before release started
+git reset --hard <a-git-sha>
+
+# delete the git tag that was created
+git tag -d v1.0.0
