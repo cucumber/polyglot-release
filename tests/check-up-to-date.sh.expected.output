@@ -1,3 +1,3 @@
-Please update polyglot-release.
+Please run polyglot-release --update
  - current version: v0.0.1
  - latest version: v0.0.2

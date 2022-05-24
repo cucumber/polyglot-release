@@ -1,6 +1,8 @@
-polyglot-release v-develop: Makes a release to GitHub
+polyglot-release: Makes a release to GitHub
 Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
 OPTIONS:
   --help                 shows this help
+  --update               updates this script to the latest version
+  --version              show the current version
   --no-git-push          do not push to git
   --quiet                don't log progress messages

@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added 
+- Support self updating with `--update`
 
 ## [0.9.2] - 2022-05-24
 ### Fixed
