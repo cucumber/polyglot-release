@@ -20,7 +20,7 @@ pushd .. > /dev/null
 mkdir "v0.0.2"
 cp "$(which polyglot-release)" ./v0.0.2/polyglot-release
 sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.2/" ./v0.0.2/polyglot-release
-python3 -m http.server &
+python3 -m http.server 2>/dev/null &
 server_pid=$!
 trap 'kill -9 $server_pid' SIGINT SIGQUIT SIGTERM EXIT
 sleep 1 # Wait for server to start
