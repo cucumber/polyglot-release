@@ -181,10 +181,14 @@ if [[ "$1" ]]; then
 else
   tests="$(realpath tests)/*.sh"
 fi
-failure=
+total_tests=0
+total_failed=0
 for test in $tests; do
   if [[ ! "$1" || $(realpath "$1") == "$test" ]]; then
-    run_test "$test" || failure="true"
+    ((total_tests=total_tests+1))
+    run_test "$test" || ((total_failed=total_failed+1))
   fi
 done
-test -z "$failure"
+echo
+echo "$total_tests tests, $total_failed failed"
+test "$total_failed" -eq "0"
