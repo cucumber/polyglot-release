@@ -239,15 +239,8 @@ function do_update() {
     return
   fi
 
-  # Note: For each signed tag, Github includes a duplicate appended with ^{}
-  latest_tag_in_git="$(
-    git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" 'v*.*.*' \
-    | grep --invert-match '\^{}' \
-    | cut -d '/' -f 3 \
-    | tail --lines=1
-    )"
-
-  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_tag_in_git" ]; then
+  latest_version=$(latest_tag_in_git)
+  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_version" ]; then
     log "Already up to date"
     return
   fi
@@ -262,13 +255,13 @@ function do_update() {
   fi
 
   new_script=$(mktemp "$current_script".XXXXXX)
-  curl --silent -o "$new_script" "$POLYGLOT_RELEASE_UPDATE_LOCATION/$latest_tag_in_git/polyglot-release"
+  curl --silent -o "$new_script" "$POLYGLOT_RELEASE_UPDATE_LOCATION/$latest_version/polyglot-release"
   chown --reference="$current_script" -- "$new_script"
   chmod --reference="$current_script" -- "$new_script"
   sync # force filesystem to fully flush file contents to disk
   mv -- "$new_script" "$current_script"
 
-  log "Updated to $latest_tag_in_git"
+  log "Updated to $latest_version"
 }
 
 function check_up_to_date() {
@@ -278,23 +271,24 @@ function check_up_to_date() {
     return
   fi
 
-  # Note: For each signed tag, Github includes a duplicate appended with ^{}
-  latest_tag_in_git="$(
-    git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" \
-    | grep -E "refs/tags/v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+[^\^]*$" \
-    | cut -d '/' -f 3 \
-    | tail -n1
-    )"
+  latest_version=$(latest_tag_in_git)
 
-  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_tag_in_git" ]; then
+  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_version" ]; then
     return
   fi
 
   echo "Please run polyglot-release --update"
   echo " - current version: v$POLYGLOT_RELEASE_VERSION"
-  echo " - latest version: $latest_tag_in_git"
+  echo " - latest version: $latest_version"
 
   exit 1
+}
+
+function latest_tag_in_git() {
+  git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" \
+  | grep -E "refs/tags/v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+[^\^]*$" \
+  | cut -d '/' -f 3 \
+  | tail -n1
 }
 
 function check_changelog_exists() {
