@@ -369,9 +369,12 @@ function check_git_index_clean() {
 }
 
 function check_git_even_with_origin() {
-  origin_head=$(git ls-remote origin -h refs/heads/main | head -n1 | tr -s ' ' | cut -d ' ' -f 1)
+  origin_head=$(git ls-remote origin --heads refs/heads/main \
+    | head -n1 \
+    | tr -s '[:space:]' ' ' \
+    | cut -d ' ' -f 1 \
+  )
   local_head=$(git rev-list HEAD | head -n1)
-
   if [ "$origin_head" != "$local_head" ] ; then
     echo "This branch is not even with origin. Run git status."
     exit 1
