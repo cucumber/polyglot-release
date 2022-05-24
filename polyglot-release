@@ -376,7 +376,10 @@ function check_git_even_with_origin() {
   )
   local_head=$(git rev-list HEAD | head -n1)
   if [ "$origin_head" != "$local_head" ] ; then
-    echo "This branch is not even with origin. Run git status."
+    echo "This branch is not even with origin!"
+    echo
+    echo "Have a look at:"
+    echo "    git status"
     exit 1
   fi
 }
