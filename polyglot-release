@@ -256,6 +256,15 @@ function do_update() {
 
   new_script=$(mktemp "$current_script".XXXXXX)
   curl --silent --output "$new_script" "$POLYGLOT_RELEASE_UPDATE_LOCATION/$latest_version/polyglot-release"
+  replace_file "$current_script" "$new_script"
+
+  log "Updated to $latest_version"
+}
+
+function replace_file() {
+  current_script=$1
+  new_script=$2
+
   if [[ $(uname -s) = "Darwin" ]]; then
     uid=$(stat -f '%u' "$current_script")
     gid=$(stat -f '%g' "$current_script")
@@ -268,8 +277,6 @@ function do_update() {
   fi
   sync # force filesystem to fully flush file contents to disk
   mv -- "$new_script" "$current_script"
-
-  log "Updated to $latest_version"
 }
 
 function check_up_to_date() {
