@@ -1,0 +1,1 @@
+polyglot-release --version
