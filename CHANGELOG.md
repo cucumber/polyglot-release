@@ -7,6 +7,7 @@
 ## [0.9.2] - 2022-05-24
 ### Fixed
 - Make the scripts work on MacOS
+- New version argument must have the format `<digits>.<digits>.<digits>`. 
 
 ## [0.9.1] - 2022-05-22
 ### Fixed

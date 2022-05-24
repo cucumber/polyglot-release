@@ -206,7 +206,7 @@ function post_release_ruby() {
 }
 
 function validate_new_version_argument() {
-  if [[ ! "$NEW_VERSION" =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
+  if [[ ! "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
     show_usage
     exit 1
