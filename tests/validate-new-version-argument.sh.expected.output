@@ -1,0 +1,12 @@
+Invalid MAJOR.MINOR.PATCH argument: 1x0x0
+Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
+OPTIONS:
+  --help                 shows this help
+  --no-git-push          do not push to git
+  --quiet                don't log progress messages
+Invalid MAJOR.MINOR.PATCH argument: 1.0.0-SNAPSHOT
+Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH
+OPTIONS:
+  --help                 shows this help
+  --no-git-push          do not push to git
+  --quiet                don't log progress messages
