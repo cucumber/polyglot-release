@@ -6,7 +6,7 @@ set -e
 pushd .. > /dev/null
 cp "$(which polyglot-release)" polyglot-release
 chmod 744 ./polyglot-release
-sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.1/" polyglot-release
+sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.1/" polyglot-release
 popd > /dev/null
 
 # Create a release for v0.0.2 in polyglot-release.git.
@@ -19,7 +19,7 @@ popd > /dev/null
 pushd .. > /dev/null
 mkdir "v0.0.2"
 cp "$(which polyglot-release)" ./v0.0.2/polyglot-release
-sed -i "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.2/" ./v0.0.2/polyglot-release
+sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.2/" ./v0.0.2/polyglot-release
 python3 -m http.server &
 server_pid=$!
 trap 'kill -9 $server_pid' SIGINT SIGQUIT SIGTERM EXIT
