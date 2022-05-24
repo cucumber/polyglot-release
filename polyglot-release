@@ -256,11 +256,16 @@ function do_update() {
 
   new_script=$(mktemp "$current_script".XXXXXX)
   curl --silent --output "$new_script" "$POLYGLOT_RELEASE_UPDATE_LOCATION/$latest_version/polyglot-release"
-  uid=$(stat -f '%u' "$current_script")
-  gid=$(stat -f '%g' "$current_script")
-  permissions=$(stat -f '%p' "$current_script")
-  chown "$uid:$gid" "$new_script"
-  chmod "${permissions:3:7}" "$new_script"
+  if [[ $(uname -s) = "Darwin" ]]; then
+    uid=$(stat -f '%u' "$current_script")
+    gid=$(stat -f '%g' "$current_script")
+    permissions=$(stat -f '%p' "$current_script")
+    chown "$uid:$gid" "$new_script"
+    chmod "${permissions:3:7}" "$new_script"
+  else
+    chown --reference="$current_script" -- "$new_script"
+    chmod --reference="$current_script" -- "$new_script"
+  fi
   sync # force filesystem to fully flush file contents to disk
   mv -- "$new_script" "$current_script"
 
