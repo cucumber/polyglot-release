@@ -5,6 +5,7 @@
 ## [0.9.3] - 2022-05-24
 ### Added
 - Support self updating with `--update`
+- Check if the current branch is even with `origin`
 
 ## [0.9.2] - 2022-05-24
 ### Fixed

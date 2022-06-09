@@ -368,6 +368,24 @@ function check_git_index_clean() {
   fi
 }
 
+function check_git_even_with_origin() {
+  current_branch=$(git branch --show-current)
+  remote_tracking_branch=$(git config "branch.$current_branch.merge")
+  origin_head=$(git ls-remote origin --heads "$remote_tracking_branch" \
+    | head -n1 \
+    | tr -s '[:space:]' ' ' \
+    | cut -d ' ' -f 1 \
+  )
+  local_head=$(git rev-list HEAD | head -n1)
+  if [ "$origin_head" != "$local_head" ] ; then
+    echo "This branch is not even with origin $remote_tracking_branch!"
+    echo
+    echo "Have a look at:"
+    echo "    git status"
+    exit 1
+  fi
+}
+
 function show_usage() {
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
@@ -444,6 +462,7 @@ check_changelog_exists
 check_gpg_keys_configured
 check_git_tags_fetched
 check_git_index_clean
+check_git_even_with_origin
 
 if [[ $# -ne 1 ]]; then
   echo "Please specify a version to release. Use --help to show usage instructions."
