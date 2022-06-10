@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.0.0] - 2022-06-09
+
 ## [0.9.3] - 2022-05-24
 ### Added
 - Support self updating with `--update`
@@ -20,7 +22,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.9.3...main
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
+[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.9.3...main
 [0.9.3]: https://github.com/cucumber/polyglot-release/compare/v0.9.2...main
 [0.9.2]: https://github.com/cucumber/polyglot-release/compare/v0.9.1...main
 [0.9.1]: https://github.com/cucumber/polyglot-release/compare/v0.9.0...main
