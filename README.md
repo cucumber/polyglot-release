@@ -49,6 +49,12 @@ $ tree
 
 ## Installation
 
+Firts, check that `/usr/local/bin` is writable on your machine:
+
+    touch /usr/local/bin/polyglot-release
+
+If this fails, you need to [make it writable](https://apple.stackexchange.com/questions/192227/how-to-make-files-in-usr-local-writable-for-homebrew)
+
 To install in a project run:
 
 ```shell
