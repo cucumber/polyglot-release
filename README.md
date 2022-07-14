@@ -6,6 +6,20 @@ Make releases with a single command
 
 Supports the release process for Cucumber repos as documented in [RELEASING.md](https://github.com/cucumber/.github/blob/main/RELEASING.md).
 
+It's designed to be run locally on a dev's workstation to make the mechanical changes to package manager manifests and the `CHANGELOG.md` file neccesary when making a release.
+
+Essentially, when you run `polyglot-release X.Y.Z` it will:
+
+1. run some sanity checks to make sure you don't have unpushed local changes etc.
+1. modify package manager files in each language version to set the next version to X.Y.Z
+1. update the `CHANGELOG.md` moving everything in the `Unreleased` section into a section for the X.Y.Z release. 
+1. commit
+1. tag the commit with `vX.Y.Z`
+1. git push to a `release/vX.Y.Z` branch on the `origin` remote
+4) modify package manager files in some languages (e.g. Java) to a "post-release / next development / SNAPSHOT" version
+5) commit again
+6) push everything to `origin/main`
+
 ## Works with polyglot repos
 
 If we have a project structure with distinct folders for each language, it will release each language, updating the version number in the different package manager manifests in a single git commit.
