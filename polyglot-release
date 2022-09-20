@@ -47,6 +47,24 @@ function cs_project_file() {
   echo "$project_name/$project_name.csproj"
 }
 
+SUPPORTED_LANGUAGES+=("elixir")
+function is_monoglot_elixir() {
+  [[ $(find ./mix.exs -type f | wc -l) -gt 0 ]]
+}
+function pre_release_elixir() {
+  # noop
+  :
+}
+function release_elixir() {
+  check_for_tools "sed"
+  sed -i".tmp" "s/version: \".*\"/version: \"$NEW_VERSION\"/" "mix.exs"
+  rm -rf mix.exs.tmp
+}
+function post_release_elixir() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("github-action")
 function is_monoglot_github-action() {
   [[ -f action.yaml ]]
@@ -73,9 +91,9 @@ function pre_release_go() {
 }
 function release_go() {
   MODULE_WITH_NEW_VERSION=$(
-    go mod edit -json |\
-    jq -r '.Module.Path' |\
-    sed -E "s/(.*)v[0-9]+.[0-9]+.[0-9]+$/\1v$NEW_VERSION/"
+    go mod edit -json |
+      jq -r '.Module.Path' |
+      sed -E "s/(.*)v[0-9]+.[0-9]+.[0-9]+$/\1v$NEW_VERSION/"
   )
   go mod edit -module "$MODULE_WITH_NEW_VERSION"
 }
@@ -124,8 +142,7 @@ function is_monoglot_perl() {
   [[ -f cpanfile ]]
 }
 function pre_release_perl() {
-  if [[ ! -f VERSION ]];
-  then
+  if [[ ! -f VERSION ]]; then
     echo "This looks like a Perl project, but there is no VERSION file"
     exit 1
   fi
@@ -164,13 +181,13 @@ function post_release_polyglot-release() {
 
 SUPPORTED_LANGUAGES+=("python")
 function is_monoglot_python() {
-  [[ -f pyproject.toml  || -f setup.py ]]
+  [[ -f pyproject.toml || -f setup.py ]]
 }
 function pre_release_python() {
   check_for_tools "sed"
 }
 function release_python() {
-  if  [[ -f pyproject.toml ]]; then
+  if [[ -f pyproject.toml ]]; then
     PROJECT_FILE=pyproject.toml
   else
     PROJECT_FILE=setup.py
@@ -191,8 +208,7 @@ function is_monoglot_ruby() {
   [[ $(find ./*.gemspec -type f | wc -l) -gt 0 ]]
 }
 function pre_release_ruby() {
-  if [[ ! -f VERSION ]];
-  then
+  if [[ ! -f VERSION ]]; then
     echo "This looks like a Ruby project, but there is no VERSION file"
     exit 1
   fi
@@ -300,10 +316,10 @@ function check_up_to_date() {
 }
 
 function latest_tag_in_git() {
-  git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" \
-  | grep -E "refs/tags/v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$" \
-  | cut -d '/' -f 3 \
-  | tail -n1
+  git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" |
+    grep -E "refs/tags/v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$" |
+    cut -d '/' -f 3 |
+    tail -n1
 }
 
 function check_changelog_exists() {
@@ -371,13 +387,14 @@ function check_git_index_clean() {
 function check_git_even_with_origin() {
   current_branch=$(git branch --show-current)
   remote_tracking_branch=$(git config "branch.$current_branch.merge")
-  origin_head=$(git ls-remote origin --heads "$remote_tracking_branch" \
-    | head -n1 \
-    | tr -s '[:space:]' ' ' \
-    | cut -d ' ' -f 1 \
+  origin_head=$(
+    git ls-remote origin --heads "$remote_tracking_branch" |
+      head -n1 |
+      tr -s '[:space:]' ' ' |
+      cut -d ' ' -f 1
   )
   local_head=$(git rev-list HEAD | head -n1)
-  if [ "$origin_head" != "$local_head" ] ; then
+  if [ "$origin_head" != "$local_head" ]; then
     echo "This branch is not even with origin $remote_tracking_branch!"
     echo
     echo "Have a look at:"
