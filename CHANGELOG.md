@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Support elixir ([#82](https://github.com/cucumber/polyglot-release/pull/82))
 
 ## [1.0.0] - 2022-06-09
 ### Added
