@@ -33,7 +33,7 @@ function setup_git_repos() {
   git config user.signingkey "$GPG_KEY_ID"
   cp -R "$fixture"/. .
   git add .
-  git commit --message "Initial commit" --quiet
+  git commit --gpg-sign --message "Initial commit" --quiet
   git tag v0.0.1
   git push --set-upstream origin main --quiet
   git push --tags --quiet
