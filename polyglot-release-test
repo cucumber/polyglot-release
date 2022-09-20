@@ -185,8 +185,8 @@ total_tests=0
 total_failed=0
 for test in $tests; do
   if [[ ! "$1" || $(realpath "$1") == "$test" ]]; then
-    ((total_tests=total_tests+1))
-    run_test "$test" || ((total_failed=total_failed+1))
+    ((total_tests = total_tests + 1))
+    run_test "$test" || ((total_failed = total_failed + 1))
   fi
 done
 echo
