@@ -1,3 +1,10 @@
+
+**
+Prepare release v1.0.0
+
+Created-by: polyglot-release v-develop
+
+
 diff --git a/CHANGELOG.md b/CHANGELOG.md
 --- a/CHANGELOG.md
 +++ b/CHANGELOG.md
@@ -10,12 +17,9 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 +[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
-diff --git a/pom.xml b/pom.xml
---- a/pom.xml
-+++ b/pom.xml
-@@ -8 +8 @@
--    <version>0.0.1-SNAPSHOT</version>
-+    <version>1.0.0</version>
-@@ -15 +15 @@
--        <tag>HEAD</tag>
-+        <tag>v1.0.0</tag>
+diff --git a/VERSION b/VERSION
+--- a/VERSION
++++ b/VERSION
+@@ -1 +1 @@
+-0.0.0
++1.0.0

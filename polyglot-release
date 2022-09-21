@@ -1,12 +1,15 @@
 #!/bin/bash
 set -e
 
-# quiet output from pushd / popd
+# quiet output from pushd / popd / find
 function pushd() {
   command pushd "$@" >/dev/null
 }
 function popd() {
   command popd >/dev/null
+}
+function find() {
+  command find "$@" 2>/dev/null
 }
 # Usage: 'run pre_release|release|post_release <language>'
 function run() {
@@ -26,24 +29,22 @@ function is_monoglot_dotnet() {
 }
 function pre_release_dotnet() {
   check_for_tools "xmlstarlet"
-  solution_file=$(find ./*.sln -type f)
-  project_name=${solution_file%.sln}
-  cs_project_file="$project_name/$project_name.csproj"
-  if [[ ! -f "$cs_project_file" ]];
-  then
-    echo "This looks like a .Net project, but there is no $cs_project_file file"
+  if [[ ! -f "$(cs_project_file)" ]]; then
+    echo "This looks like a .Net project, but there is no $(cs_project_file) file"
     exit 1
   fi
 }
 function release_dotnet() {
-  solution_file=$(find ./*.sln -type f)
-  project_name=${solution_file%.sln}
-  cs_project_file="$project_name/$project_name.csproj"
-  xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$cs_project_file"
+  xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$(cs_project_file)"
 }
 function post_release_dotnet() {
   # noop
   :
+}
+function cs_project_file() {
+  solution_file=$(realpath "$(find ./*.sln -type f)" --relative-to "$(pwd)")
+  project_name=${solution_file%.sln}
+  echo "$project_name/$project_name.csproj"
 }
 
 SUPPORTED_LANGUAGES+=("github-action")
@@ -137,6 +138,30 @@ function post_release_perl() {
   :
 }
 
+# Note: Do not repeat this pattern for project specific needs
+# Instead implement https://github.com/cucumber/polyglot-release/issues/67
+SUPPORTED_LANGUAGES+=("polyglot-release")
+function is_monoglot_polyglot-release() {
+  [[ -f polyglot-release ]]
+}
+function pre_release_polyglot-release() {
+  check_for_tools "sed"
+  if [[ ! -f README.md ]]; then
+    echo "This looks like the polyglot-release project, but there is no README.md file"
+    exit 1
+  fi
+}
+function release_polyglot-release() {
+  for file in polyglot-release README.md; do
+    sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file"
+    rm -f "polyglot-release.tmp"
+  done
+}
+function post_release_polyglot-release() {
+  sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=/" polyglot-release
+  rm -f "polyglot-release.tmp"
+}
+
 SUPPORTED_LANGUAGES+=("php")
 function is_monoglot_php() {
   [[ -f composer.json ]]
@@ -168,9 +193,10 @@ function release_python() {
     PROJECT_FILE=setup.py
   fi
 
-  sed -i \
-  		-e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
-  		"$PROJECT_FILE"
+  sed -i".tmp" \
+    -e "s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/" \
+    "$PROJECT_FILE"
+  rm -f "$PROJECT_FILE.tmp"
 }
 function post_release_python() {
   # noop
@@ -197,7 +223,7 @@ function post_release_ruby() {
 }
 
 function validate_new_version_argument() {
-  if [[ ! "$NEW_VERSION" =~ ^[0-9]+.[0-9]+.[0-9]+$ ]]; then
+  if [[ ! "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
     show_usage
     exit 1
@@ -223,6 +249,80 @@ function check_for_tools() {
   fi
 }
 
+function do_update() {
+  if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
+    # Polyglot release was not released.
+    # Let's assume we're up to date.
+    return
+  fi
+
+  latest_version=$(latest_tag_in_git)
+  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_version" ]; then
+    log "Already up to date"
+    return
+  fi
+
+  check_for_tools "curl"
+
+  current_script=${BASH_SOURCE[0]}
+
+  if [ ! -w "$current_script" ]; then
+    echo "You do not appear to have write permissions to $current_script. Try using sudo."
+    exit 1
+  fi
+
+  new_script=$(mktemp "$current_script".XXXXXX)
+  curl --silent --output "$new_script" "$POLYGLOT_RELEASE_UPDATE_LOCATION/$latest_version/polyglot-release"
+  replace_file "$current_script" "$new_script"
+
+  log "Updated to $latest_version"
+}
+
+function replace_file() {
+  current_script=$1
+  new_script=$2
+
+  if [[ $(uname -s) = "Darwin" ]]; then
+    uid=$(stat -f '%u' "$current_script")
+    gid=$(stat -f '%g' "$current_script")
+    permissions=$(stat -f '%p' "$current_script")
+    chown "$uid:$gid" "$new_script"
+    chmod "${permissions:3:7}" "$new_script"
+  else
+    chown --reference="$current_script" -- "$new_script"
+    chmod --reference="$current_script" -- "$new_script"
+  fi
+  sync # force filesystem to fully flush file contents to disk
+  mv -- "$new_script" "$current_script"
+}
+
+function check_up_to_date() {
+  if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
+    # Polyglot release was not released.
+    # Let's assume we're up to date.
+    return
+  fi
+
+  latest_version=$(latest_tag_in_git)
+
+  if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_version" ]; then
+    return
+  fi
+
+  echo "Please run polyglot-release --update"
+  echo " - current version: v$POLYGLOT_RELEASE_VERSION"
+  echo " - latest version: $latest_version"
+
+  exit 1
+}
+
+function latest_tag_in_git() {
+  git ls-remote --tags --sort='version:refname' "$POLYGLOT_RELEASE_GIT_REPO" \
+  | grep -E "refs/tags/v[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+$" \
+  | cut -d '/' -f 3 \
+  | tail -n1
+}
+
 function check_changelog_exists() {
   if [[ ! -f CHANGELOG.md ]]; then
     echo "Please create a CHANGELOG.md"
@@ -244,13 +344,13 @@ function check_in_git_root_directory() {
 }
 
 function check_gpg_keys_configured() {
-  key="$(git config user.signingkey)"
-  if [[ -z $key ]]; then
+  if [[ ! $(git config user.signingkey) ]]; then
     echo "You do not have a user.signingkey configured in git!"
     echo
     echo "All commits need to be signed. Please see https://docs.github.com/en/authentication/managing-commit-signature-verification/telling-git-about-your-signing-key"
     exit 1
   fi
+  key=$(git config user.signingkey)
   if ! gpg --list-secret-keys | grep -q "$key"; then
     echo "Your git user.signingkey ($key) was not found in your GPG keys."
     echo
@@ -285,13 +385,31 @@ function check_git_index_clean() {
   fi
 }
 
+function check_git_even_with_origin() {
+  current_branch=$(git branch --show-current)
+  remote_tracking_branch=$(git config "branch.$current_branch.merge")
+  origin_head=$(git ls-remote origin --heads "$remote_tracking_branch" \
+    | head -n1 \
+    | tr -s '[:space:]' ' ' \
+    | cut -d ' ' -f 1 \
+  )
+  local_head=$(git rev-list HEAD | head -n1)
+  if [ "$origin_head" != "$local_head" ] ; then
+    echo "This branch is not even with origin $remote_tracking_branch!"
+    echo
+    echo "Have a look at:"
+    echo "    git status"
+    exit 1
+  fi
+}
+
 function show_usage() {
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
   echo "  --help                 shows this help"
+  echo "  --update               updates this script to the latest version"
+  echo "  --version              show the current version"
   echo "  --no-git-push          do not push to git"
-  echo "  --no-git-commit        do not commit git"
-  echo "  --only-release         do not update versions after release"
   echo "  --quiet                don't log progress messages"
 }
 
@@ -301,10 +419,18 @@ function log() {
   fi
 }
 
+function format_commit_message() {
+  echo "$1
+
+Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
+}
+
 # Initialize global variables
 NEW_VERSION=
 NO_GIT_PUSH=
-ONLY_RELEASE=
+POLYGLOT_RELEASE_VERSION=
+POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release}
+POLYGLOT_RELEASE_UPDATE_LOCATION=${POLYGLOT_RELEASE_UPDATE_LOCATION:-https://raw.githubusercontent.com/cucumber/polyglot-release}
 QUIET=
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
@@ -315,22 +441,21 @@ while [[ $# -gt 0 ]]; do
     NO_GIT_PUSH="true"
     shift # past argument
     ;;
-  --no-git-commit)
-    NO_GIT_COMMIT="true"
-    NO_GIT_PUSH="true"
-    shift # past argument
-    ;;
-  --only-release)
-    ONLY_RELEASE="true"
-    shift # past argument
-    ;;
   --quiet)
     QUIET="true"
     shift # past argument
     ;;
   -h | --help)
-    echo "Makes a release to GitHub"
+    echo "polyglot-release: Makes a release to GitHub"
     show_usage
+    exit 0
+    ;;
+  --update)
+    do_update
+    exit 0
+    ;;
+  --version)
+    echo "v${POLYGLOT_RELEASE_VERSION:--develop}"
     exit 0
     ;;
   --* | -*)
@@ -347,12 +472,14 @@ done
 
 set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
-check_for_tools "git" "changelog" "gpg"
+check_for_tools "git" "changelog" "gpg" "realpath"
+check_up_to_date
 check_in_git_root_directory
 check_changelog_exists
 check_gpg_keys_configured
 check_git_tags_fetched
 check_git_index_clean
+check_git_even_with_origin
 
 if [[ $# -ne 1 ]]; then
   echo "Please specify a version to release. Use --help to show usage instructions."
@@ -365,6 +492,8 @@ if [[ $# -ne 1 ]]; then
 fi
 NEW_VERSION=$1
 validate_new_version_argument
+
+commit_before_release="$(git rev-parse HEAD)"
 
 ###
 ## pre release
@@ -389,41 +518,52 @@ log "Package manager manifests and CHANGELOG.md updated for $NEW_VERSION"
 log "Here's what changed:"
 log "$(git -c color.diff=always diff)"
 
-if [[ -z $NO_GIT_COMMIT ]]; then
-  TAG="v$NEW_VERSION"
-  git commit --gpg-sign --quiet --all --message="Prepare release $TAG"
-  git tag --sign --message "$TAG" "$TAG"
-  log "Files committed to to git and tagged '$TAG'"
-fi
+TAG="v$NEW_VERSION"
+git commit --gpg-sign --quiet --all --message="$(format_commit_message "Prepare release $TAG")"
+git tag --sign --message "$(format_commit_message "$TAG")" "$TAG"
+log "Files committed to to git and tagged '$TAG'"
 
 ###
 ## post release
 ###
-if [[ -n $ONLY_RELEASE ]]; then
-  exit 0
-fi
-
 for language in "${SUPPORTED_LANGUAGES[@]}"; do
   run post_release "$language"
 done
 
-if [[ -z $NO_GIT_COMMIT && $(git status --porcelain) ]]; then
-  git commit --gpg-sign --quiet --all --message="Prepare for the next development iteration"
+if [[ $(git status --porcelain) ]]; then
+  git commit --gpg-sign --quiet --all --message="$(format_commit_message "Prepare for the next development iteration")"
   log "Post-release changes committed to to git"
 fi
 
 ###
 # push to github
 ##
+local_branch=$(git rev-parse --abbrev-ref HEAD)
+release_commit=$(git rev-list --max-count=1 "$TAG")
+release_branch="release/$TAG"
 if [[ -z $NO_GIT_PUSH ]]; then
-  local_branch=$(git rev-parse --abbrev-ref HEAD)
-  git push --quiet origin "$local_branch"
+  git push --quiet --atomic origin "refs/heads/$local_branch" "refs/tags/$TAG" "$release_commit:refs/heads/$release_branch"
+  log "Tag $TAG pushed to origin"
   log "All commit(s) pushed to origin/$local_branch"
-  release_commit=$(git rev-list --max-count=1 "$TAG")
-  release_branch="release/$TAG"
-  git push --quiet origin "$release_commit:refs/heads/$release_branch"
   log "Release commit (tagged with $TAG) pushed to origin/$release_branch"
   if [[ -n $QUIET ]]; then
     echo "$release_branch"
   fi
+else
+  log "You now need to eyeball these commits, then push manually:"
+  log
+  log "# push local commits and tags to $local_branch"
+  log "git push origin refs/heads/$local_branch refs/tags/$TAG"
+  log
+  log "# push to release branch"
+  log "git push origin $release_commit:refs/heads/$release_branch"
+  log
+  log
+  log "If things do not look quite right you can roll back the release:"
+  log
+  log "# reset to the commit before release started"
+  log "git reset --hard $commit_before_release"
+  log
+  log "# delete the git tag that was created"
+  log "git tag -d $TAG"
 fi

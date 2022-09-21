@@ -6,6 +6,20 @@ Make releases with a single command
 
 Supports the release process for Cucumber repos as documented in [RELEASING.md](https://github.com/cucumber/.github/blob/main/RELEASING.md).
 
+It's designed to be run locally on a dev's workstation to make the mechanical changes to package manager manifests and the `CHANGELOG.md` file neccesary when making a release.
+
+Essentially, when you run `polyglot-release X.Y.Z` it will:
+
+1. run some sanity checks to make sure you don't have unpushed local changes etc.
+1. modify package manager files in each language version to set the next version to X.Y.Z
+1. update the `CHANGELOG.md` moving everything in the `Unreleased` section into a section for the X.Y.Z release. 
+1. commit
+1. tag the commit with `vX.Y.Z`
+1. git push to a `release/vX.Y.Z` branch on the `origin` remote
+4) modify package manager files in some languages (e.g. Java) to a "post-release / next development / SNAPSHOT" version
+5) commit again
+6) push everything to `origin/main`
+
 ## Works with polyglot repos
 
 If we have a project structure with distinct folders for each language, it will release each language, updating the version number in the different package manager manifests in a single git commit.
@@ -51,16 +65,25 @@ $ tree
 
 ## Installation
 
+Firts, check that `/usr/local/bin` is writable on your machine:
+
+    touch /usr/local/bin/polyglot-release
+
+If this fails, you need to [make it writable](https://apple.stackexchange.com/questions/192227/how-to-make-files-in-usr-local-writable-for-homebrew)
+
 To install in a project run:
 
 ```shell
-curl --silent -o ~/.local/bin/polyglot-release https://raw.githubusercontent.com/cucumber/polyglot-release/main/polyglot-release-bootstrapper
-chmod 744 ~/.local/bin/polyglot-release
-# Ensure ~/.local/bin is in your $PATH
+POLYGLOT_RELEASE_VERSION=1.0.0
+curl --silent -o /usr/local/bin/polyglot-release https://raw.githubusercontent.com/cucumber/polyglot-release/v$POLYGLOT_RELEASE_VERSION/polyglot-release
+chmod 755 /usr/local/bin/polyglot-release
+# Ensure /usr/local/bin is in your $PATH
 polyglot-release --help
 ```
 
 ## Contributing
+
+First, install [shellcheck](https://www.shellcheck.net/)
 
 To run all the tests:
 
@@ -68,7 +91,7 @@ To run all the tests:
 
 To run a single test:
 
-    ./polyglot-releaset-test <path-to-test-script>
+    ./polyglot-release-test <path-to-test-script>
 
 We use an [approval testing](https://approvaltests.com/) style for testing this app.
 
@@ -92,3 +115,11 @@ Sometimes it's helpful to play around with how the tool works in a safe, sandbox
 You can start a bash prompt in the same environment as an automated test would run in (with `local` and `origin` git repo folders) like this:
 
     polyglot-release-test ./tests/fixtures/<some-fixture>
+
+## Releasing
+
+You can use `polyglot-release` to release polyglot-release:
+
+```
+./polyglot-release MAJOR.MINOR.PATCH
+```
