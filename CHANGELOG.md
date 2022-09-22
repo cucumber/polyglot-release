@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.1.0] - 2022-09-22
 ### Added
 - Support elixir ([#82](https://github.com/cucumber/polyglot-release/pull/82))
 
@@ -25,7 +27,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.1.0...main
+[1.1.0]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 [1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.9.3...main
 [0.9.3]: https://github.com/cucumber/polyglot-release/compare/v0.9.2...main
 [0.9.2]: https://github.com/cucumber/polyglot-release/compare/v0.9.1...main
