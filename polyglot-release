@@ -52,11 +52,9 @@ function is_monoglot_elixir() {
   [[ -f mix.exs ]]
 }
 function pre_release_elixir() {
-  # noop
-  :
+  check_for_tools "sed"
 }
 function release_elixir() {
-  check_for_tools "sed"
   sed -i".tmp" "s/version: \".*\"/version: \"$NEW_VERSION\"/" "mix.exs"
   rm -rf mix.exs.tmp
 }
