@@ -49,7 +49,7 @@ function cs_project_file() {
 
 SUPPORTED_LANGUAGES+=("elixir")
 function is_monoglot_elixir() {
-  [[ $(find ./mix.exs -type f | wc -l) -gt 0 ]]
+  [[ -f mix.exs ]]
 }
 function pre_release_elixir() {
   # noop
