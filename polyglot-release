@@ -23,6 +23,25 @@ function run() {
 }
 SUPPORTED_LANGUAGES=()
 
+SUPPORTED_LANGUAGES+=("c")
+function is_monoglot_c() {
+  # Do not support monoglot C project for now so we do not have to require for instance the cmake file CFileLists.txt
+  false
+}
+function pre_release_c() {
+  if [[ ! -f VERSION ]]; then
+    echo "This looks like a C project, but there is no VERSION file"
+    exit 1
+  fi
+}
+function release_c() {
+  echo "$NEW_VERSION" >VERSION
+}
+function post_release_c() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("dotnet")
 function is_monoglot_dotnet() {
   [[ $(find ./*.sln -type f | wc -l) -gt 0 ]]
