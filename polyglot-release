@@ -25,8 +25,7 @@ SUPPORTED_LANGUAGES=()
 
 SUPPORTED_LANGUAGES+=("c")
 function is_monoglot_c() {
-  # Do not support monoglot C project for now so we do not have to require for instance the cmake file CFileLists.txt
-  false
+  [[ -f VERSION ]]
 }
 function pre_release_c() {
   if [[ ! -f VERSION ]]; then
