@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Support c ([#83](https://github.com/cucumber/polyglot-release/pull/83))
 
 ## [1.1.0] - 2022-09-22
 ### Added

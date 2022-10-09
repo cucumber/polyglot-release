@@ -28,6 +28,8 @@ If we have a project structure with distinct folders for each language, it will 
 $ tree
 .
 ├── CHANGELOG.md
+│── c
+│   └── VERSION
 │── dotnet
 │   ├── Project.sln
 │   └── Project
