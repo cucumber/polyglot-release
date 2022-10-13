@@ -69,7 +69,7 @@ $ tree
 
 ## Installation
 
-Firts, check that `/usr/local/bin` is writable on your machine:
+First, check that `/usr/local/bin` is writable on your machine:
 
     touch /usr/local/bin/polyglot-release
 
@@ -84,6 +84,16 @@ chmod 755 /usr/local/bin/polyglot-release
 # Ensure /usr/local/bin is in your $PATH
 polyglot-release --help
 ```
+
+Before using `polyglot-release` to make a release, make sure you have these tools installed:
+* [Git](https://git-scm.com/) - version > 2.25
+* [changelog](https://github.com/cucumber/changelog/)
+* `curl`
+* `gpg`
+* Core Utils (e.g. `find`, `sed`, `grep`, `pushd`, `popd`, ect). On MacOS you can install this with `brew install coreutils`
+
+Other tools may also be required depending on the language(s) you are trying to release. Polyglot-release will inform
+you about these as needed.
 
 ## Contributing
 
