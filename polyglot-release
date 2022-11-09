@@ -461,7 +461,7 @@ Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 # Initialize global variables
 NEW_VERSION=
 NO_GIT_PUSH=
-POLYGLOT_RELEASE_VERSION=1.2.0
+POLYGLOT_RELEASE_VERSION=
 POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release}
 POLYGLOT_RELEASE_UPDATE_LOCATION=${POLYGLOT_RELEASE_UPDATE_LOCATION:-https://raw.githubusercontent.com/cucumber/polyglot-release}
 QUIET=
