@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.2.0] - 2022-11-09
 ### Added
 - Support c ([#83](https://github.com/cucumber/polyglot-release/pull/83))
 
@@ -29,7 +31,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.1.0...main
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.2.0...main
+[1.2.0]: https://github.com/cucumber/polyglot-release/compare/v1.1.0...main
 [1.1.0]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 [1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.9.3...main
 [0.9.3]: https://github.com/cucumber/polyglot-release/compare/v0.9.2...main
