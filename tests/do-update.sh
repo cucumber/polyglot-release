@@ -23,7 +23,7 @@ sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.2/" .
 python3 -m http.server 2>/dev/null &
 server_pid=$!
 trap 'kill -9 $server_pid' SIGINT SIGQUIT SIGTERM EXIT
-sleep 1 # Wait for server to start
+sleep 2 # Wait for server to start, not very performant in CI
 popd > /dev/null
 
 #  Update polyglot release
