@@ -335,6 +335,7 @@ function check_up_to_date() {
     return
   fi
 
+  local latest_version
   latest_version=$(latest_tag_in_git)
 
   if [ "v$POLYGLOT_RELEASE_VERSION" == "$latest_version" ]; then
