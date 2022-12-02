@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.3.0] - 2022-12-02
 ### Fixed
 - Go: Only  use major version in go module ([#86](https://github.com/cucumber/polyglot-release/pull/86))
 
@@ -33,7 +35,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.2.0...main
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.3.0...main
+[1.3.0]: https://github.com/cucumber/polyglot-release/compare/v1.2.0...main
 [1.2.0]: https://github.com/cucumber/polyglot-release/compare/v1.1.0...main
 [1.1.0]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 [1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.9.3...main
