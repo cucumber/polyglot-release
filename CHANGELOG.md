@@ -1,10 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Go: Also update module imports ([#90](https://github.com/cucumber/polyglot-release/pull/90)) 
 
 ## [1.3.0] - 2022-12-02
 ### Fixed
-- Go: Only  use major version in go module ([#86](https://github.com/cucumber/polyglot-release/pull/86))
+- Go: Only use major version in go module ([#86](https://github.com/cucumber/polyglot-release/pull/86))
 
 ## [1.2.0] - 2022-11-09
 ### Added
