@@ -62,7 +62,7 @@ function get_fixture() {
   else
     fixture=polyglot
   fi
-  echo $fixture
+  echo "$fixture"
 }
 
 function setup_workdir() {
