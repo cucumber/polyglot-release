@@ -17,6 +17,12 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
 +[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
+diff --git a/cli/main.go b/cli/main.go
+--- a/cli/main.go
++++ b/cli/main.go
+@@ -4 +4 @@ import (
+-	module "github.com/example/project/v0"
++	module "github.com/example/project/v1"
 diff --git a/go.mod b/go.mod
 --- a/go.mod
 +++ b/go.mod

@@ -103,19 +103,20 @@ function is_monoglot_go() {
   [[ -f go.mod ]]
 }
 function pre_release_go() {
-  check_for_tools "go" "jq" "sed"
+  check_for_tools "go" "jq" "sed" "find"
 }
 function release_go() {
+  local module_with_old_version
+  module_with_old_version="$(go mod edit -json | jq -r '.Module.Path' )"
   local new_major_version
   new_major_version="$(echo "$NEW_VERSION" | sed -E 's/^([0-9]+)\.[0-9]+\.[0-9]+$/\1/')"
   # The sed below also captures 3-digit versions
   local module_with_new_version
-  module_with_new_version=$(
-    go mod edit -json |
-      jq -r '.Module.Path' |
-      sed -E "s/(.*)v[0-9]+(\.[0-9]+\.[0-9]+)?$/\1v$new_major_version/"
-  )
+  module_with_new_version="$(echo "$module_with_old_version" | sed -E "s/(.*)v[0-9]+(\.[0-9]+\.[0-9]+)?$/\1v$new_major_version/")"
+
   go mod edit -module "$module_with_new_version"
+  find . -name '*.go' -exec sed -i".tmp" "s#$module_with_old_version#$module_with_new_version#g" {} \;
+  find . -name '*.go.tmp' -exec rm {} \;
 }
 function post_release_go() {
   # noop
