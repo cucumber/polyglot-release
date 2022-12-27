@@ -18,9 +18,23 @@ function run() {
     eval "$1_$2"
     popd
   elif eval "is_monoglot_$2"; then
+    IS_CURRENT_LANGUAGE_POLYGLOT=
     eval "$1_$2"
+    IS_CURRENT_LANGUAGE_POLYGLOT=true
   fi
 }
+# Usage 'decorate "prefix" "suffix" "${TAGS{@}}"'
+function decorate() {
+    local prefix=$1
+    local suffix=$2
+    local tags=()
+
+    for tag in "${@:3}" ; do
+      tags+=("${prefix}${tag}${suffix}")
+    done
+    echo "${tags[@]}"
+}
+
 SUPPORTED_LANGUAGES=()
 
 SUPPORTED_LANGUAGES+=("c")
@@ -104,6 +118,10 @@ function is_monoglot_go() {
 }
 function pre_release_go() {
   check_for_tools "go" "jq" "sed" "find"
+  if $IS_CURRENT_LANGUAGE_POLYGLOT; then
+    # Use an additional tag. See: https://go.dev/ref/mod#vcs-version
+    TAGS+=("go/v$NEW_VERSION");
+  fi
 }
 function release_go() {
   local module_with_old_version
@@ -465,12 +483,14 @@ Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 }
 
 # Initialize global variables
+IS_CURRENT_LANGUAGE_POLYGLOT=true
 NEW_VERSION=
 NO_GIT_PUSH=
 POLYGLOT_RELEASE_VERSION=
 POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release}
 POLYGLOT_RELEASE_UPDATE_LOCATION=${POLYGLOT_RELEASE_UPDATE_LOCATION:-https://raw.githubusercontent.com/cucumber/polyglot-release}
 QUIET=
+TAGS=()
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
 
@@ -530,6 +550,8 @@ if [[ $# -ne 1 ]]; then
   exit 1
 fi
 NEW_VERSION=$1
+NEW_VERSION_TAG="v$NEW_VERSION"
+TAGS+=("$NEW_VERSION_TAG")
 validate_new_version_argument
 
 commit_before_release="$(git rev-parse HEAD)"
@@ -557,10 +579,11 @@ log "Package manager manifests and CHANGELOG.md updated for $NEW_VERSION"
 log "Here's what changed:"
 log "$(git -c color.diff=always diff)"
 
-TAG="v$NEW_VERSION"
-git commit --gpg-sign --quiet --all --message="$(format_commit_message "Prepare release $TAG")"
-git tag --sign --message "$(format_commit_message "$TAG")" "$TAG"
-log "Files committed to to git and tagged '$TAG'"
+git commit --gpg-sign --quiet --all --message="$(format_commit_message "Prepare release $NEW_VERSION_TAG")"
+for tag in "${TAGS[@]}"; do
+  git tag --sign --message "$(format_commit_message "$NEW_VERSION_TAG")" "$tag"
+done
+log "Files committed to to git and tagged $(decorate "'" "'" "${TAGS[@]}")"
 
 ###
 ## post release
@@ -578,13 +601,14 @@ fi
 # push to github
 ##
 local_branch=$(git rev-parse --abbrev-ref HEAD)
-release_commit=$(git rev-list --max-count=1 "$TAG")
-release_branch="release/$TAG"
+release_commit=$(git rev-list --max-count=1 "$NEW_VERSION_TAG")
+release_branch="release/$NEW_VERSION_TAG"
 if [[ -z $NO_GIT_PUSH ]]; then
-  git push --quiet --atomic origin "refs/heads/$local_branch" "refs/tags/$TAG" "$release_commit:refs/heads/$release_branch"
-  log "Tag $TAG pushed to origin"
+  # shellcheck disable=SC2046
+  git push --quiet --atomic origin "refs/heads/$local_branch" $(decorate "refs/tags/" "" "${TAGS[@]}") "$release_commit:refs/heads/$release_branch"
+  log "Tag(s) ${TAGS[*]} pushed to origin"
   log "All commit(s) pushed to origin/$local_branch"
-  log "Release commit (tagged with $TAG) pushed to origin/$release_branch"
+  log "Release commit (tagged with $NEW_VERSION_TAG) pushed to origin/$release_branch"
   if [[ -n $QUIET ]]; then
     echo "$release_branch"
   fi
@@ -592,7 +616,7 @@ else
   log "You now need to eyeball these commits, then push manually:"
   log
   log "# push local commits and tags to $local_branch"
-  log "git push origin refs/heads/$local_branch refs/tags/$TAG"
+  log "git push origin refs/heads/$local_branch $(decorate "refs/tags/" "" "${TAGS[@]}")"
   log
   log "# push to release branch"
   log "git push origin $release_commit:refs/heads/$release_branch"
@@ -604,5 +628,5 @@ else
   log "git reset --hard $commit_before_release"
   log
   log "# delete the git tag that was created"
-  log "git tag -d $TAG"
+  log "git tag -d ${TAGS[*]}"
 fi
