@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Go: Tag polyglot go releases with go/vVERSION ([#93](https://github.com/cucumber/polyglot-release/pull/93))
 
 ## [1.3.1] - 2022-12-17
 ### Fixed
