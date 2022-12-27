@@ -78,7 +78,7 @@ If this fails, you need to [make it writable](https://apple.stackexchange.com/qu
 To install in a project run:
 
 ```shell
-POLYGLOT_RELEASE_VERSION=1.3.1
+POLYGLOT_RELEASE_VERSION=1.3.2
 curl --silent -o /usr/local/bin/polyglot-release https://raw.githubusercontent.com/cucumber/polyglot-release/v$POLYGLOT_RELEASE_VERSION/polyglot-release
 chmod 755 /usr/local/bin/polyglot-release
 # Ensure /usr/local/bin is in your $PATH

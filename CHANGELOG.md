@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.3.2] - 2022-12-27
 ### Fixed
 - Go: Tag polyglot go releases with go/vVERSION ([#93](https://github.com/cucumber/polyglot-release/pull/93))
 
@@ -41,7 +43,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.3.1...main
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.3.2...main
+[1.3.2]: https://github.com/cucumber/polyglot-release/compare/v1.3.1...main
 [1.3.1]: https://github.com/cucumber/polyglot-release/compare/v1.3.0...main
 [1.3.0]: https://github.com/cucumber/polyglot-release/compare/v1.2.0...main
 [1.2.0]: https://github.com/cucumber/polyglot-release/compare/v1.1.0...main
