@@ -463,11 +463,12 @@ function check_git_even_with_origin() {
 function show_usage() {
   echo "Usage: polyglot-release [OPTIONS] MAJOR.MINOR.PATCH"
   echo "OPTIONS:"
-  echo "  --help                 shows this help"
-  echo "  --update               updates this script to the latest version"
-  echo "  --version              show the current version"
-  echo "  --no-git-push          do not push to git"
-  echo "  --quiet                don't log progress messages"
+  echo "  --help                   shows this help"
+  echo "  --update                 updates this script to the latest version"
+  echo "  --version                show the current version"
+  echo "  --no-git-push            do not push to git"
+  echo "  --quiet                  don't log progress messages"
+  echo "  --permit-invalid-version allow a version that isn't MAJOR.MINOR.PATCH (useful for pre-releases)"
 }
 
 function log() {
@@ -490,6 +491,7 @@ POLYGLOT_RELEASE_VERSION=
 POLYGLOT_RELEASE_GIT_REPO=${POLYGLOT_RELEASE_GIT_REPO:-https://github.com/cucumber/polyglot-release}
 POLYGLOT_RELEASE_UPDATE_LOCATION=${POLYGLOT_RELEASE_UPDATE_LOCATION:-https://raw.githubusercontent.com/cucumber/polyglot-release}
 QUIET=
+PERMIT_INVALID_VERSION=
 TAGS=()
 POSITIONAL_ARGS=()
 RELEASE_DATE=${RELEASE_DATE:-$(date +%F)}
@@ -502,6 +504,10 @@ while [[ $# -gt 0 ]]; do
     ;;
   --quiet)
     QUIET="true"
+    shift # past argument
+    ;;
+  --permit-invalid-version)
+    PERMIT_INVALID_VERSION="true"
     shift # past argument
     ;;
   -h | --help)
