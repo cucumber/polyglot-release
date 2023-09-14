@@ -11,14 +11,14 @@ It's designed to be run locally on a dev's workstation to make the mechanical ch
 Essentially, when you run `polyglot-release X.Y.Z` it will:
 
 1. run some sanity checks to make sure you don't have unpushed local changes etc.
-1. modify package manager files in each language version to set the next version to X.Y.Z
-1. update the `CHANGELOG.md` moving everything in the `Unreleased` section into a section for the X.Y.Z release. 
-1. commit
-1. tag the commit with `vX.Y.Z`
-1. git push to a `release/vX.Y.Z` branch on the `origin` remote
-4) modify package manager files in some languages (e.g. Java) to a "post-release / next development / SNAPSHOT" version
-5) commit again
-6) push everything to `origin/main`
+2. modify package manager files in each language version to set the next version to X.Y.Z
+3. update the `CHANGELOG.md` moving everything in the `Unreleased` section into a section for the X.Y.Z release. 
+4. commit
+5. tag the commit with `vX.Y.Z`
+6. git push to a `release/vX.Y.Z` branch on the `origin` remote
+7. modify package manager files in some languages (e.g. Java) to a "post-release / next development / SNAPSHOT" version
+8. commit again
+9. push everything to `origin/main`
 
 ## Works with polyglot repos
 
