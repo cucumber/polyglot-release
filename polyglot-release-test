@@ -43,7 +43,10 @@ function setup_git_repos() {
 function setup_polyglot_release_git_repo() {
   mkdir "polyglot-release.git"
   pushd "polyglot-release.git" >/dev/null || exit 1
-  git init --quiet -b main
+#  git init --quiet -b main
+  git init --quiet
+  git checkout -b main
+  git branch -D master
   git config user.email "polyglot-release-author@example.com"
   git config user.name "Polyglot Release Author"
   git config user.signingkey "$GPG_KEY_ID"
