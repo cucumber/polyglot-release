@@ -278,7 +278,7 @@ function post_release_ruby() {
 }
 
 function validate_new_version_argument() {
-  if [[ ! "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && "$PERMIT_INVALID_VERSION" != "true"]]; then
+  if [[ ! "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && "$PERMIT_INVALID_VERSION" != "true" ]]; then
     echo "Invalid MAJOR.MINOR.PATCH argument: $NEW_VERSION"
     echo "Did you mean to to release a pre-release version? If so please ensure you use the --permit-invalid-version flag"
     show_usage
