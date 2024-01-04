@@ -483,7 +483,6 @@ Created-by: polyglot-release v${POLYGLOT_RELEASE_VERSION:--develop}"
 }
 
 # Initialize global variables
-FIRST_RELEASE=
 IS_CURRENT_LANGUAGE_POLYGLOT=true
 NEW_VERSION=
 NO_GIT_PUSH=
