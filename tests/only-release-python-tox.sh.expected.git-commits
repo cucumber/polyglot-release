@@ -16,7 +16,7 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 @@ -17 +18,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...HEAD
-+[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD
++[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...v1.0.0
 diff --git a/setup.py b/setup.py
 --- a/setup.py
 +++ b/setup.py

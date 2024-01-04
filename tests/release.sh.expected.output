@@ -1,7 +1,7 @@
 Package manager manifests and CHANGELOG.md updated for 1.0.0
 Here's what changed:
 [1mdiff --git a/CHANGELOG.md b/CHANGELOG.md[m
-[1mindex 5c5d610..e849b16 100644[m
+[1mindex 1e01735..51739ed 100644[m
 [1m--- a/CHANGELOG.md[m
 [1m+++ b/CHANGELOG.md[m
 [36m@@ -7,12 +7,14 @@[m [mand this project adheres to [Semantic Versioning](http://semver.org/).[m
@@ -19,7 +19,7 @@ Here's what changed:
  [m
 [31m-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD[m
 [32m+[m[32m[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...HEAD[m
-[32m+[m[32m[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD[m
+[32m+[m[32m[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...v1.0.0[m
  [0.0.1]: https://github.com/cucumber/polyglot-release/compare/v0.0.0...v0.0.1[m
 [1mdiff --git a/java/pom.xml b/java/pom.xml[m
 [1mindex 1ddc4c5..6879b6c 100644[m
