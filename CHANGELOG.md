@@ -43,14 +43,14 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.3.2...main
-[1.3.2]: https://github.com/cucumber/polyglot-release/compare/v1.3.1...main
-[1.3.1]: https://github.com/cucumber/polyglot-release/compare/v1.3.0...main
-[1.3.0]: https://github.com/cucumber/polyglot-release/compare/v1.2.0...main
-[1.2.0]: https://github.com/cucumber/polyglot-release/compare/v1.1.0...main
-[1.1.0]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
-[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.9.3...main
-[0.9.3]: https://github.com/cucumber/polyglot-release/compare/v0.9.2...main
-[0.9.2]: https://github.com/cucumber/polyglot-release/compare/v0.9.1...main
-[0.9.1]: https://github.com/cucumber/polyglot-release/compare/v0.9.0...main
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.3.2...HEAD
+[1.3.2]: https://github.com/cucumber/polyglot-release/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/cucumber/polyglot-release/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/cucumber/polyglot-release/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/cucumber/polyglot-release/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.9.3...HEAD
+[0.9.3]: https://github.com/cucumber/polyglot-release/compare/v0.9.2...HEAD
+[0.9.2]: https://github.com/cucumber/polyglot-release/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/cucumber/polyglot-release/compare/v0.9.0...HEAD
 [0.9.0]: https://github.com/cucumber/polyglot-release/compare/ad3c912c06971aefdd597d7c315ca75fa93ce83f...v0.9.0~~
