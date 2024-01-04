@@ -17,9 +17,9 @@ Here's what changed:
 [31m-## [0.0.0] - 2000-01-01[m
 [32m+[m[32m## 0.0.0 - 2000-01-01[m
  [m
-[31m-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main[m
-[32m+[m[32m[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main[m
-[32m+[m[32m[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main[m
+[31m-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD[m
+[32m+[m[32m[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...HEAD[m
+[32m+[m[32m[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD[m
  [0.0.1]: https://github.com/cucumber/polyglot-release/compare/v0.0.0...v0.0.1[m
 [1mdiff --git a/java/pom.xml b/java/pom.xml[m
 [1mindex 1ddc4c5..6879b6c 100644[m

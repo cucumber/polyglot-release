@@ -14,9 +14,9 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 -## [0.0.0] - 2000-01-01
 +## 0.0.0 - 2000-01-01
 @@ -17 +18,2 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
--[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
-+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...main
-+[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...main
+-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD
++[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...HEAD
++[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD
 diff --git a/pom.xml b/pom.xml
 --- a/pom.xml
 +++ b/pom.xml
