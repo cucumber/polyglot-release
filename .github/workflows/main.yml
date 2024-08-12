@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: sudo apt install -y xmlstarlet shellcheck
-      - run: sudo snap install go --classic.
+      - run: sudo snap install  --classic. go
       - name: Install `changelog` tool
         run: |
           mkdir -p $HOME/.local/bin
