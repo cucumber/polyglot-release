@@ -4,13 +4,22 @@ set -e
 shellcheck polyglot-release*
 set +e
 
+function realpath() {
+  # See the caveats on https://formulae.brew.sh/formula/coreutils
+  if command -v "grealpath" >/dev/null; then
+    command grealpath "$@"
+  else
+    command realpath "$@"
+  fi
+}
+
 SRC=$(realpath .)
 GNUPGHOME=$(mktemp -d)
 export GNUPGHOME
 
 function import_gpg_key() {
   gpg --homedir="$GNUPGHOME" --batch -q --fast-import "$SRC/tests/gpg-key.private.pgp"
-  GPG_KEY_ID=D8C4AB54E1AB7D53
+  GPG_KEY_ID=DE503E8A237FCB730B01997E17879BF1F32682BC
 }
 
 function normalize_git_sha() {

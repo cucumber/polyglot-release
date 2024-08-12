@@ -5,4 +5,5 @@ OPTIONS:
   --update               updates this script to the latest version
   --version              show the current version
   --no-git-push          do not push to git
+  --no-progress-bar      do not show a progress bar
   --quiet                don't log progress messages
