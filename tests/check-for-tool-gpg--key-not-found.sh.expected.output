@@ -1,4 +1,4 @@
-Your git user.signingkey (D8C4AB54E1AB7D53) was not found in your GPG keys.
+Your git user.signingkey (DE503E8A237FCB730B01997E17879BF1F32682BC) was not found in your GPG keys.
 
 To see all your GPG keys, use:
     gpg --list-secret-keys

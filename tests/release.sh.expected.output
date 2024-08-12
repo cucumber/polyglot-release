@@ -1,3 +1,7 @@
+Checking prerequisites
+************
+Preparing release
+************
 Package manager manifests and CHANGELOG.md updated for 1.0.0
 Here's what changed:
 [1mdiff --git a/CHANGELOG.md b/CHANGELOG.md[m
@@ -78,6 +82,8 @@ Here's what changed:
 [31m-0.0.0[m
 [32m+[m[32m1.0.0[m
 Files committed to to git and tagged 'v1.0.0'
+Preparing for the next development iteration
+************
 Post-release changes committed to to git
 Tag(s) v1.0.0 pushed to origin
 All commit(s) pushed to origin/main
