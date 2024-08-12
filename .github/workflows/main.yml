@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt install -y xmlstarlet shellcheck go
+      - run: sudo apt install -y xmlstarlet shellcheck
+      - run: sudo snap install go
       - name: Install `changelog` tool
         run: |
           mkdir -p $HOME/.local/bin
