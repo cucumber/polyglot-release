@@ -1,10 +1,10 @@
 # Changelog
 
 ## [Unreleased]
-
-## [1.3.2] - 2022-12-27
 ### Added
 - A rudimentary progress indicator ([#100](https://github.com/cucumber/polyglot-release/pull/100))
+
+## [1.3.2] - 2022-12-27
 
 ### Fixed
 - Go: Tag polyglot go releases with go/vVERSION ([#93](https://github.com/cucumber/polyglot-release/pull/93))
