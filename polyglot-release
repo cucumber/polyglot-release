@@ -12,7 +12,6 @@ function find() {
   command find "$@" 2>/dev/null
 }
 function realpath() {
-  echo "Calling realpath shim"
   # See the caveats on https://formulae.brew.sh/formula/coreutils
   if command -v "grealpath" >/dev/null; then
     command grealpath "$@"

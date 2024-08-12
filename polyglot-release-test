@@ -4,6 +4,15 @@ set -e
 shellcheck polyglot-release*
 set +e
 
+function realpath() {
+  # See the caveats on https://formulae.brew.sh/formula/coreutils
+  if command -v "grealpath" >/dev/null; then
+    command grealpath "$@"
+  else
+    command realpath "$@"
+  fi
+}
+
 SRC=$(realpath .)
 GNUPGHOME=$(mktemp -d)
 export GNUPGHOME
