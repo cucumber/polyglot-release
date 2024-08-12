@@ -10,28 +10,26 @@ on:
       - main
 
 jobs:
-  test:
-    strategy:
-      matrix:
-        include:
-        - os: macos-latest
-          changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_darwin_amd64.tar.gz
-        - os: ubuntu-latest
-          changelog: https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz
-    runs-on: ${{ matrix.os }}
+  test-ubuntu:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: Homebrew/actions/setup-homebrew@master
-      - name: Install `coreutils`
-        run: brew install coreutils
-        if: ${{ matrix.os == 'macos-latest' }}
-      - name: Install `shellcheck` tool
-        run: brew install shellcheck
+      - run: sudo apt install -y xmlstarlet shellcheck go
       - name: Install `changelog` tool
         run: |
           mkdir -p $HOME/.local/bin
           echo "$HOME/.local/bin" >> $GITHUB_PATH
-          wget -qO- "${{ matrix.changelog }}" | tar xvz -C $HOME/.local/bin changelog
-      - name: Install `xmlstarlet` tool
-        run: brew install xmlstarlet
+          wget -qO- "https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_linux_amd64.tar.gz" | tar xvz -C $HOME/.local/bin changelog
+      - run: ./polyglot-release-test
+  test-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Homebrew/actions/setup-homebrew@master
+        run: brew install xmlstarlet shellcheck go coreutils
+      - name: Install `changelog` tool
+        run: |
+          mkdir -p $HOME/.local/bin
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          wget -qO- "https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_darwin_amd64.tar.gz" | tar xvz -C $HOME/.local/bin changelog
       - run: ./polyglot-release-test
