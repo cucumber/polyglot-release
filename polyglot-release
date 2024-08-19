@@ -240,7 +240,7 @@ function pre_release_polyglot-release() {
 function release_polyglot-release() {
   for file in polyglot-release README.md; do
     sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=$NEW_VERSION/" "$file"
-    rm -f "polyglot-release.tmp"
+    rm -f "$file.tmp"
   done
 }
 function post_release_polyglot-release() {
