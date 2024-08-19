@@ -17,18 +17,22 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...HEAD
 +[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...v1.0.0
-diff --git a/package-lock.json b/package-lock.json
---- a/package-lock.json
-+++ b/package-lock.json
-@@ -3 +3 @@
--  "version": "0.0.1",
-+  "version": "1.0.0",
-@@ -9 +9 @@
--      "version": "0.0.1"
-+      "version": "1.0.0"
-diff --git a/package.json b/package.json
---- a/package.json
-+++ b/package.json
-@@ -3 +3 @@
--  "version": "0.0.1"
-+  "version": "1.0.0"
+diff --git a/gradle.properties b/gradle.properties
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -1 +1 @@
+-version = 0.0.1
++version = 1.0.0
+
+**
+Prepare for the next development iteration
+
+Created-by: polyglot-release v-develop
+
+
+diff --git a/gradle.properties b/gradle.properties
+--- a/gradle.properties
++++ b/gradle.properties
+@@ -1 +1 @@
+-version = 1.0.0
++version = 1.0.1-SNAPSHOT

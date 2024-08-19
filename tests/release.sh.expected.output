@@ -1,7 +1,7 @@
 Checking prerequisites
-************
+*************
 Preparing release
-************
+*************
 Package manager manifests and CHANGELOG.md updated for 1.0.0
 Here's what changed:
 [1mdiff --git a/CHANGELOG.md b/CHANGELOG.md[m
@@ -46,44 +46,44 @@ Here's what changed:
      </scm>[m
  </project>[m
 [1mdiff --git a/javascript/package-lock.json b/javascript/package-lock.json[m
-[1mindex 2a19e31..67dba24 100644[m
+[1mindex cfa567d..67dba24 100644[m
 [1m--- a/javascript/package-lock.json[m
 [1m+++ b/javascript/package-lock.json[m
 [36m@@ -1,12 +1,12 @@[m
  {[m
    "name": "@example/project",[m
-[31m-  "version": "0.0.0",[m
+[31m-  "version": "0.0.1",[m
 [32m+[m[32m  "version": "1.0.0",[m
    "lockfileVersion": 2,[m
    "requires": true,[m
    "packages": {[m
      "": {[m
        "name": "@example/project",[m
-[31m-      "version": "0.0.0"[m
+[31m-      "version": "0.0.1"[m
 [32m+[m[32m      "version": "1.0.0"[m
      }[m
    }[m
  }[m
 [1mdiff --git a/javascript/package.json b/javascript/package.json[m
-[1mindex 806abfd..c37a94d 100644[m
+[1mindex b5da2c1..c37a94d 100644[m
 [1m--- a/javascript/package.json[m
 [1m+++ b/javascript/package.json[m
 [36m@@ -1,4 +1,4 @@[m
  {[m
    "name": "@example/project",[m
-[31m-  "version": "0.0.0"[m
+[31m-  "version": "0.0.1"[m
 [32m+[m[32m  "version": "1.0.0"[m
  }[m
 [1mdiff --git a/ruby/VERSION b/ruby/VERSION[m
-[1mindex 77d6f4c..3eefcb9 100644[m
+[1mindex 8acdd82..3eefcb9 100644[m
 [1m--- a/ruby/VERSION[m
 [1m+++ b/ruby/VERSION[m
 [36m@@ -1 +1 @@[m
-[31m-0.0.0[m
+[31m-0.0.1[m
 [32m+[m[32m1.0.0[m
 Files committed to to git and tagged 'v1.0.0'
 Preparing for the next development iteration
-************
+*************
 Post-release changes committed to to git
 Tag(s) v1.0.0 pushed to origin
 All commit(s) pushed to origin/main

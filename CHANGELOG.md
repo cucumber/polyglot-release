@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Support android ([#101](https://github.com/cucumber/polyglot-release/pull/101))
 
 ## [1.4.0] - 2024-08-12
 ### Added

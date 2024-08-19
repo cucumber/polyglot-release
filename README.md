@@ -28,6 +28,8 @@ If we have a project structure with distinct folders for each language, it will 
 $ tree
 .
 ├── CHANGELOG.md
+│── android
+│   └── gradle.properties
 │── c
 │   └── VERSION
 │── dotnet

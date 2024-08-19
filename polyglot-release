@@ -46,6 +46,27 @@ function decorate() {
 
 SUPPORTED_LANGUAGES=()
 
+SUPPORTED_LANGUAGES+=("android")
+function is_monoglot_android() {
+  [[ -f gradle.properties ]]
+}
+function pre_release_android() {
+  check_for_tools "sed"
+}
+function release_android() {
+  update_gradle_properties_version "$NEW_VERSION"
+}
+function post_release_android() {
+  update_gradle_properties_version "$(next_development_version)-SNAPSHOT"
+}
+function update_gradle_properties_version() {
+  version=$1
+  sed -i".tmp" \
+    -e "s/\(version *= *\)[0-9]*\.[0-9]*\.[0-9]*/\1$version/" \
+    "gradle.properties"
+  rm -f "gradle.properties.tmp"
+}
+
 SUPPORTED_LANGUAGES+=("c")
 function is_monoglot_c() {
   [[ -f VERSION ]]
@@ -297,6 +318,10 @@ function validate_new_version_argument() {
     echo "Version $NEW_VERSION has already been released."
     exit 1
   fi
+}
+
+function next_development_version() {
+    echo "$NEW_VERSION_MAJOR.$NEW_VERSION_MINOR.$((NEW_VERSION_PATCH + 1))"
 }
 
 function check_for_tools() {
@@ -593,9 +618,12 @@ if [[ $# -ne 1 ]]; then
   exit 1
 fi
 NEW_VERSION=$1
+validate_new_version_argument
+NEW_VERSION_MAJOR=$(echo "$NEW_VERSION" | cut -d '.' -f1)
+NEW_VERSION_MINOR=$(echo "$NEW_VERSION" | cut -d '.' -f2)
+NEW_VERSION_PATCH=$(echo "$NEW_VERSION" | cut -d '.' -f3)
 NEW_VERSION_TAG="v$NEW_VERSION"
 TAGS+=("$NEW_VERSION_TAG")
-validate_new_version_argument
 
 commit_before_release="$(git rev-parse HEAD)"
 
