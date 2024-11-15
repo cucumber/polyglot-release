@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Support CPP ([#104](https://github.com/cucumber/polyglot-release/pull/104))
 
 ## [1.5.0] - 2024-08-19
 ### Added

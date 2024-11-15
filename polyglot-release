@@ -85,6 +85,24 @@ function post_release_c() {
   :
 }
 
+SUPPORTED_LANGUAGES+=("cpp")
+function is_monoglot_cpp() {
+  [[ -f VERSION ]]
+}
+function pre_release_cpp() {
+  if [[ ! -f VERSION ]]; then
+    echo "This looks like a C++ project, but there is no VERSION file"
+    exit 1
+  fi
+}
+function release_cpp() {
+  echo "$NEW_VERSION" >VERSION
+}
+function post_release_cpp() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("dotnet")
 function is_monoglot_dotnet() {
   [[ $(find ./*.sln -type f | wc -l) -gt 0 ]]
