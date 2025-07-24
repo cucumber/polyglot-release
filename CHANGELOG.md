@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.6.1] - 2025-07-24
 ### Fixed
 - Check if release exists against remote ([#105](https://github.com/cucumber/polyglot-release/pull/105))
 
@@ -57,7 +59,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.6.0...HEAD
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/cucumber/polyglot-release/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/cucumber/polyglot-release/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/cucumber/polyglot-release/compare/v1.4.0...v1.5.0
 [1.4.0]: https://github.com/cucumber/polyglot-release/compare/v1.3.2...v1.4.0
