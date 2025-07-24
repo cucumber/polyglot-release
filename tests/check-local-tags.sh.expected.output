@@ -1,4 +1,3 @@
-No git tag found for v0.0.1 (found in CHANGELOG.md)!
+The v0.0.2 for version 0.0.2 already exists on your machine but not on the remote.
 
-Do you need to run this?
-    git fetch --tags
+Did you forget to clean up the tags from an aborted release?

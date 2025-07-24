@@ -331,11 +331,6 @@ function validate_new_version_argument() {
     show_usage
     exit 1
   fi
-
-  if [ -n "$(git tag --list "v$NEW_VERSION")" ]; then
-    echo "Version $NEW_VERSION has already been released."
-    exit 1
-  fi
 }
 
 function next_development_version() {
@@ -480,20 +475,24 @@ function check_gpg_keys_configured() {
   fi
 }
 
-function check_git_tags_fetched() {
-  latest_version_from_changelog=$(changelog latest)
-  if [[ $latest_version_from_changelog == v* ]]; then
-    expected_tag="$latest_version_from_changelog"
-  else
-    expected_tag="v$latest_version_from_changelog"
-  fi
-  if [[ -z $(git tag --list "$expected_tag") ]]; then
-    echo "No git tag found for $expected_tag (found in CHANGELOG.md)!"
-    echo
-    echo "Do you need to run this?"
-    echo "    git fetch --tags"
-    exit 1
-  fi
+function check_git_tags_do_not_exist() {
+  for tag in "${TAGS[@]}"; do
+    if [[ -n $(git ls-remote --tags origin "refs/tags/$tag") ]]; then
+      echo "Version $NEW_VERSION has already been released with tag $tag."
+      echo
+      echo "Do you need to run this?"
+      echo "    git fetch --tags"
+      exit 1
+    fi
+  done
+  for tag in "${TAGS[@]}"; do
+    if [[ -n $(git tag --list "$tag") ]]; then
+      echo "The $tag for version $NEW_VERSION already exists on your machine but not on the remote."
+      echo
+      echo "Did you forget to clean up the tags from an aborted release?"
+      exit 1
+    fi
+  done
 }
 
 function check_git_index_clean() {
@@ -622,7 +621,6 @@ check_up_to_date
 check_in_git_root_directory
 check_changelog_exists
 check_gpg_keys_configured
-check_git_tags_fetched
 check_git_index_clean
 check_git_even_with_origin
 
@@ -654,6 +652,8 @@ for language in "${SUPPORTED_LANGUAGES[@]}"; do
   log_progress_increment
 done
 log_progress_finish
+
+check_git_tags_do_not_exist
 
 ###
 ## release

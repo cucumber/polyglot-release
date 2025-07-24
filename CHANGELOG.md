@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Check if release exists against remote ([#105](https://github.com/cucumber/polyglot-release/pull/105))
 
 ## [1.6.0] - 2024-11-24
 ### Added
