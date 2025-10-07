@@ -52,7 +52,7 @@ $ tree
 ├── php
 │   └── composer.json
 ├── python
-│   └── setup.py # or pyproject.toml
+│   └── pyproject.toml # or setup.py, or pyproject.toml with uv.lock,  
 └── ruby
     ├── project.gemspec
     └── VERSION
