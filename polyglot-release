@@ -314,8 +314,16 @@ function release_python() {
   
   # Update version and revision in uv.file file
   if [[ -f uv.lock && -f pyproject.toml ]]; then
-    sed -i".tmp" \
-      -e "/name *= *\"$(python_uv_project_name)\"/{n;s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/}" uv.lock
+    # Find dependency entry for this project.
+    line=$(grep -n -m 1 "name *= *\"$(python_uv_project_name)\"" uv.lock | cut -d ":" -f1)
+    # Print everything that precedes the project entry
+    head -n "$line"  uv.lock > uv.lock.tmp
+    # Print the new version
+    echo "version = \"$NEW_VERSION\"" >> uv.lock.tmp
+    # Print everything after the version
+    tail -n "+$((line + 2))" uv.lock >>  uv.lock.tmp
+    # Replace the file.
+    mv uv.lock.tmp uv.lock
     rm -f uv.lock.tmp
     
     sed -i".tmp" \
