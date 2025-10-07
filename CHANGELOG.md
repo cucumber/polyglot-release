@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Support Python with UV ([#107](https://github.com/cucumber/polyglot-release/pull/107))
 
 ## [1.6.1] - 2025-07-24
 ### Fixed
