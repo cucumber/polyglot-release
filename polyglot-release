@@ -290,7 +290,7 @@ function is_monoglot_python() {
 function pre_release_python() {
   check_for_tools "sed"
   if [[ -f uv.lock && -f pyproject.toml ]]; then
-      if [[ -z $(python_project_name) ]]; then
+      if [[ -z $(python_uv_project_name) ]]; then
         echo "This looks like a Python UV project, but the project name is blank."
         exit 1
       fi
@@ -309,11 +309,16 @@ function release_python() {
     "$PROJECT_FILE"
   rm -f "$PROJECT_FILE.tmp"
   
+  # Update version and revision in uv.file file
   if [[ -f uv.lock && -f pyproject.toml ]]; then
-    set -x
     sed -i".tmp" \
-      -e "/name *= *\"$(python_project_name)\"/{n;s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/}" "uv.lock"
-    rm -f "uv.lock.tmp"
+      -e "/name *= *\"$(python_uv_project_name)\"/{n;s/\(version *= *\"\)[0-9]*\.[0-9]*\.[0-9]*\(\"\)/\1$NEW_VERSION\2/}" uv.lock
+    rm -f uv.lock.tmp
+    
+    sed -i".tmp" \
+        -e "s/\(revision *= *\)[0-9]*/\1$(python_uv_next_revision)/" \
+        uv.lock
+    rm -f uv.lock.tmp
   fi
 }
 function post_release_python() {
@@ -321,8 +326,13 @@ function post_release_python() {
   :
 }
 
-function python_project_name() {
+function python_uv_project_name() {
   grep -E  'name *= *"[a-z]+"' pyproject.toml  | sed 's/name *= *"//' | sed 's/"//'
+}
+
+function python_uv_next_revision() {
+  REVISION=$(grep -E  'revision *= *[0-9]+' uv.lock  | sed 's/revision *= *//')
+  echo $((REVISION + 1))
 }
 
 

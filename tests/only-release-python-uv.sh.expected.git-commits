@@ -26,6 +26,9 @@ diff --git a/pyproject.toml b/pyproject.toml
 diff --git a/uv.lock b/uv.lock
 --- a/uv.lock
 +++ b/uv.lock
+@@ -2 +2 @@ version = 1
+-revision = 3
++revision = 4
 @@ -7 +7 @@ name = "project"
 -version = "0.0.1"
 +version = "1.0.0"
