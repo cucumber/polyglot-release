@@ -291,12 +291,15 @@ function pre_release_python() {
   check_for_tools "sed"
   if [[ -f uv.lock && -f pyproject.toml ]]; then
       if [[ -z $(python_uv_project_name) ]]; then
-        echo "This looks like a Python UV project, but the project name is blank."
+        echo "This looks like a Python UV project, but the project name is blank or missing."
+        exit 1
+      fi
+      if [[ -z $(python_uv_revision) ]]; then
+        echo "This looks like a Python UV project, but the revision is blank or missing."
         exit 1
       fi
   fi
 }
-
 function release_python() {
   if [[ -f pyproject.toml ]]; then
     PROJECT_FILE=pyproject.toml
@@ -325,16 +328,16 @@ function post_release_python() {
   # noop
   :
 }
-
 function python_uv_project_name() {
   grep -E  'name *= *"[a-z]+"' pyproject.toml  | sed 's/name *= *"//' | sed 's/"//'
 }
-
 function python_uv_next_revision() {
-  REVISION=$(grep -E  'revision *= *[0-9]+' uv.lock  | sed 's/revision *= *//')
+  REVISION=$(python_uv_revision)
   echo $((REVISION + 1))
 }
-
+function python_uv_revision() {
+  grep -E  'revision *= *[0-9]+' uv.lock  | sed 's/revision *= *//'
+}
 
 SUPPORTED_LANGUAGES+=("ruby")
 function is_monoglot_ruby() {
