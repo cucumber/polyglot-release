@@ -337,14 +337,14 @@ function post_release_python() {
   :
 }
 function python_uv_project_name() {
-  grep -E  'name *= *"[a-z]+"' pyproject.toml  | sed 's/name *= *"//' | sed 's/"//'
+  grep -E  '^name *= *".+"$' pyproject.toml | sed 's/name *= *"//' | sed 's/"//'
 }
 function python_uv_next_revision() {
   REVISION=$(python_uv_revision)
   echo $((REVISION + 1))
 }
 function python_uv_revision() {
-  grep -E  'revision *= *[0-9]+' uv.lock  | sed 's/revision *= *//'
+  grep -E  '^revision *= *[0-9]+$' uv.lock | sed 's/revision *= *//'
 }
 
 SUPPORTED_LANGUAGES+=("ruby")
