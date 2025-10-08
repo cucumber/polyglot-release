@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Allow any character in Python project names ([#108](https://github.com/cucumber/polyglot-release/pull/108))
 
 ## [1.7.0] - 2025-10-08
 ### Added
