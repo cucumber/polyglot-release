@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Update `realpath --relative-to` detection ([#109](https://github.com/cucumber/polyglot-release/pull/109))
 
 ## [1.7.1] - 2025-10-08
 ### Fixed

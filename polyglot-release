@@ -393,7 +393,7 @@ function check_for_tools() {
 
 function check_for_tools_realpath_with_relative_to() {
     output=$(realpath --help)
-    if [[ "$output" != *"--relative-to=DIR"* ]]; then
+    if [[ "$output" != *"--relative-to"* ]]; then
       echo
       echo "Please install realpath with support for --relative-to"
       echo "Hint: On OSX this requires installing coreutils"
