@@ -105,7 +105,7 @@ function post_release_cpp() {
 
 SUPPORTED_LANGUAGES+=("dotnet")
 function is_monoglot_dotnet() {
-  [[ $(find ./*.sln -type f | wc -l) -gt 0 ]]
+  [[ $(find ./*.sln -type f | wc -l) -gt 0 || $(find ./*.slnx -type f | wc -l) -gt 0 ]]
 }
 function pre_release_dotnet() {
   check_for_tools "xmlstarlet"
@@ -122,8 +122,8 @@ function post_release_dotnet() {
   :
 }
 function cs_project_file() {
-  solution_file=$(realpath "$(find ./*.sln -type f)" --relative-to="$(pwd)")
-  project_name=${solution_file%.sln}
+  solution_file="$(realpath --relative-to="$(pwd)" "$(find ./ -type f \( -name \*.slnx -o -name \*.sln \))")"
+  project_name="${solution_file%.*}"
   echo "$project_name/$project_name.csproj"
 }
 

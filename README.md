@@ -33,7 +33,7 @@ $ tree
 │── c
 │   └── VERSION
 │── dotnet
-│   ├── Project.sln
+│   ├── Project.sln or Project.slnx 
 │   └── Project
 │       └── Project.csproj
 ├── elixir
@@ -52,7 +52,7 @@ $ tree
 ├── php
 │   └── composer.json
 ├── python
-│   └── pyproject.toml # or setup.py, or pyproject.toml with uv.lock,  
+│   └── pyproject.toml, setup.py, or pyproject.toml with uv.lock,  
 └── ruby
     ├── project.gemspec
     └── VERSION

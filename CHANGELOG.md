@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Support .Net `.slnx` projects ([#111](https://github.com/cucumber/polyglot-release/pull/111))
 
 ## [1.7.2] - 2025-11-14
 ### Fixed
