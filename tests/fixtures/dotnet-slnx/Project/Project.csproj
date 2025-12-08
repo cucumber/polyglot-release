@@ -1,0 +1,5 @@
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup Label="Version">
+		<VersionNumber>0.0.1</VersionNumber>
+	</PropertyGroup>
+</Project>
