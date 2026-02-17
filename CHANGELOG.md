@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Support .Net `Directory.Build.props` files ([#114](https://github.com/cucumber/polyglot-release/pull/114))
 
 ## [1.9.0] - 2025-12-08
 ### Added

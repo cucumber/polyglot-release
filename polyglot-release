@@ -115,7 +115,12 @@ function pre_release_dotnet() {
   fi
 }
 function release_dotnet() {
+  set -x
   xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$(cs_project_file)"
+  directory_build_props="Directory.Build.props"
+  if [[ -f "$directory_build_props" ]]; then
+    xmlstarlet ed --pf --omit-decl --inplace --update /Project/PropertyGroup/VersionNumber --value "$NEW_VERSION" "$directory_build_props"
+  fi
 }
 function post_release_dotnet() {
   # noop
