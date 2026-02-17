@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Remove debug statements
 
 ## [1.10.0] - 2026-02-17
 ### Added
