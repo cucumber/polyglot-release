@@ -33,7 +33,8 @@ $ tree
 │── c
 │   └── VERSION
 │── dotnet
-│   ├── Project.sln or Project.slnx 
+│   ├── Project.sln or Project.slnx
+│   ├── Directory.Build.props (optional) 
 │   └── Project
 │       └── Project.csproj
 ├── elixir
