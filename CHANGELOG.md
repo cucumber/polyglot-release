@@ -1,6 +1,7 @@
 # Changelog
 
 ## [Unreleased]
+- Support Dart ([#121](https://github.com/cucumber/polyglot-release/pull/121))
 
 ## [1.10.1] - 2026-02-17
 ### Fixed
