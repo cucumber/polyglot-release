@@ -103,6 +103,36 @@ function post_release_cpp() {
   :
 }
 
+SUPPORTED_LANGUAGES+=("dart")
+function is_monoglot_dart() {
+  [[ -f pubspec.yaml ]]
+}
+function pre_release_dart() {
+  if [[ ! -f pubspec.yaml ]]; then
+    echo "This looks like a Dart project, but there is no pubspec.yaml file"
+    exit 1
+  fi
+  if [[ ! -f CHANGELOG.md ]]; then
+    echo "This looks like a Dart project, but there is no CHANGELOG.md file"
+    exit 1
+  fi
+}
+function release_dart() {
+  sed -i".tmp" "s/version: \".*\"/version: \"$NEW_VERSION\"/" "pubspec.yaml"
+  rm -rf pubspec.yaml.tmp
+  if [[ $IS_CURRENT_LANGUAGE_POLYGLOT == "true" ]]; then
+    # Also update the version in the dummy change log.
+    if [[ -f CHANGELOG.md ]]; then
+      sed -i".tmp" "s/## .*/## $NEW_VERSION/" "CHANGELOG.md"
+      rm -rf CHANGELOG.md.tmp
+    fi
+  fi
+}
+function post_release_dart() {
+  # noop
+  :
+}
+
 SUPPORTED_LANGUAGES+=("dotnet")
 function is_monoglot_dotnet() {
   [[ $(find ./*.sln -type f | wc -l) -gt 0 || $(find ./*.slnx -type f | wc -l) -gt 0 ]]
@@ -170,7 +200,7 @@ function is_monoglot_go() {
 }
 function pre_release_go() {
   check_for_tools "go" "jq" "sed" "find"
-  if $IS_CURRENT_LANGUAGE_POLYGLOT; then
+  if [[ $IS_CURRENT_LANGUAGE_POLYGLOT == "true" ]]; then
     # Use an additional tag. See: https://go.dev/ref/mod#vcs-version
     TAGS+=("go/v$NEW_VERSION");
   fi
