@@ -1,8 +1,10 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.11.1] - 2026-07-05
 ### Fixed
-- Update unquoted version in pubspec.yaml 
+- Update unquoted version in pubspec.yaml
 
 ## [1.11.0] - 2026-07-01
 ### Added
@@ -91,7 +93,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.11.0...HEAD
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.11.1...HEAD
+[1.11.1]: https://github.com/cucumber/polyglot-release/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/cucumber/polyglot-release/compare/v1.10.1...v1.11.0
 [1.10.1]: https://github.com/cucumber/polyglot-release/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/cucumber/polyglot-release/compare/v1.9.0...v1.10.0
