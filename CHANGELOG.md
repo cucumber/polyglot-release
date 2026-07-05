@@ -1,8 +1,12 @@
 # Changelog
 
 ## [Unreleased]
+### Fixed
+- Update unquoted version in pubspec.yaml 
 
 ## [1.11.0] - 2026-07-01
+### Added
+- Support Dart ([#121](https://github.com/cucumber/polyglot-release/pull/121))
 
 ## [1.10.1] - 2026-02-17
 ### Fixed

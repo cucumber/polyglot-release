@@ -118,7 +118,7 @@ function pre_release_dart() {
   fi
 }
 function release_dart() {
-  sed -i".tmp" "s/version: \".*\"/version: \"$NEW_VERSION\"/" "pubspec.yaml"
+  sed -i".tmp" "s/version: .*/version: $NEW_VERSION/" "pubspec.yaml"
   rm -rf pubspec.yaml.tmp
   if [[ $IS_CURRENT_LANGUAGE_POLYGLOT == "true" ]]; then
     # Also update the version in the dummy change log.

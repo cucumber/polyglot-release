@@ -17,3 +17,9 @@ diff --git a/CHANGELOG.md b/CHANGELOG.md
 -[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...HEAD
 +[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.0.0...HEAD
 +[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...v1.0.0
+diff --git a/pubspec.yaml b/pubspec.yaml
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -2 +2 @@ name: example project
+-version: 0.0.1
++version: 1.0.0

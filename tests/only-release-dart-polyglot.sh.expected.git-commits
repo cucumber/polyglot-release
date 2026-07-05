@@ -23,3 +23,9 @@ diff --git a/dart/CHANGELOG.md b/dart/CHANGELOG.md
 @@ -3 +3 @@
 -## 0.0.1
 +## 1.0.0
+diff --git a/dart/pubspec.yaml b/dart/pubspec.yaml
+--- a/dart/pubspec.yaml
++++ b/dart/pubspec.yaml
+@@ -2 +2 @@ name: example project
+-version: 0.0.1
++version: 1.0.0
