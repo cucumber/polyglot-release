@@ -436,7 +436,6 @@ function check_for_tools_realpath_with_relative_to() {
 }
 
 function do_update() {
-  set -x
   if [ -z "$POLYGLOT_RELEASE_VERSION" ]; then
     # Polyglot release was not released.
     # Let's assume we're up to date.

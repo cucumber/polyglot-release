@@ -1,5 +1,5 @@
 # fixture: ruby
-set -ex
+set -e
 
 # Copy the polyglot-release script and set the version to v0.0.1.
 # This simulates a user who has installed a released version of polyglot-release.
@@ -22,8 +22,8 @@ cp "$(which polyglot-release)" ./v0.0.2/polyglot-release
 sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.2/" ./v0.0.2/polyglot-release
 python3 -m http.server 2>/dev/null &
 server_pid=$!
-trap 'kill -9 $server_pid || true' SIGINT SIGQUIT SIGTERM EXIT
-sleep 10 # Wait for server to start, not very performant in CI
+trap 'kill -9 $server_pid' SIGINT SIGQUIT SIGTERM EXIT
+sleep 5 # Wait for server to start, not very performant in CI
 popd > /dev/null
 
 #  Update polyglot release
