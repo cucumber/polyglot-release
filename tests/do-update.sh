@@ -22,7 +22,7 @@ cp "$(which polyglot-release)" ./v0.0.2/polyglot-release
 sed -i".tmp" "s/^POLYGLOT_RELEASE_VERSION=.*$/POLYGLOT_RELEASE_VERSION=0.0.2/" ./v0.0.2/polyglot-release
 python3 -m http.server 2>/dev/null &
 server_pid=$!
-trap 'kill -9 $server_pid' SIGINT SIGQUIT SIGTERM EXIT
+trap 'kill -9 $server_pid || true' SIGINT SIGQUIT SIGTERM EXIT
 sleep 2 # Wait for server to start, not very performant in CI
 popd > /dev/null
 
