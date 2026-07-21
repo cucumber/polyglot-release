@@ -40,5 +40,5 @@ jobs:
           wget -qO- "https://github.com/cucumber/changelog/releases/download/0.10.0/changelog_0.10.0_darwin_amd64.tar.gz" | tar xvz -C $HOME/.local/bin changelog
       - run: |
           set -x
-          ./polyglot-release-test do-update.sh
+          ./polyglot-release-test tests/do-update.sh
       - run: ./polyglot-release-test
