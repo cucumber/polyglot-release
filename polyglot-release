@@ -50,8 +50,12 @@ SUPPORTED_LANGUAGES+=("android")
 function is_monoglot_android() {
   [[ -f gradle.properties ]]
 }
+function tools_android() {
+    echo "sed"
+}
 function pre_release_android() {
-  check_for_tools "sed"
+  # noop
+  :
 }
 function release_android() {
   update_gradle_properties_version "$NEW_VERSION"
@@ -71,6 +75,10 @@ SUPPORTED_LANGUAGES+=("c")
 function is_monoglot_c() {
   [[ -f VERSION ]]
 }
+function tools_c() {
+  # noop
+  :
+}
 function pre_release_c() {
   if [[ ! -f VERSION ]]; then
     echo "This looks like a C project, but there is no VERSION file"
@@ -89,6 +97,10 @@ SUPPORTED_LANGUAGES+=("cpp")
 function is_monoglot_cpp() {
   [[ -f VERSION ]]
 }
+function tools_cpp() {
+  # noop
+  :
+}
 function pre_release_cpp() {
   if [[ ! -f VERSION ]]; then
     echo "This looks like a C++ project, but there is no VERSION file"
@@ -106,6 +118,10 @@ function post_release_cpp() {
 SUPPORTED_LANGUAGES+=("dart")
 function is_monoglot_dart() {
   [[ -f pubspec.yaml ]]
+}
+function tools_dart() {
+  # noop
+  :
 }
 function pre_release_dart() {
   if [[ ! -f pubspec.yaml ]]; then
@@ -137,8 +153,10 @@ SUPPORTED_LANGUAGES+=("dotnet")
 function is_monoglot_dotnet() {
   [[ $(find ./*.sln -type f | wc -l) -gt 0 || $(find ./*.slnx -type f | wc -l) -gt 0 ]]
 }
+function tools_dotnet() {
+    echo "xmlstarlet"
+}
 function pre_release_dotnet() {
-  check_for_tools "xmlstarlet"
   if [[ ! -f "$(cs_project_file)" ]]; then
     echo "This looks like a .Net project, but there is no $(cs_project_file) file"
     exit 1
@@ -165,8 +183,12 @@ SUPPORTED_LANGUAGES+=("elixir")
 function is_monoglot_elixir() {
   [[ -f mix.exs ]]
 }
+function tools_elixir() {
+    echo "sed"
+}
 function pre_release_elixir() {
-  check_for_tools "sed"
+  # noop
+  :
 }
 function release_elixir() {
   sed -i".tmp" "s/version: \".*\"/version: \"$NEW_VERSION\"/" "mix.exs"
@@ -180,6 +202,10 @@ function post_release_elixir() {
 SUPPORTED_LANGUAGES+=("github-action")
 function is_monoglot_github-action() {
   [[ -f action.yaml ]]
+}
+function tools_github-action() {
+  # noop
+  :
 }
 function pre_release_github-action() {
   # noop
@@ -198,8 +224,10 @@ SUPPORTED_LANGUAGES+=("go")
 function is_monoglot_go() {
   [[ -f go.mod ]]
 }
+function tools_go(){
+  echo "go" "jq" "sed" "find"
+}
 function pre_release_go() {
-  check_for_tools "go" "jq" "sed" "find"
   if [[ $IS_CURRENT_LANGUAGE_POLYGLOT == "true" ]]; then
     # Use an additional tag. See: https://go.dev/ref/mod#vcs-version
     TAGS+=("go/v$NEW_VERSION");
@@ -227,8 +255,12 @@ SUPPORTED_LANGUAGES+=("javascript")
 function is_monoglot_javascript() {
   [[ -f package.json ]]
 }
+function tools_javascript() {
+    echo "npm"
+}
 function pre_release_javascript() {
-  check_for_tools "npm"
+  # noop
+  :
 }
 function release_javascript() {
   npm version --no-git-tag-version "$NEW_VERSION" >/dev/null
@@ -242,8 +274,12 @@ SUPPORTED_LANGUAGES+=("java")
 function is_monoglot_java() {
   [[ -f pom.xml ]]
 }
+function tools_java() {
+    echo "mvn"
+}
 function pre_release_java() {
-  check_for_tools "mvn"
+    # noop
+    :
 }
 function release_java() {
   mvn --quiet versions:set -DnewVersion="$NEW_VERSION" 2>/dev/null
@@ -261,6 +297,10 @@ function post_release_java() {
 SUPPORTED_LANGUAGES+=("perl")
 function is_monoglot_perl() {
   [[ -f cpanfile ]]
+}
+function tools_perl() {
+  # noop
+  :
 }
 function pre_release_perl() {
   if [[ ! -f VERSION ]]; then
@@ -282,8 +322,10 @@ SUPPORTED_LANGUAGES+=("polyglot-release")
 function is_monoglot_polyglot-release() {
   [[ -f polyglot-release ]]
 }
+function tools_polyglot-release() {
+    echo "sed"
+}
 function pre_release_polyglot-release() {
-  check_for_tools "sed"
   if [[ ! -f README.md ]]; then
     echo "This looks like the polyglot-release project, but there is no README.md file"
     exit 1
@@ -304,6 +346,10 @@ SUPPORTED_LANGUAGES+=("php")
 function is_monoglot_php() {
   [[ -f composer.json ]]
 }
+function tools_php() {
+  # noop
+  :
+}
 function pre_release_php() {
   # noop
   :
@@ -321,8 +367,10 @@ SUPPORTED_LANGUAGES+=("python")
 function is_monoglot_python() {
   [[ -f pyproject.toml || -f setup.py ]]
 }
+function tools_python() {
+    echo "sed"
+}
 function pre_release_python() {
-  check_for_tools "sed"
   if [[ -f uv.lock && -f pyproject.toml ]]; then
       if [[ -z $(python_uv_project_name) ]]; then
         echo "This looks like a Python UV project, but the project name is blank or missing."
@@ -384,6 +432,10 @@ function python_uv_revision() {
 SUPPORTED_LANGUAGES+=("ruby")
 function is_monoglot_ruby() {
   [[ $(find ./*.gemspec -type f | wc -l) -gt 0 ]]
+}
+function tools_ruby() {
+  # noop
+  :
 }
 function pre_release_ruby() {
   if [[ ! -f VERSION ]]; then
@@ -716,6 +768,19 @@ NEW_VERSION_TAG="v$NEW_VERSION"
 TAGS+=("$NEW_VERSION_TAG")
 
 commit_before_release="$(git rev-parse HEAD)"
+
+###
+## check installed tools for each language
+###
+log_progress_start "Checking installed tools"
+required_tools=""
+for language in "${SUPPORTED_LANGUAGES[@]}"; do
+  required_tools+="$(run tools "$language") "
+  log_progress_increment
+done
+log_progress_finish
+IFS=' ' read -r -a required_tools_array <<< "${required_tools}"
+check_for_tools "${required_tools_array[@]}"
 
 ###
 ## pre release
