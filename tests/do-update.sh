@@ -1,5 +1,5 @@
 # fixture: ruby
-set -e
+set -ex
 
 # Copy the polyglot-release script and set the version to v0.0.1.
 # This simulates a user who has installed a released version of polyglot-release.
