@@ -1,4 +1,4 @@
-[![Tests](https://github.com/cucumber/polyglot-release/actions/workflows/main.yml/badge.svg)](https://github.com/cucumber/polyglot-release/actions/workflows/main.yml)
+[![Tests](https://github.com/cucumber/polyglot-release/actions/workflows/main.yaml/badge.svg)](https://github.com/cucumber/polyglot-release/actions/workflows/main.yaml)
 
 # polyglot-release
 
