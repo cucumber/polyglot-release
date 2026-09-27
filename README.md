@@ -32,6 +32,8 @@ $ tree
 │   └── gradle.properties
 │── c
 │   └── VERSION
+│── cpp
+│   └── VERSION
 │── dart
 │   ├── pubspec.yaml
 │   └── CHANGELOG.md 
