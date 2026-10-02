@@ -1,7 +1,9 @@
 # Changelog
 
 ## [Unreleased]
-### Added 
+
+## [1.12.0] - 2026-10-02
+### Added
 - Check availability of all required tools at once ([#125](https://github.com/cucumber/polyglot-release/pull/125))
 - Support CMakeLists.txt for C++ ([#126](https://github.com/cucumber/polyglot-release/pull/126))
 
@@ -96,7 +98,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.11.1...HEAD
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/cucumber/polyglot-release/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/cucumber/polyglot-release/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/cucumber/polyglot-release/compare/v1.10.1...v1.11.0
 [1.10.1]: https://github.com/cucumber/polyglot-release/compare/v1.10.0...v1.10.1
