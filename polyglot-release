@@ -95,20 +95,26 @@ function post_release_c() {
 
 SUPPORTED_LANGUAGES+=("cpp")
 function is_monoglot_cpp() {
-  [[ -f VERSION ]]
+  [[ -f VERSION ]] || [[ -f CMakeLists.txt ]]
 }
 function tools_cpp() {
   # noop
   :
 }
 function pre_release_cpp() {
-  if [[ ! -f VERSION ]]; then
-    echo "This looks like a C++ project, but there is no VERSION file"
+  if [[ ! -f VERSION ]] && [[ ! -f CMakeLists.txt ]] ; then
+    echo "This looks like a C++ project, but there is no CMakeLists.txt or VERSION file"
     exit 1
   fi
 }
 function release_cpp() {
-  echo "$NEW_VERSION" >VERSION
+  if [[ -f VERSION ]] ; then
+    echo "$NEW_VERSION" >VERSION
+  fi
+  if [[ -f CMakeLists.txt ]] ; then
+    sed -i".tmp" "s/project(\(.*\) VERSION \(.*\) LANGUAGES CXX)/project(\1 VERSION $NEW_VERSION LANGUAGES CXX)/" "CMakeLists.txt"
+    rm -rf CMakeLists.txt.tmp
+  fi
 }
 function post_release_cpp() {
   # noop

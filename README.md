@@ -33,7 +33,7 @@ $ tree
 │── c
 │   └── VERSION
 │── cpp
-│   └── VERSION
+│   └── CMakeLists.txt or VERSION 
 │── dart
 │   ├── pubspec.yaml
 │   └── CHANGELOG.md 
