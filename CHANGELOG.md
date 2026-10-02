@@ -3,9 +3,7 @@
 ## [Unreleased]
 ### Added 
 - Check availability of all required tools at once ([#125](https://github.com/cucumber/polyglot-release/pull/125))
-
-### Changed
-- Update CMakeLists.txt for C++ ([#126](https://github.com/cucumber/polyglot-release/pull/126))
+- Support CMakeLists.txt for C++ ([#126](https://github.com/cucumber/polyglot-release/pull/126))
 
 ## [1.11.1] - 2026-07-05
 ### Fixed
