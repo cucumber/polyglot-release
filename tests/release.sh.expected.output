@@ -40,9 +40,9 @@ Here's what changed:
      <packaging>jar</packaging>[m
  [m
      <scm>[m
-         <connection>scm:git:git://github.com/cucumber/polyglot-release.git</connection>[m
+         <connection>scm:git:https://github.com/cucumber/polyglot-release.git</connection>[m
          <developerConnection>scm:git:git@github.com:cucumber/polyglot-release.git</developerConnection>[m
-         <url>git://github.com/cucumber/polyglot-release.git</url>[m
+         <url>https://github.com/cucumber/polyglot-release.git</url>[m
 [31m-        <tag>HEAD</tag>[m
 [32m+[m[32m        <tag>v1.0.0</tag>[m
      </scm>[m
