@@ -61,6 +61,8 @@ $ tree
 │   └── pyproject.toml, setup.py, or pyproject.toml with uv.lock,  
 └── ruby
     ├── project.gemspec
+    ├── project
+    │   └── version.rb or
     └── VERSION
 ```
 

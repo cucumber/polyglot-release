@@ -444,13 +444,18 @@ function tools_ruby() {
   :
 }
 function pre_release_ruby() {
-  if [[ ! -f VERSION ]]; then
-    echo "This looks like a Ruby project, but there is no VERSION file"
+  if [[ ! -f VERSION && $(find . -name version.rb -type f | wc -l) -eq 0 ]]; then
+    echo "This looks like a Ruby project, but there is no VERSION or version.rb file"
     exit 1
   fi
 }
 function release_ruby() {
-  echo "$NEW_VERSION" >VERSION
+  if [[ -f VERSION ]]; then
+    echo "$NEW_VERSION" >VERSION
+  fi
+
+  find . -name 'version.rb' -exec sed -i".tmp" "s/\( *VERSION *= *'\)[0-9]*\.[0-9]*\.[0-9]*\('\)/\1$NEW_VERSION\2/" {} \;
+  find . -name 'version.rb.tmp' -exec rm {} \;
 }
 function post_release_ruby() {
   # noop

@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- ruby: Support version.rb files ([#129](https://github.com/cucumber/polyglot-release/pull/129))
 
 ## [1.12.0] - 2026-10-02
 ### Added
