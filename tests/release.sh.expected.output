@@ -28,7 +28,7 @@ Here's what changed:
 [32m+[m[32m[1.0.0]: https://github.com/cucumber/polyglot-release/compare/v0.0.1...v1.0.0[m
  [0.0.1]: https://github.com/cucumber/polyglot-release/compare/v0.0.0...v0.0.1[m
 [1mdiff --git a/java/pom.xml b/java/pom.xml[m
-[1mindex 1ddc4c5..6879b6c 100644[m
+[1mindex 7305a08..bff39c8 100644[m
 [1m--- a/java/pom.xml[m
 [1m+++ b/java/pom.xml[m
 [36m@@ -5,13 +5,13 @@[m
