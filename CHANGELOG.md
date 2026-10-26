@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+
+## [1.13.0] - 2026-10-26
 ### Added
 - ruby: Support version.rb files ([#129](https://github.com/cucumber/polyglot-release/pull/129))
 
@@ -100,7 +102,8 @@
 ### Added
 - First release of polyglot-release
 
-[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.12.0...HEAD
+[Unreleased]: https://github.com/cucumber/polyglot-release/compare/v1.13.0...HEAD
+[1.13.0]: https://github.com/cucumber/polyglot-release/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/cucumber/polyglot-release/compare/v1.11.1...v1.12.0
 [1.11.1]: https://github.com/cucumber/polyglot-release/compare/v1.11.0...v1.11.1
 [1.11.0]: https://github.com/cucumber/polyglot-release/compare/v1.10.1...v1.11.0
