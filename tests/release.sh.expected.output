@@ -89,4 +89,4 @@ Preparing for the next development iteration
 Post-release changes committed to to git
 Tag(s) v1.0.0 pushed to origin
 All commit(s) pushed to origin/main
-Release commit (tagged with v1.0.0) pushed to origin/release/v1.0.0
+Release commit (tagged with v1.0.0) pushed to origin

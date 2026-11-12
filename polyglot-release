@@ -849,26 +849,20 @@ fi
 # push to github
 ##
 local_branch=$(git rev-parse --abbrev-ref HEAD)
-release_commit=$(git rev-list --max-count=1 "$NEW_VERSION_TAG")
-release_branch="release/$NEW_VERSION_TAG"
 if [[ -z $NO_GIT_PUSH ]]; then
   # shellcheck disable=SC2046
-  git push --quiet --atomic origin "refs/heads/$local_branch" $(decorate "refs/tags/" "" "${TAGS[@]}") "$release_commit:refs/heads/$release_branch"
+  git push --quiet --atomic origin "refs/heads/$local_branch" $(decorate "refs/tags/" "" "${TAGS[@]}")
   log "Tag(s) ${TAGS[*]} pushed to origin"
   log "All commit(s) pushed to origin/$local_branch"
-  log "Release commit (tagged with $NEW_VERSION_TAG) pushed to origin/$release_branch"
+  log "Release commit (tagged with $NEW_VERSION_TAG) pushed to origin"
   if [[ -n $QUIET ]]; then
-    echo "$release_branch"
+    echo "$NEW_VERSION_TAG"
   fi
 else
   log "You now need to eyeball these commits, then push manually:"
   log
   log "# push local commits and tags to $local_branch"
   log "git push origin refs/heads/$local_branch $(decorate "refs/tags/" "" "${TAGS[@]}")"
-  log
-  log "# push to release branch"
-  log "git push origin $release_commit:refs/heads/$release_branch"
-  log
   log
   log "If things do not look quite right you can roll back the release:"
   log

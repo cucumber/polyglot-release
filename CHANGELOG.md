@@ -1,6 +1,8 @@
 # Changelog
 
 ## [Unreleased]
+### Changed
+- Do not create `release/*` branches ([#130](https://github.com/cucumber/polyglot-release/pull/130))
 
 ## [1.13.0] - 2026-10-26
 ### Added
